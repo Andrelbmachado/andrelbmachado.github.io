@@ -4,25 +4,30 @@
    ───────────────────────────────────────────── */
 
 /* ══════════════════════════════════════════════
-   1. ANIMATED GRID BACKGROUND
+   1. ANIMATED GRID BACKGROUND — PS2-style towers
    ══════════════════════════════════════════════ */
 (function initGridBackground() {
   const canvas = document.getElementById("gridBg");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
 
-  /* ── Top-down cube config ── */
-  const CELL   = 64;           // grid spacing (bigger cubes)
-  const CUBE   = 58;           // cube face size
-  const GAP    = CELL - CUBE;  // gap between cubes
-  const DEPTH  = 6;            // resting side depth visible
-  const HOVER_RADIUS = 220;    // mouse influence radius
-  const MAX_RISE = 18;         // max extra depth on hover
-  const MAX_SCALE = 1.35;      // max scale of cube under mouse
-  const FADE_SPEED = 0.08;
-  const GLOW_COLOR = [41, 151, 255];
+  /* ── Tower / cube config ── */
+  const CELL         = 64;      // grid spacing
+  const CUBE         = 58;      // top-face size (stays constant — no scale)
+  const DEPTH        = 5;       // resting side-face depth
+  const HOVER_RADIUS = 240;     // mouse influence radius
+  const MAX_RISE     = 60;      // max extra extrusion on hover (tall towers!)
+  const FADE_SPEED   = 0.08;
+  const RISE_SPEED   = 0.22;    // how fast cubes grow on approach
+  const GLOW_COLOR   = [41, 151, 255];
 
-  let cols, rows, rise;
+  /* Projection angles for the "3/4 top-down" look
+     offX = horizontal spread of side faces
+     offY = vertical   spread of side faces          */
+  const PROJ_X = 0.22;   // moderate horizontal
+  const PROJ_Y = 0.55;   // strong vertical → shows height
+
+  let cols, rows, rise, drawOrder;
   let mouseX = -9999, mouseY = -9999;
 
   function resize() {
@@ -32,69 +37,72 @@
     rows = Math.ceil(canvas.height / CELL) + 2;
     const len = cols * rows;
     if (!rise || rise.length !== len) rise = new Float32Array(len);
+    drawOrder = new Array(len);
+    for (let i = 0; i < len; i++) drawOrder[i] = i;
   }
 
-  /* Draw one cube seen from directly above at (x,y) with scale */
-  function drawCube(x, y, riseVal, isDark, brightness, scale) {
-    const d = DEPTH + riseVal;       // total visible side depth
-    const s = CUBE * scale;          // scaled face size
-    // Offset to keep cube centered on grid position
-    const off = (s - CUBE) / 2;
-    const cx = x - off;
-    const cy = y - off;
+  /* ── Draw one tower at grid pos (x,y) ── */
+  function drawCube(x, y, riseVal, isDark, brightness) {
+    const d   = DEPTH + riseVal;           // total visible extrusion
+    const s   = CUBE;                      // face size (constant)
+    const oX  = d * PROJ_X;               // horizontal projection
+    const oY  = d * PROJ_Y;               // vertical projection
 
-    // ── Bottom-right side face (shadow side) ──
+    // Top-face is shifted UP proportionally to rise
+    const liftY = riseVal * 0.35;
+    const tx = x;
+    const ty = y - liftY;
+
+    /* ── Right side face ── */
     if (d > 0.5) {
-      // Right side
       ctx.beginPath();
-      ctx.moveTo(cx + s, cy);
-      ctx.lineTo(cx + s + d * 0.5, cy + d * 0.35);
-      ctx.lineTo(cx + s + d * 0.5, cy + s + d * 0.35);
-      ctx.lineTo(cx + s, cy + s);
+      ctx.moveTo(tx + s,       ty);
+      ctx.lineTo(tx + s + oX,  ty + oY);
+      ctx.lineTo(tx + s + oX,  ty + s + oY);
+      ctx.lineTo(tx + s,       ty + s);
       ctx.closePath();
       if (isDark) {
         ctx.fillStyle = brightness > 0.01
-          ? `rgb(${6 + brightness * 10}, ${6 + brightness * 10}, ${6 + brightness * 14})`
-          : 'rgb(4, 4, 4)';
+          ? `rgb(${Math.round(5 + brightness * 12)}, ${Math.round(5 + brightness * 12)}, ${Math.round(5 + brightness * 18)})`
+          : 'rgb(3, 3, 3)';
       } else {
         ctx.fillStyle = brightness > 0.01
-          ? `rgba(0, 0, 0, ${0.06 + brightness * 0.06})`
+          ? `rgba(0, 0, 0, ${(0.06 + brightness * 0.08).toFixed(3)})`
           : 'rgba(0, 0, 0, 0.04)';
       }
       ctx.fill();
 
-      // Bottom side
+      /* ── Bottom side face ── */
       ctx.beginPath();
-      ctx.moveTo(cx, cy + s);
-      ctx.lineTo(cx + s, cy + s);
-      ctx.lineTo(cx + s + d * 0.5, cy + s + d * 0.35);
-      ctx.lineTo(cx + d * 0.5, cy + s + d * 0.35);
+      ctx.moveTo(tx,           ty + s);
+      ctx.lineTo(tx + s,       ty + s);
+      ctx.lineTo(tx + s + oX,  ty + s + oY);
+      ctx.lineTo(tx + oX,      ty + s + oY);
       ctx.closePath();
       if (isDark) {
         ctx.fillStyle = brightness > 0.01
-          ? `rgb(${3 + brightness * 7}, ${3 + brightness * 7}, ${3 + brightness * 10})`
-          : 'rgb(2, 2, 2)';
+          ? `rgb(${Math.round(2 + brightness * 8)}, ${Math.round(2 + brightness * 8)}, ${Math.round(2 + brightness * 14)})`
+          : 'rgb(1, 1, 1)';
       } else {
         ctx.fillStyle = brightness > 0.01
-          ? `rgba(0, 0, 0, ${0.08 + brightness * 0.07})`
+          ? `rgba(0, 0, 0, ${(0.08 + brightness * 0.09).toFixed(3)})`
           : 'rgba(0, 0, 0, 0.055)';
       }
       ctx.fill();
     }
 
-    // ── Top face (main visible square) ──
+    /* ── Top face (the lit square) ── */
     ctx.beginPath();
-    ctx.rect(cx, cy, s, s);
+    ctx.rect(tx, ty, s, s);
 
     if (isDark) {
       if (brightness > 0.01) {
-        const base = 14 + brightness * 16;
-        ctx.fillStyle = `rgb(${base}, ${base}, ${Math.min(255, base + brightness * 12)})`;
+        const base = 14 + brightness * 20;
+        ctx.fillStyle = `rgb(${Math.round(base)}, ${Math.round(base)}, ${Math.round(Math.min(255, base + brightness * 14))})`;
       } else {
         ctx.fillStyle = 'rgb(10, 10, 10)';
       }
     } else {
-      // Light mode: near-white, almost invisible at rest
       if (brightness > 0.01) {
         ctx.fillStyle = `rgba(255, 255, 255, ${0.9 + brightness * 0.1})`;
       } else {
@@ -103,74 +111,87 @@
     }
     ctx.fill();
 
-    // ── Edge lines for definition ──
+    /* ── Edge lines for definition ── */
     if (isDark) {
       ctx.strokeStyle = brightness > 0.05
-        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.3})`
+        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(brightness * 0.35).toFixed(3)})`
         : 'rgba(255, 255, 255, 0.03)';
-      ctx.lineWidth = brightness > 0.05 ? 0.8 : 0.4;
+      ctx.lineWidth = brightness > 0.05 ? 0.9 : 0.4;
     } else {
       ctx.strokeStyle = brightness > 0.05
-        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${0.15 + brightness * 0.3})`
+        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(0.15 + brightness * 0.3).toFixed(3)})`
         : 'rgba(0, 0, 0, 0.04)';
       ctx.lineWidth = brightness > 0.05 ? 0.8 : 0.4;
     }
     ctx.stroke();
 
-    // ── Shadow between cubes (inset look) — light mode ──
+    /* ── Inset shadow (light mode resting) ── */
     if (!isDark && brightness <= 0.01) {
-      // Left shadow
       ctx.fillStyle = 'rgba(0, 0, 0, 0.025)';
-      ctx.fillRect(cx, cy, 1.5, s);
-      // Top shadow
-      ctx.fillRect(cx, cy, s, 1.5);
+      ctx.fillRect(tx, ty, 1.5, s);
+      ctx.fillRect(tx, ty, s, 1.5);
     }
 
-    // ── Glow halo on hover ──
+    /* ── Glow halo on hover ── */
     if (brightness > 0.08) {
-      ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * (isDark ? 0.5 : 0.35)})`;
-      ctx.shadowBlur = brightness * (isDark ? 14 : 10);
+      ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(brightness * (isDark ? 0.55 : 0.35)).toFixed(3)})`;
+      ctx.shadowBlur = brightness * (isDark ? 16 : 10);
       ctx.beginPath();
-      ctx.rect(cx, cy, s, s);
-      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * (isDark ? 0.4 : 0.3)})`;
-      ctx.lineWidth = isDark ? 1 : 0.8;
+      ctx.rect(tx, ty, s, s);
+      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(brightness * (isDark ? 0.45 : 0.3)).toFixed(3)})`;
+      ctx.lineWidth = isDark ? 1.2 : 0.8;
       ctx.stroke();
       ctx.shadowColor = 'transparent';
       ctx.shadowBlur = 0;
     }
   }
 
+  /* ── Main loop ── */
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    const count = cols * rows;
 
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const idx = r * cols + c;
-        const px = c * CELL;
-        const py = r * CELL;
+    /* 1. Update rise for every cube */
+    for (let i = 0; i < count; i++) {
+      const c  = i % cols;
+      const r  = (i - c) / cols;
+      const px = c * CELL;
+      const py = r * CELL;
+      const dist = Math.hypot(mouseX - (px + CUBE / 2), mouseY - (py + CUBE / 2));
 
-        const dist = Math.hypot(mouseX - (px + CUBE / 2), mouseY - (py + CUBE / 2));
-
-        // Target rise
-        let targetRise = 0;
-        if (dist < HOVER_RADIUS) {
-          const t = 1 - dist / HOVER_RADIUS;
-          targetRise = MAX_RISE * t * t;
-        }
-
-        // Smooth interpolation
-        rise[idx] += (targetRise - rise[idx]) * (targetRise > rise[idx] ? 0.28 : FADE_SPEED);
-
-        const currentRise = rise[idx];
-        const brightness = currentRise / MAX_RISE;
-
-        // Scale: cube under mouse grows, neighbors grow less
-        const scale = 1 + (MAX_SCALE - 1) * brightness;
-
-        // Cube rises = drawn offset upward
-        drawCube(px, py - currentRise * 0.5, currentRise, isDark, brightness, scale);
+      let target = 0;
+      if (dist < HOVER_RADIUS) {
+        const t = 1 - dist / HOVER_RADIUS;
+        target = MAX_RISE * t * t;
       }
+      rise[i] += (target - rise[i]) * (target > rise[i] ? RISE_SPEED : FADE_SPEED);
+    }
+
+    /* 2. Sort draw order: shortest towers first → tallest on top
+          Secondary: back-to-front (lower row index = further back) */
+    for (let i = 0; i < count; i++) drawOrder[i] = i;
+    drawOrder.length = count;
+    drawOrder.sort((a, b) => {
+      const diff = rise[a] - rise[b];
+      if (diff > 0.5)  return  1;
+      if (diff < -0.5) return -1;
+      // Same height → back rows first
+      const ra = (a / cols) | 0, rb = (b / cols) | 0;
+      if (ra !== rb) return ra - rb;
+      return (a % cols) - (b % cols);
+    });
+
+    /* 3. Draw in sorted order */
+    for (let i = 0; i < count; i++) {
+      const idx = drawOrder[i];
+      const c   = idx % cols;
+      const r   = (idx - c) / cols;
+      const px  = c * CELL;
+      const py  = r * CELL;
+      const cur = rise[idx];
+      const bri = cur / MAX_RISE;
+      drawCube(px, py, cur, isDark, bri);
     }
 
     requestAnimationFrame(draw);
