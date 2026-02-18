@@ -8,6 +8,8 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
+console.log("[3D] Module loaded. THREE version:", THREE.REVISION);
+
 /* ── DOM refs ────────────────────────────── */
 const stage       = document.getElementById("stage");
 const canvasWrap  = document.getElementById("stageCanvas");
@@ -29,6 +31,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.2;
 canvasWrap.appendChild(renderer.domElement);
+console.log("[3D] Renderer created. Canvas size:", canvasWrap.clientWidth, "x", canvasWrap.clientHeight);
 
 /* ── Scene ───────────────────────────────── */
 const scene  = new THREE.Scene();
@@ -165,7 +168,9 @@ function initActiveNav() {
 
 /* ── Load 3D models ──────────────────────── */
 async function init3D() {
+  const loadingEl = document.getElementById("loadingIndicator");
   try {
+    console.log("[3D] Starting model load…");
     const loaded = await Promise.all(
       MODEL_DEFS.map((d) => loadModel(d.path, d.size))
     );
@@ -180,23 +185,28 @@ async function init3D() {
       models.push({ group, baseY: MODEL_DEFS[i].y });
     });
 
+    // Remove loading indicator
+    if (loadingEl) loadingEl.remove();
+
     animate();
     console.log("[3D] All models loaded, starting render loop.");
   } catch (err) {
     console.error("[3D] Load error:", err);
+    if (loadingEl) loadingEl.remove();
     const msg = document.createElement("div");
     Object.assign(msg.style, {
       position: "absolute", inset: "0",
       display: "grid", placeItems: "center",
       fontSize: ".95rem", color: "#6e6e73",
     });
-    msg.textContent = "Não foi possível carregar os modelos 3D.";
+    msg.textContent = "Não foi possível carregar os modelos 3D. (" + (err.message || err) + ")";
     canvasWrap.appendChild(msg);
   }
 }
 
 function loadModel(path, targetSize) {
   return new Promise((resolve, reject) => {
+    console.log(`[3D] Loading: ${path}`);
     loader.load(path, (gltf) => {
       const m = gltf.scene;
       const box = new THREE.Box3().setFromObject(m);
@@ -227,7 +237,14 @@ function loadModel(path, targetSize) {
 
       console.log(`[3D] Loaded: ${path}`, m);
       resolve(m);
-    }, undefined, reject);
+    },
+    (xhr) => {
+      if (xhr.total) console.log(`[3D] ${path}: ${Math.round(xhr.loaded / xhr.total * 100)}%`);
+    },
+    (err) => {
+      console.error(`[3D] Failed to load: ${path}`, err);
+      reject(err);
+    });
   });
 }
 
