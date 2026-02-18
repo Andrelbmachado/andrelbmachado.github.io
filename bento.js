@@ -18,6 +18,7 @@
   const DEPTH  = 6;            // resting side depth visible
   const HOVER_RADIUS = 220;    // mouse influence radius
   const MAX_RISE = 18;         // max extra depth on hover
+  const MAX_SCALE = 1.35;      // max scale of cube under mouse
   const FADE_SPEED = 0.08;
   const GLOW_COLOR = [41, 151, 255];
 
@@ -33,19 +34,23 @@
     if (!rise || rise.length !== len) rise = new Float32Array(len);
   }
 
-  /* Draw one cube seen from directly above at (x,y) */
-  function drawCube(x, y, riseVal, isDark, brightness) {
+  /* Draw one cube seen from directly above at (x,y) with scale */
+  function drawCube(x, y, riseVal, isDark, brightness, scale) {
     const d = DEPTH + riseVal;       // total visible side depth
-    const s = CUBE;                  // face size
+    const s = CUBE * scale;          // scaled face size
+    // Offset to keep cube centered on grid position
+    const off = (s - CUBE) / 2;
+    const cx = x - off;
+    const cy = y - off;
 
     // ── Bottom-right side face (shadow side) ──
     if (d > 0.5) {
       // Right side
       ctx.beginPath();
-      ctx.moveTo(x + s, y);
-      ctx.lineTo(x + s + d * 0.5, y + d * 0.35);
-      ctx.lineTo(x + s + d * 0.5, y + s + d * 0.35);
-      ctx.lineTo(x + s, y + s);
+      ctx.moveTo(cx + s, cy);
+      ctx.lineTo(cx + s + d * 0.5, cy + d * 0.35);
+      ctx.lineTo(cx + s + d * 0.5, cy + s + d * 0.35);
+      ctx.lineTo(cx + s, cy + s);
       ctx.closePath();
       if (isDark) {
         ctx.fillStyle = brightness > 0.01
@@ -60,10 +65,10 @@
 
       // Bottom side
       ctx.beginPath();
-      ctx.moveTo(x, y + s);
-      ctx.lineTo(x + s, y + s);
-      ctx.lineTo(x + s + d * 0.5, y + s + d * 0.35);
-      ctx.lineTo(x + d * 0.5, y + s + d * 0.35);
+      ctx.moveTo(cx, cy + s);
+      ctx.lineTo(cx + s, cy + s);
+      ctx.lineTo(cx + s + d * 0.5, cy + s + d * 0.35);
+      ctx.lineTo(cx + d * 0.5, cy + s + d * 0.35);
       ctx.closePath();
       if (isDark) {
         ctx.fillStyle = brightness > 0.01
@@ -79,7 +84,7 @@
 
     // ── Top face (main visible square) ──
     ctx.beginPath();
-    ctx.rect(x, y, s, s);
+    ctx.rect(cx, cy, s, s);
 
     if (isDark) {
       if (brightness > 0.01) {
@@ -116,9 +121,9 @@
     if (!isDark && brightness <= 0.01) {
       // Left shadow
       ctx.fillStyle = 'rgba(0, 0, 0, 0.025)';
-      ctx.fillRect(x, y, 1.5, s);
+      ctx.fillRect(cx, cy, 1.5, s);
       // Top shadow
-      ctx.fillRect(x, y, s, 1.5);
+      ctx.fillRect(cx, cy, s, 1.5);
     }
 
     // ── Glow halo on hover ──
@@ -126,7 +131,7 @@
       ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * (isDark ? 0.5 : 0.35)})`;
       ctx.shadowBlur = brightness * (isDark ? 14 : 10);
       ctx.beginPath();
-      ctx.rect(x, y, s, s);
+      ctx.rect(cx, cy, s, s);
       ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * (isDark ? 0.4 : 0.3)})`;
       ctx.lineWidth = isDark ? 1 : 0.8;
       ctx.stroke();
@@ -160,8 +165,11 @@
         const currentRise = rise[idx];
         const brightness = currentRise / MAX_RISE;
 
+        // Scale: cube under mouse grows, neighbors grow less
+        const scale = 1 + (MAX_SCALE - 1) * brightness;
+
         // Cube rises = drawn offset upward
-        drawCube(px, py - currentRise * 0.5, currentRise, isDark, brightness);
+        drawCube(px, py - currentRise * 0.5, currentRise, isDark, brightness, scale);
       }
     }
 
