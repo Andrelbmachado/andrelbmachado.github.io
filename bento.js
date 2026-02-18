@@ -11,14 +11,14 @@
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
 
-  /* ── Isometric cube config ── */
-  const CELL   = 48;          // grid spacing
-  const CUBE_W = 40;          // base cube top-face width
-  const CUBE_H = 20;          // base cube top-face height (iso)
-  const DEPTH  = 14;          // resting cube side-face depth
-  const HOVER_RADIUS = 200;   // mouse influence radius
-  const MAX_RISE = 22;        // extra depth (rise) for cube under mouse
-  const FADE_SPEED = 0.07;
+  /* ── Top-down cube config ── */
+  const CELL   = 64;           // grid spacing (bigger cubes)
+  const CUBE   = 58;           // cube face size
+  const GAP    = CELL - CUBE;  // gap between cubes
+  const DEPTH  = 6;            // resting side depth visible
+  const HOVER_RADIUS = 220;    // mouse influence radius
+  const MAX_RISE = 18;         // max extra depth on hover
+  const FADE_SPEED = 0.08;
   const GLOW_COLOR = [41, 151, 255];
 
   let cols, rows, rise;
@@ -33,102 +33,102 @@
     if (!rise || rise.length !== len) rise = new Float32Array(len);
   }
 
-  /* Draw one isometric cube at grid position (px,py) with given rise */
-  function drawCube(px, py, r, isDark, brightness) {
-    const hw = CUBE_W / 2;                // half width
-    const hh = CUBE_H / 2;                // half height of top rhombus
-    const d  = DEPTH + r;                 // total depth including rise
+  /* Draw one cube seen from directly above at (x,y) */
+  function drawCube(x, y, riseVal, isDark, brightness) {
+    const d = DEPTH + riseVal;       // total visible side depth
+    const s = CUBE;                  // face size
 
-    // Top face corners (isometric diamond)
-    const top = [
-      [px,        py - hh],     // top
-      [px + hw,   py],          // right
-      [px,        py + hh],     // bottom
-      [px - hw,   py],          // left
-    ];
-
-    // ── Top face ── (lightest — lit from above)
-    ctx.beginPath();
-    ctx.moveTo(top[0][0], top[0][1]);
-    for (let i = 1; i < 4; i++) ctx.lineTo(top[i][0], top[i][1]);
-    ctx.closePath();
-
-    if (isDark) {
-      const base = brightness > 0.01 ? 18 + brightness * 14 : 16;
-      ctx.fillStyle = `rgb(${base}, ${base}, ${base + (brightness > 0.01 ? brightness * 8 : 0)})`;
-    } else {
-      const base = brightness > 0.01 ? 240 + brightness * 12 : 238;
-      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
-    }
-    ctx.fill();
-
-    // Subtle top highlight line
-    if (brightness > 0.05 && isDark) {
-      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.35})`;
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
-    } else {
-      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-    }
-
-    // ── Right face ── (medium shade)
-    ctx.beginPath();
-    ctx.moveTo(top[1][0], top[1][1]);       // right corner
-    ctx.lineTo(top[2][0], top[2][1]);       // bottom corner
-    ctx.lineTo(top[2][0], top[2][1] + d);   // bottom + depth
-    ctx.lineTo(top[1][0], top[1][1] + d);   // right + depth
-    ctx.closePath();
-
-    if (isDark) {
-      const base = brightness > 0.01 ? 10 + brightness * 8 : 9;
-      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
-    } else {
-      const base = brightness > 0.01 ? 215 + brightness * 10 : 212;
-      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
-    }
-    ctx.fill();
-
-    if (brightness > 0.05 && isDark) {
-      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.2})`;
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-    }
-
-    // ── Left face ── (darkest)
-    ctx.beginPath();
-    ctx.moveTo(top[3][0], top[3][1]);       // left corner
-    ctx.lineTo(top[2][0], top[2][1]);       // bottom corner
-    ctx.lineTo(top[2][0], top[2][1] + d);   // bottom + depth
-    ctx.lineTo(top[3][0], top[3][1] + d);   // left + depth
-    ctx.closePath();
-
-    if (isDark) {
-      const base = brightness > 0.01 ? 6 + brightness * 5 : 5;
-      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
-    } else {
-      const base = brightness > 0.01 ? 200 + brightness * 10 : 198;
-      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
-    }
-    ctx.fill();
-
-    if (brightness > 0.05 && isDark) {
-      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.15})`;
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-    }
-
-    // ── Blue glow halo when bright (dark mode only) ──
-    if (brightness > 0.08 && isDark) {
-      ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.5})`;
-      ctx.shadowBlur = brightness * 12;
+    // ── Bottom-right side face (shadow side) ──
+    if (d > 0.5) {
+      // Right side
       ctx.beginPath();
-      ctx.moveTo(top[0][0], top[0][1]);
-      for (let i = 1; i < 4; i++) ctx.lineTo(top[i][0], top[i][1]);
+      ctx.moveTo(x + s, y);
+      ctx.lineTo(x + s + d * 0.5, y + d * 0.35);
+      ctx.lineTo(x + s + d * 0.5, y + s + d * 0.35);
+      ctx.lineTo(x + s, y + s);
       ctx.closePath();
-      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.4})`;
-      ctx.lineWidth = 1;
+      if (isDark) {
+        ctx.fillStyle = brightness > 0.01
+          ? `rgb(${6 + brightness * 10}, ${6 + brightness * 10}, ${6 + brightness * 14})`
+          : 'rgb(4, 4, 4)';
+      } else {
+        ctx.fillStyle = brightness > 0.01
+          ? `rgba(0, 0, 0, ${0.06 + brightness * 0.06})`
+          : 'rgba(0, 0, 0, 0.04)';
+      }
+      ctx.fill();
+
+      // Bottom side
+      ctx.beginPath();
+      ctx.moveTo(x, y + s);
+      ctx.lineTo(x + s, y + s);
+      ctx.lineTo(x + s + d * 0.5, y + s + d * 0.35);
+      ctx.lineTo(x + d * 0.5, y + s + d * 0.35);
+      ctx.closePath();
+      if (isDark) {
+        ctx.fillStyle = brightness > 0.01
+          ? `rgb(${3 + brightness * 7}, ${3 + brightness * 7}, ${3 + brightness * 10})`
+          : 'rgb(2, 2, 2)';
+      } else {
+        ctx.fillStyle = brightness > 0.01
+          ? `rgba(0, 0, 0, ${0.08 + brightness * 0.07})`
+          : 'rgba(0, 0, 0, 0.055)';
+      }
+      ctx.fill();
+    }
+
+    // ── Top face (main visible square) ──
+    ctx.beginPath();
+    ctx.rect(x, y, s, s);
+
+    if (isDark) {
+      if (brightness > 0.01) {
+        const base = 14 + brightness * 16;
+        ctx.fillStyle = `rgb(${base}, ${base}, ${Math.min(255, base + brightness * 12)})`;
+      } else {
+        ctx.fillStyle = 'rgb(10, 10, 10)';
+      }
+    } else {
+      // Light mode: near-white, almost invisible at rest
+      if (brightness > 0.01) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.9 + brightness * 0.1})`;
+      } else {
+        ctx.fillStyle = 'rgba(248, 248, 250, 0.85)';
+      }
+    }
+    ctx.fill();
+
+    // ── Edge lines for definition ──
+    if (isDark) {
+      ctx.strokeStyle = brightness > 0.05
+        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.3})`
+        : 'rgba(255, 255, 255, 0.03)';
+      ctx.lineWidth = brightness > 0.05 ? 0.8 : 0.4;
+    } else {
+      ctx.strokeStyle = brightness > 0.05
+        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${0.15 + brightness * 0.3})`
+        : 'rgba(0, 0, 0, 0.04)';
+      ctx.lineWidth = brightness > 0.05 ? 0.8 : 0.4;
+    }
+    ctx.stroke();
+
+    // ── Shadow between cubes (inset look) — light mode ──
+    if (!isDark && brightness <= 0.01) {
+      // Left shadow
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.025)';
+      ctx.fillRect(x, y, 1.5, s);
+      // Top shadow
+      ctx.fillRect(x, y, s, 1.5);
+    }
+
+    // ── Glow halo on hover ──
+    if (brightness > 0.08) {
+      ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * (isDark ? 0.5 : 0.35)})`;
+      ctx.shadowBlur = brightness * (isDark ? 14 : 10);
+      ctx.beginPath();
+      ctx.rect(x, y, s, s);
+      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * (isDark ? 0.4 : 0.3)})`;
+      ctx.lineWidth = isDark ? 1 : 0.8;
       ctx.stroke();
       ctx.shadowColor = 'transparent';
       ctx.shadowBlur = 0;
@@ -139,14 +139,13 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    // Draw back-to-front (top rows first) for correct overlap
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const idx = r * cols + c;
-        const px = c * CELL + (r % 2 === 0 ? 0 : CELL / 2);  // offset alternate rows
-        const py = r * (CUBE_H * 0.75 + 4);
+        const px = c * CELL;
+        const py = r * CELL;
 
-        const dist = Math.hypot(mouseX - px, mouseY - py);
+        const dist = Math.hypot(mouseX - (px + CUBE / 2), mouseY - (py + CUBE / 2));
 
         // Target rise
         let targetRise = 0;
@@ -156,12 +155,13 @@
         }
 
         // Smooth interpolation
-        rise[idx] += (targetRise - rise[idx]) * (targetRise > rise[idx] ? 0.25 : FADE_SPEED);
+        rise[idx] += (targetRise - rise[idx]) * (targetRise > rise[idx] ? 0.28 : FADE_SPEED);
 
         const currentRise = rise[idx];
         const brightness = currentRise / MAX_RISE;
 
-        drawCube(px, py - currentRise, currentRise, isDark, brightness);
+        // Cube rises = drawn offset upward
+        drawCube(px, py - currentRise * 0.5, currentRise, isDark, brightness);
       }
     }
 
@@ -293,9 +293,10 @@
   const cards = document.querySelectorAll(".bento-card");
 
   cards.forEach((card) => {
-    let hovering = false;
-
-    card.addEventListener("mouseenter", () => { hovering = true; });
+    card.addEventListener("mouseenter", () => {
+      // Disable CSS transition so JS transform is instant
+      card.style.transition = 'box-shadow 0.3s, border-color 0.3s, background 0.4s';
+    });
 
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
@@ -320,7 +321,8 @@
     });
 
     card.addEventListener("mouseleave", () => {
-      hovering = false;
+      // Re-enable CSS transition for smooth return
+      card.style.transition = 'transform 0.22s ease-out, box-shadow 0.3s, border-color 0.3s, background 0.4s';
       card.style.transform = "perspective(800px) rotateX(0) rotateY(0) scale3d(1,1,1)";
       const shine = card.querySelector(".bento-shine");
       if (shine) {
