@@ -4,9 +4,9 @@
    Theme toggle is handled by inline <script> in HTML.
    ───────────────────────────────────────────── */
 
-import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
-import { GLTFLoader } from "https://unpkg.com/three@0.164.1/examples/jsm/loaders/GLTFLoader.js";
-import { RoomEnvironment } from "https://unpkg.com/three@0.164.1/examples/jsm/environments/RoomEnvironment.js";
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 /* ── DOM refs ────────────────────────────── */
 const stage       = document.getElementById("stage");

@@ -127,15 +127,16 @@ a { color: inherit; text-decoration: none; }
   height: 36px;
   border: none;
   border-radius: 50%;
-  background: transparent;
-  color: var(--text-second);
+  background: var(--border);
+  color: var(--text-primary);
   cursor: pointer;
   transition: color .25s, background .25s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .theme-toggle:hover {
-  color: var(--text-primary);
-  background: var(--border);
+  background: var(--accent);
+  color: #fff;
 }
 
 /* Show moon in light, sun in dark */
