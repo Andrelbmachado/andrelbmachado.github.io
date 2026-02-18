@@ -1,5 +1,6 @@
 /* ─────────────────────────────────────────────
    André Machado — Portfolio  ·  Three.js 3D
+   Dark/Light mode + mouse-drag rotation
    ───────────────────────────────────────────── */
 
 import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
@@ -9,10 +10,29 @@ import { GLTFLoader } from "https://unpkg.com/three@0.164.1/examples/jsm/loaders
 const stage       = document.getElementById("stage");
 const canvasWrap  = document.getElementById("stageCanvas");
 const slides      = Array.from(document.querySelectorAll(".stage-slide"));
-const slideTexts  = Array.from(document.querySelectorAll(".slide-text"));
 const reveals     = Array.from(document.querySelectorAll(".reveal"));
 const navLinks    = Array.from(document.querySelectorAll(".nav-links a"));
 const sections    = Array.from(document.querySelectorAll("main section[id]"));
+const themeBtn    = document.getElementById("themeToggle");
+const htmlEl      = document.documentElement;
+
+/* ── Theme toggle ────────────────────────── */
+const THEME_KEY = "am-theme";
+function applyTheme(t) {
+  htmlEl.setAttribute("data-theme", t);
+  localStorage.setItem(THEME_KEY, t);
+}
+// init from storage or system preference
+const stored = localStorage.getItem(THEME_KEY);
+if (stored) {
+  applyTheme(stored);
+} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  applyTheme("dark");
+}
+themeBtn.addEventListener("click", () => {
+  const next = htmlEl.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  applyTheme(next);
+});
 
 /* ── Set stage height ────────────────────── */
 const NUM_SLIDES = slides.length;
@@ -35,22 +55,22 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0.6, 6);
 
 /* ── Lighting — studio setup ─────────────── */
-const key = new THREE.DirectionalLight(0xffffff, 2.6);
-key.position.set(5, 6, 7);
-scene.add(key);
+const keyL = new THREE.DirectionalLight(0xffffff, 2.6);
+keyL.position.set(5, 6, 7);
+scene.add(keyL);
 
-const fill = new THREE.DirectionalLight(0xd8e0f3, 1.4);
-fill.position.set(-4, 3, 5);
-scene.add(fill);
+const fillL = new THREE.DirectionalLight(0xd8e0f3, 1.4);
+fillL.position.set(-4, 3, 5);
+scene.add(fillL);
 
-const rim = new THREE.DirectionalLight(0xffffff, 1.0);
-rim.position.set(0, 4, -5);
-scene.add(rim);
+const rimL = new THREE.DirectionalLight(0xffffff, 1.0);
+rimL.position.set(0, 4, -5);
+scene.add(rimL);
 
-const hemi = new THREE.HemisphereLight(0xf0f4ff, 0xe4e6ec, 0.9);
-scene.add(hemi);
+const hemiL = new THREE.HemisphereLight(0xf0f4ff, 0xe4e6ec, 0.9);
+scene.add(hemiL);
 
-/* ── Subtle floor disc ───────────────────── */
+/* ── Floor ───────────────────────────────── */
 const floor = new THREE.Mesh(
   new THREE.CircleGeometry(4.5, 64),
   new THREE.MeshStandardMaterial({
@@ -67,7 +87,7 @@ scene.add(floor);
 
 /* ── Models ──────────────────────────────── */
 const loader = new GLTFLoader();
-const models = [];          // { group, baseY }
+const models = [];
 let smoothProgress = 0;
 const clock = new THREE.Clock();
 
@@ -75,6 +95,37 @@ const MODEL_DEFS = [
   { path: "./assets/models/cuia.glb",   size: 2.6, y: -0.1, rotY: -0.3  },
   { path: "./assets/models/oculos.glb", size: 3.4, y: -0.05, rotY:  0.5 },
 ];
+
+/* ── Mouse drag rotation ─────────────────── */
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let dragRotX = 0;    // user-applied rotation around Y
+let dragRotY = 0;    // user-applied rotation around X
+let targetDragRotX = 0;
+let targetDragRotY = 0;
+
+canvasWrap.addEventListener("pointerdown", (e) => {
+  isDragging = true;
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+  canvasWrap.setPointerCapture(e.pointerId);
+});
+
+canvasWrap.addEventListener("pointermove", (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - dragStartX;
+  const dy = e.clientY - dragStartY;
+  targetDragRotX += dx * 0.008;
+  targetDragRotY += dy * 0.004;
+  // clamp vertical tilt
+  targetDragRotY = Math.max(-0.6, Math.min(0.6, targetDragRotY));
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+});
+
+canvasWrap.addEventListener("pointerup", () => { isDragging = false; });
+canvasWrap.addEventListener("pointercancel", () => { isDragging = false; });
 
 /* ── Init ────────────────────────────────── */
 initReveal();
@@ -121,7 +172,7 @@ async function init3D() {
       group.add(mesh);
       group.position.y = MODEL_DEFS[i].y;
       group.rotation.y = MODEL_DEFS[i].rotY;
-      group.visible = false;        // start hidden
+      group.visible = false;
       scene.add(group);
       models.push({ group, baseY: MODEL_DEFS[i].y });
     });
@@ -173,15 +224,23 @@ function loadModel(path, targetSize) {
 function updateScroll(dt) {
   if (!models.length) return;
 
+  // smooth user drag rotation
+  dragRotX += (targetDragRotX - dragRotX) * 0.12;
+  dragRotY += (targetDragRotY - dragRotY) * 0.12;
+
+  // slowly decay drag back when not dragging
+  if (!isDragging) {
+    targetDragRotX *= 0.98;
+    targetDragRotY *= 0.98;
+  }
+
   const stageRect = stage.getBoundingClientRect();
   const vh = window.innerHeight;
 
-  // raw 0→1 across the stage section
   const raw = THREE.MathUtils.clamp(
     -stageRect.top / (stageRect.height - vh), 0, 1
   );
 
-  // smooth damp
   smoothProgress = THREE.MathUtils.damp(
     smoothProgress, raw, 5.5, Math.max(dt, 1 / 120)
   );
@@ -189,22 +248,17 @@ function updateScroll(dt) {
   const p = smoothProgress;
   const t = performance.now();
 
-  // Determine which model to show (split evenly)
   const segSize = 1 / NUM_SLIDES;
 
   models.forEach((m, i) => {
     const segStart = i * segSize;
-    const segEnd   = (i + 1) * segSize;
 
-    // local progress: 0→1 within this model's segment
     const local = THREE.MathUtils.clamp(
       (p - segStart) / segSize, 0, 1
     );
 
-    // fade: ramp in 0→0.15, hold, ramp out 0.85→1
     const fadeIn  = THREE.MathUtils.smoothstep(local, 0.0,  0.15);
     const fadeOut = 1 - THREE.MathUtils.smoothstep(local, 0.82, 1.0);
-    // For the last model, don't fade out
     const opacity = i === NUM_SLIDES - 1
       ? fadeIn
       : Math.min(fadeIn, fadeOut);
@@ -214,16 +268,17 @@ function updateScroll(dt) {
 
     if (!isActive) return;
 
-    // gentle float & auto-rotate
+    // float + auto-rotate + user drag
     m.group.position.y = m.baseY + Math.sin(t * 0.0012 + i) * 0.06;
-    m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025;
+    m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025 + dragRotX;
+    m.group.rotation.x = dragRotY;
 
-    // scale entrance: small → full
+    // scale entrance
     const scaleT = THREE.MathUtils.smoothstep(local, 0.0, 0.2);
     const s = THREE.MathUtils.lerp(0.7, 1, scaleT);
     m.group.scale.setScalar(s);
 
-    // set opacity on meshes
+    // opacity
     m.group.traverse((c) => {
       if (c.isMesh && c.material) {
         const mats = Array.isArray(c.material) ? c.material : [c.material];
@@ -241,7 +296,7 @@ function updateScroll(dt) {
     if (textEl) textEl.classList.toggle("visible", vis);
   });
 
-  // camera subtle shift
+  // camera
   camera.position.x = THREE.MathUtils.lerp(0.1, -0.1, p);
   camera.position.z = THREE.MathUtils.lerp(6, 5.2, p);
   camera.lookAt(0, 0, 0);
