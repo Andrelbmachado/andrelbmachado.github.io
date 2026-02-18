@@ -99,36 +99,43 @@ const MODEL_DEFS = [
   { path: "./assets/models/oculos.glb", size: 3.4, y: -0.05, rotY:  0.5 },
 ];
 
-/* ── Mouse drag rotation ─────────────────── */
+/* ── Mouse drag rotation (free spin + return) ── */
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
-let dragRotX = 0;    // user-applied rotation around Y
-let dragRotY = 0;    // user-applied rotation around X
-let targetDragRotX = 0;
+let dragRotY = 0;      // current user Y-axis (horizontal drag)
+let dragRotX = 0;      // current user X-axis (vertical drag)
 let targetDragRotY = 0;
+let targetDragRotX = 0;
+const DRAG_SENSITIVITY = 0.01;
+const RETURN_SPEED     = 0.04;  // how quickly it springs back to upright
+
+canvasWrap.style.cursor = 'grab';
 
 canvasWrap.addEventListener("pointerdown", (e) => {
   isDragging = true;
   dragStartX = e.clientX;
   dragStartY = e.clientY;
   canvasWrap.setPointerCapture(e.pointerId);
+  canvasWrap.style.cursor = 'grabbing';
 });
 
 canvasWrap.addEventListener("pointermove", (e) => {
   if (!isDragging) return;
   const dx = e.clientX - dragStartX;
   const dy = e.clientY - dragStartY;
-  targetDragRotX += dx * 0.008;
-  targetDragRotY += dy * 0.004;
-  // clamp vertical tilt
-  targetDragRotY = Math.max(-0.6, Math.min(0.6, targetDragRotY));
+  targetDragRotY += dx * DRAG_SENSITIVITY;
+  targetDragRotX += dy * DRAG_SENSITIVITY;
   dragStartX = e.clientX;
   dragStartY = e.clientY;
 });
 
-canvasWrap.addEventListener("pointerup", () => { isDragging = false; });
-canvasWrap.addEventListener("pointercancel", () => { isDragging = false; });
+function endDrag() {
+  isDragging = false;
+  canvasWrap.style.cursor = 'grab';
+}
+canvasWrap.addEventListener("pointerup", endDrag);
+canvasWrap.addEventListener("pointercancel", endDrag);
 
 /* ── Init ────────────────────────────────── */
 init3D();
@@ -221,13 +228,16 @@ function updateScroll(dt) {
   if (!models.length) return;
 
   // smooth user drag rotation
-  dragRotX += (targetDragRotX - dragRotX) * 0.12;
-  dragRotY += (targetDragRotY - dragRotY) * 0.12;
+  dragRotY += (targetDragRotY - dragRotY) * 0.14;
+  dragRotX += (targetDragRotX - dragRotX) * 0.14;
 
-  // slowly decay drag back when not dragging
+  // When not dragging, smoothly return to upright (target → 0)
   if (!isDragging) {
-    targetDragRotX *= 0.98;
-    targetDragRotY *= 0.98;
+    targetDragRotY += (0 - targetDragRotY) * RETURN_SPEED;
+    targetDragRotX += (0 - targetDragRotX) * RETURN_SPEED;
+    // Snap to 0 when close enough
+    if (Math.abs(targetDragRotY) < 0.001) targetDragRotY = 0;
+    if (Math.abs(targetDragRotX) < 0.001) targetDragRotX = 0;
   }
 
   const stageRect = stage.getBoundingClientRect();
@@ -291,8 +301,9 @@ function updateScroll(dt) {
     // ── Float + auto-rotate + user drag ──
     m.group.position.x = xOffset;
     m.group.position.y = m.baseY + yLift + Math.sin(t * 0.0012 + i) * 0.06;
-    m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025 + dragRotX;
-    m.group.rotation.x = dragRotY;
+    // Auto-rotation continues; user drag adds offset (returns to 0 on release)
+    m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025 + dragRotY;
+    m.group.rotation.x = dragRotX;
 
     // ── Material opacity + depthWrite ──
     m.group.traverse((c) => {
