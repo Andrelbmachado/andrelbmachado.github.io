@@ -53,6 +53,27 @@
     const tx = x;
     const ty = y - liftY;
 
+    /* ── Blue light from below ── */
+    if (brightness > 0.02) {
+      ctx.save();
+      const gl = brightness;
+      const baseX = tx + s / 2 + oX * 0.25;
+      const baseY = ty + s + oY * 0.5 + 4;
+
+      ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(gl * (isDark ? 1.0 : 0.75)).toFixed(3)})`;
+      ctx.shadowBlur = 16 + gl * 35;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+
+      // Nearly invisible source shape at cube base — shadow creates the glow
+      ctx.fillStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(gl * (isDark ? 0.12 : 0.08)).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.ellipse(baseX, baseY, s * 0.38, 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
     /* ── Right side face ── */
     if (d > 0.5) {
       ctx.beginPath();
@@ -81,11 +102,11 @@
       ctx.closePath();
       if (isDark) {
         ctx.fillStyle = brightness > 0.01
-          ? `rgb(${Math.round(2 + brightness * 8)}, ${Math.round(2 + brightness * 8)}, ${Math.round(2 + brightness * 14)})`
+          ? `rgb(${Math.round(2 + brightness * 4)}, ${Math.round(2 + brightness * 6)}, ${Math.round(2 + brightness * 28)})`
           : 'rgb(1, 1, 1)';
       } else {
         ctx.fillStyle = brightness > 0.01
-          ? `rgba(0, 0, 0, ${(0.08 + brightness * 0.09).toFixed(3)})`
+          ? `rgba(${Math.round(brightness * 15)}, ${Math.round(brightness * 40)}, ${Math.round(80 + brightness * 120)}, ${(0.06 + brightness * 0.08).toFixed(3)})`
           : 'rgba(0, 0, 0, 0.055)';
       }
       ctx.fill();
@@ -111,17 +132,13 @@
     }
     ctx.fill();
 
-    /* ── Edge lines for definition ── */
+    /* ── Edge lines for definition (subtle, no glow) ── */
     if (isDark) {
-      ctx.strokeStyle = brightness > 0.05
-        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(brightness * 0.35).toFixed(3)})`
-        : 'rgba(255, 255, 255, 0.03)';
-      ctx.lineWidth = brightness > 0.05 ? 0.9 : 0.4;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      ctx.lineWidth = 0.4;
     } else {
-      ctx.strokeStyle = brightness > 0.05
-        ? `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(0.15 + brightness * 0.3).toFixed(3)})`
-        : 'rgba(0, 0, 0, 0.04)';
-      ctx.lineWidth = brightness > 0.05 ? 0.8 : 0.4;
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.04)';
+      ctx.lineWidth = 0.4;
     }
     ctx.stroke();
 
@@ -132,18 +149,6 @@
       ctx.fillRect(tx, ty, s, 1.5);
     }
 
-    /* ── Glow halo on hover ── */
-    if (brightness > 0.08) {
-      ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(brightness * (isDark ? 0.55 : 0.35)).toFixed(3)})`;
-      ctx.shadowBlur = brightness * (isDark ? 16 : 10);
-      ctx.beginPath();
-      ctx.rect(tx, ty, s, s);
-      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${(brightness * (isDark ? 0.45 : 0.3)).toFixed(3)})`;
-      ctx.lineWidth = isDark ? 1.2 : 0.8;
-      ctx.stroke();
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-    }
   }
 
   /* ── Main loop ── */
