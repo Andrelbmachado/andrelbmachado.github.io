@@ -57,20 +57,33 @@
 
         const brightness = cells[idx];
 
-        // Fill — dark with slight blue glow
+        const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+
+        // Fill with glow when near mouse
         if (brightness > 0.01) {
           const bri = brightness;
-          ctx.fillStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${bri * 0.18})`;
+          if (isDark) {
+            ctx.fillStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${bri * 0.18})`;
+          } else {
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.6 + bri * 0.3})`;
+          }
           ctx.fillRect(x + GAP / 2, y + GAP / 2, inner, inner);
 
-          // Glowing border
+          // Glowing border (blue glow in both themes)
           ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${bri * 0.7})`;
-          ctx.lineWidth = 1;
+          ctx.lineWidth = isDark ? 1 : 1.2;
           ctx.strokeRect(x + GAP / 2 + 0.5, y + GAP / 2 + 0.5, inner - 1, inner - 1);
         } else {
-          // Resting state — very subtle white border
-          ctx.strokeStyle = `rgba(255, 255, 255, ${BORDER_ALPHA})`;
-          ctx.lineWidth = 0.5;
+          // Resting state — theme-aware border
+          const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+          if (isDark) {
+            ctx.strokeStyle = `rgba(255, 255, 255, ${BORDER_ALPHA})`;
+          } else {
+            ctx.fillStyle = `rgba(255, 255, 255, 0.6)`;
+            ctx.fillRect(x + GAP / 2, y + GAP / 2, inner, inner);
+            ctx.strokeStyle = `rgba(0, 0, 0, 0.10)`;
+          }
+          ctx.lineWidth = isDark ? 0.5 : 0.8;
           ctx.strokeRect(x + GAP / 2 + 0.5, y + GAP / 2 + 0.5, inner - 1, inner - 1);
         }
       }
@@ -154,19 +167,13 @@
       }
     }
 
-    // Bright dot at cursor
+    // Subtle glow at trail tip (no dot)
     const last = trail[trail.length - 1];
-    ctx.beginPath();
-    ctx.arc(last.x, last.y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-    ctx.fill();
-
-    // Glow around dot
-    const grad = ctx.createRadialGradient(last.x, last.y, 0, last.x, last.y, 20);
-    grad.addColorStop(0, "rgba(41, 151, 255, 0.4)");
+    const grad = ctx.createRadialGradient(last.x, last.y, 0, last.x, last.y, 14);
+    grad.addColorStop(0, "rgba(41, 151, 255, 0.25)");
     grad.addColorStop(1, "rgba(41, 151, 255, 0)");
     ctx.beginPath();
-    ctx.arc(last.x, last.y, 20, 0, Math.PI * 2);
+    ctx.arc(last.x, last.y, 14, 0, Math.PI * 2);
     ctx.fillStyle = grad;
     ctx.fill();
 
@@ -197,11 +204,11 @@
       const nx = (x - centerX) / centerX;
       const ny = (y - centerY) / centerY;
 
-      // Tilt: rotate toward mouse (pull effect)
-      const tiltX = ny * -12;  // rotate around X axis (vertical tilt)
-      const tiltY = nx * 12;   // rotate around Y axis (horizontal tilt)
+      // Tilt: card leans toward mouse (pulled out of screen)
+      const tiltX = ny * 14;   // reversed — edge near mouse comes forward
+      const tiltY = nx * -14;  // reversed — edge near mouse comes forward
 
-      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.03, 1.03, 1.03)`;
 
       // Move shine/highlight effect
       const shine = card.querySelector(".bento-shine");
@@ -237,28 +244,7 @@
 
 
 /* ══════════════════════════════════════════════
-   5. ACTIVE NAV LINK
-   ══════════════════════════════════════════════ */
-(function initActiveNav() {
-  const navLinks = document.querySelectorAll(".nav-links a");
-  const sections = document.querySelectorAll("main section[id]");
-  const obs = new IntersectionObserver(
-    (entries) => entries.forEach((e) => {
-      if (e.isIntersecting) {
-        const id = e.target.id;
-        navLinks.forEach((l) =>
-          l.classList.toggle("active", l.getAttribute("href") === `#${id}`)
-        );
-      }
-    }),
-    { rootMargin: "-30% 0px -60% 0px" }
-  );
-  sections.forEach((s) => obs.observe(s));
-})();
-
-
-/* ══════════════════════════════════════════════
-   6. SMOOTH BENTO CARD ANCHORS
+   5. SMOOTH BENTO CARD ANCHORS
    ══════════════════════════════════════════════ */
 (function initBentoLinks() {
   document.querySelectorAll(".bento-card[data-href]").forEach((card) => {
