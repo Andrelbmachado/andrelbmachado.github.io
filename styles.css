@@ -560,6 +560,22 @@ a { color: inherit; text-decoration: none; }
   }
   .nav-links { display: none; }
   .theme-toggle { justify-self: end; }
+
+  /* 3D stage: canvas top half, text bottom half */
+  .stage-canvas {
+    height: 50vh;
+  }
+
+  .stage-slide {
+    height: 250vh;
+  }
+
+  .slide-text {
+    max-width: 100%;
+    top: 55vh;
+    transform: none;
+    padding: 20px 0 60px;
+  }
 }
 
 @media (max-width: 600px) {

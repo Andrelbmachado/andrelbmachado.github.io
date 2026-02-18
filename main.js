@@ -291,18 +291,22 @@ function updateScroll(dt) {
     // ── Scale: small → full during intro, then shrink when sliding right ──
     const scaleT = THREE.MathUtils.smoothstep(local, 0.0, 0.15);
     const introScale = THREE.MathUtils.lerp(0.6, 1, scaleT);
-    // Shrink to 0.7 when slid to the right so model fits on screen
+    // Shrink when slid to side so model fits on screen
     const shrinkT = THREE.MathUtils.smoothstep(local, 0.18, 0.35);
-    const readingScale = THREE.MathUtils.lerp(1, 0.72, shrinkT);
+    const isMobile = window.innerWidth < 980;
+    const readingScale = THREE.MathUtils.lerp(1, isMobile ? 0.6 : 0.72, shrinkT);
     m.group.scale.setScalar(introScale * readingScale);
 
-    // ── Horizontal slide: center → right when text appears ──
+    // ── Horizontal slide: center → right (desktop) or stay centered (mobile) ──
     const slideT = THREE.MathUtils.smoothstep(local, 0.18, 0.35);
+    const xOffset = isMobile ? 0 : THREE.MathUtils.lerp(0, 2.2, slideT);
+    // On mobile, model moves up slightly to make room for text below
+    const yLift = isMobile ? THREE.MathUtils.lerp(0, 0.5, slideT) : 0;
     const xOffset = THREE.MathUtils.lerp(0, 2.2, slideT);
 
     // ── Float + auto-rotate + user drag ──
     m.group.position.x = xOffset;
-    m.group.position.y = m.baseY + Math.sin(t * 0.0012 + i) * 0.06;
+    m.group.position.y = m.baseY + yLift + Math.sin(t * 0.0012 + i) * 0.06;
     m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025 + dragRotX;
     m.group.rotation.x = dragRotY;
 
