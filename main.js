@@ -1,10 +1,12 @@
 /* ─────────────────────────────────────────────
    André Machado — Portfolio  ·  Three.js 3D
-   Dark/Light mode + mouse-drag rotation
+   Mouse-drag rotation + scroll showcase
+   Theme toggle is handled by inline <script> in HTML.
    ───────────────────────────────────────────── */
 
 import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
 import { GLTFLoader } from "https://unpkg.com/three@0.164.1/examples/jsm/loaders/GLTFLoader.js";
+import { RoomEnvironment } from "https://unpkg.com/three@0.164.1/examples/jsm/environments/RoomEnvironment.js";
 
 /* ── DOM refs ────────────────────────────── */
 const stage       = document.getElementById("stage");
@@ -13,26 +15,6 @@ const slides      = Array.from(document.querySelectorAll(".stage-slide"));
 const reveals     = Array.from(document.querySelectorAll(".reveal"));
 const navLinks    = Array.from(document.querySelectorAll(".nav-links a"));
 const sections    = Array.from(document.querySelectorAll("main section[id]"));
-const themeBtn    = document.getElementById("themeToggle");
-const htmlEl      = document.documentElement;
-
-/* ── Theme toggle ────────────────────────── */
-const THEME_KEY = "am-theme";
-function applyTheme(t) {
-  htmlEl.setAttribute("data-theme", t);
-  localStorage.setItem(THEME_KEY, t);
-}
-// init from storage or system preference
-const stored = localStorage.getItem(THEME_KEY);
-if (stored) {
-  applyTheme(stored);
-} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-  applyTheme("dark");
-}
-themeBtn.addEventListener("click", () => {
-  const next = htmlEl.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  applyTheme(next);
-});
 
 /* ── Set stage height ────────────────────── */
 const NUM_SLIDES = slides.length;
@@ -44,7 +26,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(canvasWrap.clientWidth, canvasWrap.clientHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
+renderer.toneMappingExposure = 1.2;
 canvasWrap.appendChild(renderer.domElement);
 
 /* ── Scene ───────────────────────────────── */
@@ -54,20 +36,27 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 0.6, 6);
 
+/* ── Environment map for PBR materials ───── */
+const pmremGenerator = new THREE.PMREMGenerator(renderer);
+scene.environment = pmremGenerator.fromScene(
+  new RoomEnvironment(), 0.04
+).texture;
+pmremGenerator.dispose();
+
 /* ── Lighting — studio setup ─────────────── */
-const keyL = new THREE.DirectionalLight(0xffffff, 2.6);
+const keyL = new THREE.DirectionalLight(0xffffff, 2.8);
 keyL.position.set(5, 6, 7);
 scene.add(keyL);
 
-const fillL = new THREE.DirectionalLight(0xd8e0f3, 1.4);
+const fillL = new THREE.DirectionalLight(0xd8e0f3, 1.6);
 fillL.position.set(-4, 3, 5);
 scene.add(fillL);
 
-const rimL = new THREE.DirectionalLight(0xffffff, 1.0);
+const rimL = new THREE.DirectionalLight(0xffffff, 1.2);
 rimL.position.set(0, 4, -5);
 scene.add(rimL);
 
-const hemiL = new THREE.HemisphereLight(0xf0f4ff, 0xe4e6ec, 0.9);
+const hemiL = new THREE.HemisphereLight(0xf0f4ff, 0xe4e6ec, 1.0);
 scene.add(hemiL);
 
 /* ── Floor ───────────────────────────────── */
@@ -178,8 +167,9 @@ async function init3D() {
     });
 
     animate();
+    console.log("[3D] All models loaded, starting render loop.");
   } catch (err) {
-    console.error("3D load error:", err);
+    console.error("[3D] Load error:", err);
     const msg = document.createElement("div");
     Object.assign(msg.style, {
       position: "absolute", inset: "0",
@@ -209,12 +199,19 @@ function loadModel(path, targetSize) {
         if (c.isMesh && c.material) {
           const mats = Array.isArray(c.material) ? c.material : [c.material];
           mats.forEach((mat) => {
+            // Preserve all textures from the GLB.
+            // Enable transparency for scroll-driven fade.
             mat.transparent = true;
+            mat.depthWrite  = true;
+            mat.opacity     = 1;
+            // Ensure environment map affects this material
+            mat.envMapIntensity = mat.envMapIntensity || 1.0;
             mat.needsUpdate = true;
           });
         }
       });
 
+      console.log(`[3D] Loaded: ${path}`, m);
       resolve(m);
     }, undefined, reject);
   });
@@ -278,11 +275,14 @@ function updateScroll(dt) {
     const s = THREE.MathUtils.lerp(0.7, 1, scaleT);
     m.group.scale.setScalar(s);
 
-    // opacity
+    // opacity + depthWrite management
     m.group.traverse((c) => {
       if (c.isMesh && c.material) {
         const mats = Array.isArray(c.material) ? c.material : [c.material];
-        mats.forEach((mat) => { mat.opacity = opacity; });
+        mats.forEach((mat) => {
+          mat.opacity    = opacity;
+          mat.depthWrite = opacity > 0.99;
+        });
       }
     });
   });

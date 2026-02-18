@@ -7,7 +7,39 @@
     <meta name="description" content="Portfólio de André Machado. Design, desenvolvimento, 3D, apps, animação e devops." />
     <meta name="color-scheme" content="light dark" />
     <link rel="preconnect" href="https://unpkg.com" crossorigin />
-    <link rel="stylesheet" href="/styles.css?v=3" />
+    <link rel="stylesheet" href="/styles.css?v=4" />
+    <script>
+      // Theme toggle — runs immediately, no dependency on Three.js
+      (function () {
+        var THEME_KEY = "am-theme";
+        var html = document.documentElement;
+
+        function apply(t) {
+          html.setAttribute("data-theme", t);
+          try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+        }
+
+        // Restore saved theme or respect system preference
+        var saved;
+        try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+        if (saved) {
+          apply(saved);
+        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          apply("dark");
+        }
+
+        // Attach toggle handler once DOM is ready
+        document.addEventListener("DOMContentLoaded", function () {
+          var btn = document.getElementById("themeToggle");
+          if (btn) {
+            btn.addEventListener("click", function () {
+              var next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+              apply(next);
+            });
+          }
+        });
+      })();
+    </script>
   </head>
   <body>
 
@@ -277,6 +309,6 @@
       </div>
     </footer>
 
-    <script type="module" src="/main.js?v=3"></script>
+    <script type="module" src="/main.js?v=4"></script>
   </body>
 </html>
