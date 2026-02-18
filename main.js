@@ -18,7 +18,8 @@ const sections    = Array.from(document.querySelectorAll("main section[id]"));
 
 /* ── Set stage height ────────────────────── */
 const NUM_SLIDES = slides.length;
-stage.style.height = `${(NUM_SLIDES + 1) * 100}vh`;
+// Each slide is 200vh in CSS, so total scroll = NUM_SLIDES * 200vh + 100vh buffer
+stage.style.height = `${NUM_SLIDES * 200 + 100}vh`;
 
 /* ── Renderer ────────────────────────────── */
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -234,6 +235,7 @@ function updateScroll(dt) {
   const stageRect = stage.getBoundingClientRect();
   const vh = window.innerHeight;
 
+  // Overall progress 0→1 through the stage
   const raw = THREE.MathUtils.clamp(
     -stageRect.top / (stageRect.height - vh), 0, 1
   );
@@ -244,20 +246,28 @@ function updateScroll(dt) {
 
   const p = smoothProgress;
   const t = performance.now();
-
   const segSize = 1 / NUM_SLIDES;
 
   models.forEach((m, i) => {
     const segStart = i * segSize;
 
+    // Local progress 0→1 within this model's segment
     const local = THREE.MathUtils.clamp(
       (p - segStart) / segSize, 0, 1
     );
 
-    const fadeIn  = THREE.MathUtils.smoothstep(local, 0.0,  0.15);
+    /*
+     * 3 phases per model:
+     *  Phase 1 (local 0.00→0.25) — INTRO: model enters centered, scales up
+     *  Phase 2 (local 0.25→0.80) — READING: model slides right, text visible on left
+     *  Phase 3 (local 0.80→1.00) — OUTRO: model and text fade out
+     */
+
+    // ── Opacity ──
+    const fadeIn  = THREE.MathUtils.smoothstep(local, 0.0, 0.12);
     const fadeOut = 1 - THREE.MathUtils.smoothstep(local, 0.82, 1.0);
     const opacity = i === NUM_SLIDES - 1
-      ? fadeIn
+      ? fadeIn   // last model doesn't fade out
       : Math.min(fadeIn, fadeOut);
 
     const isActive = opacity > 0.01;
@@ -265,17 +275,23 @@ function updateScroll(dt) {
 
     if (!isActive) return;
 
-    // float + auto-rotate + user drag
-    m.group.position.y = m.baseY + Math.sin(t * 0.0012 + i) * 0.06;
-    m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025 + dragRotX;
-    m.group.rotation.x = dragRotY;
-
-    // scale entrance
+    // ── Scale: small → full during intro ──
     const scaleT = THREE.MathUtils.smoothstep(local, 0.0, 0.2);
     const s = THREE.MathUtils.lerp(0.7, 1, scaleT);
     m.group.scale.setScalar(s);
 
-    // opacity + depthWrite management
+    // ── Horizontal slide: center → right when text appears ──
+    // slideT: 0 at center, 1 at right position
+    const slideT = THREE.MathUtils.smoothstep(local, 0.18, 0.35);
+    const xOffset = THREE.MathUtils.lerp(0, 2.2, slideT);
+
+    // ── Float + auto-rotate + user drag ──
+    m.group.position.x = xOffset;
+    m.group.position.y = m.baseY + Math.sin(t * 0.0012 + i) * 0.06;
+    m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025 + dragRotX;
+    m.group.rotation.x = dragRotY;
+
+    // ── Material opacity + depthWrite ──
     m.group.traverse((c) => {
       if (c.isMesh && c.material) {
         const mats = Array.isArray(c.material) ? c.material : [c.material];
@@ -287,19 +303,25 @@ function updateScroll(dt) {
     });
   });
 
-  // slide text visibility
+  // ── Slide text visibility ──
   slides.forEach((slide, i) => {
     const segStart = i * segSize;
     const local = (p - segStart) / segSize;
-    const vis = local > 0.1 && local < 0.9;
+    // Text appears after intro phase, hides during outro
+    const vis = local > 0.22 && local < 0.88;
     const textEl = slide.querySelector(".slide-text");
     if (textEl) textEl.classList.toggle("visible", vis);
   });
 
-  // camera
-  camera.position.x = THREE.MathUtils.lerp(0.1, -0.1, p);
+  // ── Camera: subtle shift + track rightward offset ──
+  // Move camera slightly right to keep the side-by-side composition centered
+  const avgSlide = models.reduce((sum, m) => {
+    return sum + (m.group.visible ? m.group.position.x : 0);
+  }, 0) / Math.max(models.filter(m => m.group.visible).length, 1);
+
+  camera.position.x = avgSlide * 0.35;
   camera.position.z = THREE.MathUtils.lerp(6, 5.2, p);
-  camera.lookAt(0, 0, 0);
+  camera.lookAt(avgSlide * 0.3, 0, 0);
 }
 
 /* ── Resize ──────────────────────────────── */
