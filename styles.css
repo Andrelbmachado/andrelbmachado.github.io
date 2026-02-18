@@ -150,8 +150,9 @@ a { color: inherit; text-decoration: none; }
   border-radius: var(--radius-lg);
   padding: clamp(24px, 3vw, 36px);
   cursor: pointer; overflow: hidden;
-  /* No CSS transform transition — JS handles it instantly */
-  transition: box-shadow 0.3s, border-color 0.3s, background 0.4s;
+  /* No CSS transform transition on hover — JS sets it directly.
+     Only transition back to rest on mouseleave. */
+  transition: transform 0.25s ease-out, box-shadow 0.3s, border-color 0.3s, background 0.4s;
   transform-style: preserve-3d;
   will-change: transform;
   -webkit-backdrop-filter: saturate(140%) blur(24px);

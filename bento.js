@@ -11,29 +11,127 @@
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
 
-  const CELL = 48;           // px per square
-  const GAP  = 2;            // gap between squares
-  const BORDER_ALPHA = 0.08; // subtle resting border
-  const GLOW_RADIUS = 200;   // hover influence radius in px
-  const SCALE_RADIUS = 180;  // scale influence radius
-  const GLOW_COLOR = [41, 151, 255]; // accent blue RGB
-  const FADE_SPEED = 0.06;   // how fast glow fades per frame
-  const MAX_SCALE = 1.7;     // scale of square directly under mouse
-  const MIN_SCALE = 1.2;     // scale at edge of influence
+  /* ── Isometric cube config ── */
+  const CELL   = 48;          // grid spacing
+  const CUBE_W = 40;          // base cube top-face width
+  const CUBE_H = 20;          // base cube top-face height (iso)
+  const DEPTH  = 14;          // resting cube side-face depth
+  const HOVER_RADIUS = 200;   // mouse influence radius
+  const MAX_RISE = 22;        // extra depth (rise) for cube under mouse
+  const FADE_SPEED = 0.07;
+  const GLOW_COLOR = [41, 151, 255];
 
-  let cols, rows, cells, scales; // cell brightness & scale arrays
+  let cols, rows, rise;
   let mouseX = -9999, mouseY = -9999;
-  let animId;
 
   function resize() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
-    cols = Math.ceil(canvas.width  / CELL) + 1;
-    rows = Math.ceil(canvas.height / CELL) + 1;
+    cols = Math.ceil(canvas.width  / CELL) + 2;
+    rows = Math.ceil(canvas.height / CELL) + 2;
     const len = cols * rows;
-    if (!cells || cells.length !== len) {
-      cells  = new Float32Array(len);
-      scales = new Float32Array(len).fill(1);
+    if (!rise || rise.length !== len) rise = new Float32Array(len);
+  }
+
+  /* Draw one isometric cube at grid position (px,py) with given rise */
+  function drawCube(px, py, r, isDark, brightness) {
+    const hw = CUBE_W / 2;                // half width
+    const hh = CUBE_H / 2;                // half height of top rhombus
+    const d  = DEPTH + r;                 // total depth including rise
+
+    // Top face corners (isometric diamond)
+    const top = [
+      [px,        py - hh],     // top
+      [px + hw,   py],          // right
+      [px,        py + hh],     // bottom
+      [px - hw,   py],          // left
+    ];
+
+    // ── Top face ── (lightest — lit from above)
+    ctx.beginPath();
+    ctx.moveTo(top[0][0], top[0][1]);
+    for (let i = 1; i < 4; i++) ctx.lineTo(top[i][0], top[i][1]);
+    ctx.closePath();
+
+    if (isDark) {
+      const base = brightness > 0.01 ? 18 + brightness * 14 : 16;
+      ctx.fillStyle = `rgb(${base}, ${base}, ${base + (brightness > 0.01 ? brightness * 8 : 0)})`;
+    } else {
+      const base = brightness > 0.01 ? 240 + brightness * 12 : 238;
+      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
+    }
+    ctx.fill();
+
+    // Subtle top highlight line
+    if (brightness > 0.05 && isDark) {
+      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.35})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    } else {
+      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+    // ── Right face ── (medium shade)
+    ctx.beginPath();
+    ctx.moveTo(top[1][0], top[1][1]);       // right corner
+    ctx.lineTo(top[2][0], top[2][1]);       // bottom corner
+    ctx.lineTo(top[2][0], top[2][1] + d);   // bottom + depth
+    ctx.lineTo(top[1][0], top[1][1] + d);   // right + depth
+    ctx.closePath();
+
+    if (isDark) {
+      const base = brightness > 0.01 ? 10 + brightness * 8 : 9;
+      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
+    } else {
+      const base = brightness > 0.01 ? 215 + brightness * 10 : 212;
+      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
+    }
+    ctx.fill();
+
+    if (brightness > 0.05 && isDark) {
+      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.2})`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+    // ── Left face ── (darkest)
+    ctx.beginPath();
+    ctx.moveTo(top[3][0], top[3][1]);       // left corner
+    ctx.lineTo(top[2][0], top[2][1]);       // bottom corner
+    ctx.lineTo(top[2][0], top[2][1] + d);   // bottom + depth
+    ctx.lineTo(top[3][0], top[3][1] + d);   // left + depth
+    ctx.closePath();
+
+    if (isDark) {
+      const base = brightness > 0.01 ? 6 + brightness * 5 : 5;
+      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
+    } else {
+      const base = brightness > 0.01 ? 200 + brightness * 10 : 198;
+      ctx.fillStyle = `rgb(${base}, ${base}, ${base})`;
+    }
+    ctx.fill();
+
+    if (brightness > 0.05 && isDark) {
+      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.15})`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+    // ── Blue glow halo when bright (dark mode only) ──
+    if (brightness > 0.08 && isDark) {
+      ctx.shadowColor = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.5})`;
+      ctx.shadowBlur = brightness * 12;
+      ctx.beginPath();
+      ctx.moveTo(top[0][0], top[0][1]);
+      for (let i = 1; i < 4; i++) ctx.lineTo(top[i][0], top[i][1]);
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${brightness * 0.4})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
     }
   }
 
@@ -41,102 +139,33 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
 
+    // Draw back-to-front (top rows first) for correct overlap
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const idx = r * cols + c;
-        const baseX = c * CELL;
-        const baseY = r * CELL;
-        const inner = CELL - GAP;
+        const px = c * CELL + (r % 2 === 0 ? 0 : CELL / 2);  // offset alternate rows
+        const py = r * (CUBE_H * 0.75 + 4);
 
-        // Calculate distance from mouse to cell center
-        const cx = baseX + CELL / 2;
-        const cy = baseY + CELL / 2;
-        const dist = Math.hypot(mouseX - cx, mouseY - cy);
+        const dist = Math.hypot(mouseX - px, mouseY - py);
 
-        // Target brightness based on proximity
-        const target = dist < GLOW_RADIUS
-          ? Math.pow(1 - dist / GLOW_RADIUS, 2)
-          : 0;
-
-        // Target scale: 1.7 at center, lerp down to 1.2 at edge, 1.0 outside
-        let targetScale = 1;
-        if (dist < SCALE_RADIUS) {
-          const t = 1 - dist / SCALE_RADIUS;
-          targetScale = 1 + (MAX_SCALE - 1) * t * t + (MIN_SCALE - 1) * (1 - t * t) * t;
+        // Target rise
+        let targetRise = 0;
+        if (dist < HOVER_RADIUS) {
+          const t = 1 - dist / HOVER_RADIUS;
+          targetRise = MAX_RISE * t * t;
         }
 
         // Smooth interpolation
-        cells[idx]  += (target - cells[idx]) * (target > cells[idx] ? 0.22 : FADE_SPEED);
-        scales[idx] += (targetScale - scales[idx]) * 0.18;
+        rise[idx] += (targetRise - rise[idx]) * (targetRise > rise[idx] ? 0.25 : FADE_SPEED);
 
-        const brightness = cells[idx];
-        const scale = scales[idx];
+        const currentRise = rise[idx];
+        const brightness = currentRise / MAX_RISE;
 
-        // Scaled square dimensions
-        const sInner = inner * scale;
-        const sx = cx - sInner / 2;
-        const sy = cy - sInner / 2;
-
-        // 3D volume offsets
-        const volOff = (scale - 1) * 3;
-
-        if (brightness > 0.01) {
-          const bri = brightness;
-
-          // --- Shadow / volume layer ---
-          if (isDark) {
-            // Dark: top-left light edge for volume
-            ctx.fillStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${bri * 0.06})`;
-            ctx.fillRect(sx - volOff * 0.5, sy - volOff * 0.5, sInner + volOff, sInner + volOff);
-          } else {
-            // Light: drop shadow beneath for cube depth
-            ctx.fillStyle = `rgba(0, 0, 0, ${0.06 + bri * 0.08})`;
-            ctx.fillRect(sx + volOff * 0.8, sy + volOff * 0.8, sInner, sInner);
-          }
-
-          // --- Main fill ---
-          if (isDark) {
-            ctx.fillStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${bri * 0.22})`;
-          } else {
-            ctx.fillStyle = `rgba(255, 255, 255, ${0.7 + bri * 0.25})`;
-          }
-          ctx.fillRect(sx, sy, sInner, sInner);
-
-          // --- Highlight edge (top-left for 3D) ---
-          if (isDark) {
-            ctx.fillStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${bri * 0.12})`;
-            ctx.fillRect(sx, sy, sInner, 1.5);
-            ctx.fillRect(sx, sy, 1.5, sInner);
-          } else {
-            ctx.fillStyle = `rgba(255, 255, 255, ${bri * 0.5})`;
-            ctx.fillRect(sx, sy, sInner, 1.5);
-            ctx.fillRect(sx, sy, 1.5, sInner);
-          }
-
-          // Glowing border (blue glow in both themes)
-          ctx.strokeStyle = `rgba(${GLOW_COLOR[0]}, ${GLOW_COLOR[1]}, ${GLOW_COLOR[2]}, ${bri * 0.7})`;
-          ctx.lineWidth = isDark ? 1 : 1.2;
-          ctx.strokeRect(sx + 0.5, sy + 0.5, sInner - 1, sInner - 1);
-        } else {
-          // Resting state — theme-aware + subtle volume
-          if (isDark) {
-            ctx.strokeStyle = `rgba(255, 255, 255, ${BORDER_ALPHA})`;
-            ctx.lineWidth = 0.5;
-          } else {
-            // Light: white fill + subtle shadow for depth
-            ctx.fillStyle = `rgba(0, 0, 0, 0.03)`;
-            ctx.fillRect(sx + 1.5, sy + 1.5, sInner, sInner);
-            ctx.fillStyle = `rgba(255, 255, 255, 0.65)`;
-            ctx.fillRect(sx, sy, sInner, sInner);
-            ctx.strokeStyle = `rgba(0, 0, 0, 0.10)`;
-            ctx.lineWidth = 0.8;
-          }
-          ctx.strokeRect(sx + 0.5, sy + 0.5, sInner - 1, sInner - 1);
-        }
+        drawCube(px, py - currentRise, currentRise, isDark, brightness);
       }
     }
 
-    animId = requestAnimationFrame(draw);
+    requestAnimationFrame(draw);
   }
 
   window.addEventListener("resize", resize);
@@ -264,34 +293,9 @@
   const cards = document.querySelectorAll(".bento-card");
 
   cards.forEach((card) => {
-    // Direct property-based approach — no CSS transition delay
-    let currentTiltX = 0, currentTiltY = 0, currentScale = 1;
-    let targetTiltX = 0, targetTiltY = 0, targetScale = 1;
-    let ticking = false;
+    let hovering = false;
 
-    function updateTransform() {
-      // Instant lerp — very fast catch-up
-      currentTiltX += (targetTiltX - currentTiltX) * 0.5;
-      currentTiltY += (targetTiltY - currentTiltY) * 0.5;
-      currentScale += (targetScale - currentScale) * 0.5;
-
-      card.style.transform = `perspective(800px) rotateX(${currentTiltX}deg) rotateY(${currentTiltY}deg) scale3d(${currentScale}, ${currentScale}, ${currentScale})`;
-
-      if (Math.abs(targetTiltX - currentTiltX) > 0.01 ||
-          Math.abs(targetTiltY - currentTiltY) > 0.01 ||
-          Math.abs(targetScale - currentScale) > 0.001) {
-        requestAnimationFrame(updateTransform);
-      } else {
-        ticking = false;
-      }
-    }
-
-    function startTicking() {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(updateTransform);
-      }
-    }
+    card.addEventListener("mouseenter", () => { hovering = true; });
 
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
@@ -303,11 +307,10 @@
       const nx = (x - centerX) / centerX;
       const ny = (y - centerY) / centerY;
 
-      targetTiltX = ny * 14;
-      targetTiltY = nx * -14;
-      targetScale = 1.03;
-
-      startTicking();
+      // Apply transform IMMEDIATELY — no lerp, no rAF delay
+      const tiltX = ny * 14;
+      const tiltY = nx * -14;
+      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.03, 1.03, 1.03)`;
 
       // Shine highlight
       const shine = card.querySelector(".bento-shine");
@@ -317,11 +320,8 @@
     });
 
     card.addEventListener("mouseleave", () => {
-      targetTiltX = 0;
-      targetTiltY = 0;
-      targetScale = 1;
-      startTicking();
-
+      hovering = false;
+      card.style.transform = "perspective(800px) rotateX(0) rotateY(0) scale3d(1,1,1)";
       const shine = card.querySelector(".bento-shine");
       if (shine) {
         shine.style.background = "transparent";
