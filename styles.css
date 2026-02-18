@@ -445,6 +445,17 @@ a { color: inherit; text-decoration: none; }
 .reveal:nth-child(3) { transition-delay: .16s; }
 .reveal:nth-child(4) { transition-delay: .22s; }
 
+/* Fallback: if JS hasn't run after 1.5s, show reveals anyway */
+@keyframes revealFallback {
+  to { opacity: 1; transform: none; }
+}
+.reveal {
+  animation: revealFallback .6s ease 1.8s forwards;
+}
+.reveal.visible {
+  animation: none;
+}
+
 /* ── RESPONSIVE ──────────────────────────── */
 @media (max-width: 980px) {
   .card-grid.three-cols { grid-template-columns: 1fr; }
