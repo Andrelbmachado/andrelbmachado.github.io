@@ -299,10 +299,10 @@ function updateScroll(dt) {
 
     // ── Horizontal slide: center → right (desktop) or stay centered (mobile) ──
     const slideT = THREE.MathUtils.smoothstep(local, 0.18, 0.35);
+    const isMobile = window.innerWidth < 980;
     const xOffset = isMobile ? 0 : THREE.MathUtils.lerp(0, 2.2, slideT);
     // On mobile, model moves up slightly to make room for text below
     const yLift = isMobile ? THREE.MathUtils.lerp(0, 0.5, slideT) : 0;
-    const xOffset = THREE.MathUtils.lerp(0, 2.2, slideT);
 
     // ── Float + auto-rotate + user drag ──
     m.group.position.x = xOffset;
