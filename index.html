@@ -3,25 +3,131 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>André Machado | Portfolio 3D</title>
+    <title>André Machado | Portfolio</title>
+    <meta name="description" content="Portfólio com experiência 3D, webdesign, apps, animação e devops." />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="hud">
-      <div id="crosshair" aria-hidden="true"></div>
-      <div id="hint">Clique para entrar • WASD para mover • Mouse para olhar</div>
-      <button id="enterButton" type="button">Entrar no Portfólio</button>
-    </div>
-
-    <div id="panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
-      <div class="panel-card">
-        <div class="panel-header">
-          <h2 id="panelTitle">Seção</h2>
-          <button id="closePanel" class="panel-close" type="button" aria-label="Fechar painel">✕</button>
-        </div>
-        <div id="panelBody" class="panel-body"></div>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#inicio">André Machado</a>
+        <nav class="menu" aria-label="Seções do portfólio">
+          <a href="#sec-3d">3D</a>
+          <a href="#sec-webdesign">Webdesign</a>
+          <a href="#sec-apps">Apps</a>
+          <a href="#sec-animacao">Animação</a>
+          <a href="#sec-devops">DevOps</a>
+        </nav>
       </div>
-    </div>
+    </header>
+
+    <main>
+      <section id="inicio" class="hero section">
+        <p class="eyebrow">PORTFÓLIO</p>
+        <h1>Design e desenvolvimento com foco em produto, performance e detalhe.</h1>
+        <p class="hero-text">
+          Experiência de navegação contínua, visual clean e apresentação 3D integrada ao conteúdo.
+        </p>
+      </section>
+
+      <section id="sec-3d" class="section section-3d">
+        <div class="section-heading">
+          <p class="eyebrow">SEÇÃO 3D</p>
+          <h2>Modelos 3D em destaque durante o scroll</h2>
+          <p>
+            Role para baixo para transicionar entre os dois itens do catálogo: <strong>Cuia</strong> e
+            <strong>Óculos</strong>.
+          </p>
+        </div>
+
+        <div class="three-stage" aria-label="Visualização 3D dos projetos">
+          <div class="three-canvas-wrap" id="threeCanvasWrap"></div>
+
+          <div class="three-track" aria-hidden="true">
+            <article class="track-step" data-step="0">
+              <h3>Projeto 01 · Cuia</h3>
+              <p>Estudo de forma, material e presença volumétrica em render para web.</p>
+            </article>
+            <article class="track-step" data-step="1">
+              <h3>Projeto 02 · Óculos</h3>
+              <p>Produto com leitura refinada, proporção técnica e apresentação minimalista.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-webdesign" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">WEBDESIGN</p>
+          <h2>Interfaces pensadas para clareza, ritmo e conversão</h2>
+        </div>
+        <div class="cards">
+          <article class="card reveal">
+            <h3>Landing Premium</h3>
+            <p>Direção visual e estrutura com foco em mensagem objetiva e performance.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Design System</h3>
+            <p>Biblioteca modular para escalar produtos com consistência visual.</p>
+          </article>
+          <article class="card reveal">
+            <h3>E-commerce UX</h3>
+            <p>Fluxo otimizado de descoberta de produto até checkout.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="sec-apps" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">APPS</p>
+          <h2>Produtos digitais com usabilidade e velocidade</h2>
+        </div>
+        <div class="cards two-cols">
+          <article class="card reveal">
+            <h3>App de Operações</h3>
+            <p>Gestão de tarefas e métricas com visual limpo para uso diário.</p>
+          </article>
+          <article class="card reveal">
+            <h3>App de Conteúdo</h3>
+            <p>Navegação fluida para leitura, descoberta e retenção.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="sec-animacao" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">ANIMAÇÃO</p>
+          <h2>Microinterações e motion como parte da narrativa</h2>
+        </div>
+        <div class="cards two-cols">
+          <article class="card reveal">
+            <h3>Motion de Interface</h3>
+            <p>Transições suaves e orientadas ao contexto de uso.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Storytelling Visual</h3>
+            <p>Sequência de blocos com timing para guiar atenção sem ruído.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="sec-devops" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">DEVOPS</p>
+          <h2>Entrega contínua e stack estática otimizada</h2>
+        </div>
+        <div class="cards two-cols">
+          <article class="card reveal">
+            <h3>Deploy GitHub Pages</h3>
+            <p>Pipeline simples para publicação de front-end estático.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Monitoramento Básico</h3>
+            <p>Boas práticas de build leve, versionamento e previsibilidade.</p>
+          </article>
+        </div>
+      </section>
+    </main>
 
     <script type="module" src="./main.js"></script>
   </body>

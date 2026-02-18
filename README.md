@@ -1,13 +1,14 @@
-# Portfólio 3D Interativo (Three.js)
+# Portfólio Scroll + 3D (Three.js)
 
-Portfólio em primeira pessoa no browser, com estética low-poly adulta, 3 árvores interativas (Sobre, Projetos, Contato), hover por mira, abertura com tecla `E` e ciclo dia/noite.
+Portfólio com rolagem vertical, navegação superior por categorias e seção 3D interativa com dois modelos GLB (`cuia.glb` e `oculos.glb`) animados pelo scroll.
 
 ## Estrutura
 
 - `index.html`
 - `styles.css`
 - `main.js`
-- `assets/`
+- `assets/models/cuia.glb`
+- `assets/models/oculos.glb`
 
 ## Rodar localmente
 
@@ -29,12 +30,20 @@ Depois abra: `http://localhost:5500`
 
 > Evite abrir com `file://`, pois módulos ES podem falhar por CORS.
 
-## Controles
+## Seções do site
 
-- Mouse: olhar
-- `W A S D`: mover
-- `E`: abrir seção quando mirando na árvore
-- `Esc`: sair do pointer lock e/ou fechar painel
+- 3D
+- Webdesign
+- Apps
+- Animação
+- DevOps
+
+## Interações implementadas
+
+- Barra superior sticky com destaque da seção ativa.
+- Scroll storytelling com palco 3D fixo (sticky) na seção `3D`.
+- Transição entre os dois modelos 3D conforme a rolagem.
+- Cards com animação de entrada suave nas seções de conteúdo.
 
 ## Publicar no GitHub Pages
 
@@ -48,6 +57,7 @@ Depois abra: `http://localhost:5500`
 
 ## Observações de performance
 
-- Cena leve com geometrias simples (plane/cylinder/cone/sprite).
-- Sem texturas externas pesadas e sem backend em produção.
-- Mundo limitado para navegação curta (perímetro ~500 unidades/metros).
+- Site 100% estático e compatível com GitHub Pages.
+- Sem backend em produção.
+- Modelos carregados localmente via `assets/models`.
+- Three.js + GLTFLoader via CDN (módulos ES).
