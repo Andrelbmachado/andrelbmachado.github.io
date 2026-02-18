@@ -14,9 +14,6 @@ console.log("[3D] Module loaded. THREE version:", THREE.REVISION);
 const stage       = document.getElementById("stage");
 const canvasWrap  = document.getElementById("stageCanvas");
 const slides      = Array.from(document.querySelectorAll(".stage-slide"));
-const reveals     = Array.from(document.querySelectorAll(".reveal"));
-const navLinks    = Array.from(document.querySelectorAll(".nav-links a"));
-const sections    = Array.from(document.querySelectorAll("main section[id]"));
 
 /* ── Set stage height ────────────────────── */
 const NUM_SLIDES = slides.length;
@@ -134,37 +131,8 @@ canvasWrap.addEventListener("pointerup", () => { isDragging = false; });
 canvasWrap.addEventListener("pointercancel", () => { isDragging = false; });
 
 /* ── Init ────────────────────────────────── */
-initReveal();
-initActiveNav();
 init3D();
 window.addEventListener("resize", onResize);
-
-/* ── Reveal observer ─────────────────────── */
-function initReveal() {
-  const obs = new IntersectionObserver(
-    (entries) => entries.forEach((e) => {
-      if (e.isIntersecting) e.target.classList.add("visible");
-    }),
-    { threshold: 0.15 }
-  );
-  reveals.forEach((el) => obs.observe(el));
-}
-
-/* ── Active nav link ─────────────────────── */
-function initActiveNav() {
-  const obs = new IntersectionObserver(
-    (entries) => entries.forEach((e) => {
-      if (e.isIntersecting) {
-        const id = e.target.id;
-        navLinks.forEach((l) =>
-          l.classList.toggle("active", l.getAttribute("href") === `#${id}`)
-        );
-      }
-    }),
-    { rootMargin: "-30% 0px -60% 0px" }
-  );
-  sections.forEach((s) => obs.observe(s));
-}
 
 /* ── Load 3D models ──────────────────────── */
 async function init3D() {
