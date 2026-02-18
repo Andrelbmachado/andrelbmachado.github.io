@@ -18,8 +18,8 @@ const sections    = Array.from(document.querySelectorAll("main section[id]"));
 
 /* ── Set stage height ────────────────────── */
 const NUM_SLIDES = slides.length;
-// Each slide is 200vh in CSS, so total scroll = NUM_SLIDES * 200vh + 100vh buffer
-stage.style.height = `${NUM_SLIDES * 200 + 100}vh`;
+// Each slide is 350vh in CSS, so total scroll = NUM_SLIDES * 350vh + 100vh buffer
+stage.style.height = `${NUM_SLIDES * 350 + 100}vh`;
 
 /* ── Renderer ────────────────────────────── */
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -61,19 +61,32 @@ const hemiL = new THREE.HemisphereLight(0xf0f4ff, 0xe4e6ec, 1.0);
 scene.add(hemiL);
 
 /* ── Floor ───────────────────────────────── */
+const floorMat = new THREE.MeshStandardMaterial({
+  color: 0xecedf0,
+  roughness: 0.95,
+  metalness: 0.02,
+  transparent: true,
+  opacity: 0.7,
+});
 const floor = new THREE.Mesh(
   new THREE.CircleGeometry(4.5, 64),
-  new THREE.MeshStandardMaterial({
-    color: 0xecedf0,
-    roughness: 0.95,
-    metalness: 0.02,
-    transparent: true,
-    opacity: 0.7,
-  })
+  floorMat
 );
 floor.rotation.x = -Math.PI / 2;
 floor.position.y = -1.45;
 scene.add(floor);
+
+// Adapt floor to dark/light theme
+function updateFloorTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  floorMat.color.set(isDark ? 0x111111 : 0xecedf0);
+  floorMat.opacity = isDark ? 0.0 : 0.7;
+  floorMat.needsUpdate = true;
+}
+updateFloorTheme();
+// Watch for theme changes
+const themeObserver = new MutationObserver(updateFloorTheme);
+themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
 /* ── Models ──────────────────────────────── */
 const loader = new GLTFLoader();
@@ -275,13 +288,15 @@ function updateScroll(dt) {
 
     if (!isActive) return;
 
-    // ── Scale: small → full during intro ──
-    const scaleT = THREE.MathUtils.smoothstep(local, 0.0, 0.2);
-    const s = THREE.MathUtils.lerp(0.7, 1, scaleT);
-    m.group.scale.setScalar(s);
+    // ── Scale: small → full during intro, then shrink when sliding right ──
+    const scaleT = THREE.MathUtils.smoothstep(local, 0.0, 0.15);
+    const introScale = THREE.MathUtils.lerp(0.6, 1, scaleT);
+    // Shrink to 0.7 when slid to the right so model fits on screen
+    const shrinkT = THREE.MathUtils.smoothstep(local, 0.18, 0.35);
+    const readingScale = THREE.MathUtils.lerp(1, 0.72, shrinkT);
+    m.group.scale.setScalar(introScale * readingScale);
 
     // ── Horizontal slide: center → right when text appears ──
-    // slideT: 0 at center, 1 at right position
     const slideT = THREE.MathUtils.smoothstep(local, 0.18, 0.35);
     const xOffset = THREE.MathUtils.lerp(0, 2.2, slideT);
 

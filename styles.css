@@ -267,9 +267,9 @@ a { color: inherit; text-decoration: none; }
   pointer-events: none;
 }
 
-/* Each model gets 2x viewport — 1 for intro, 1 for reading */
+/* Each model gets 3.5x viewport — generous scroll for gradual reveal */
 .stage-slide {
-  height: 200vh;
+  height: 350vh;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
