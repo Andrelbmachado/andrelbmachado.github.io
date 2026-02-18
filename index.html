@@ -3,178 +3,244 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>André Machado | Portfolio</title>
-    <meta name="description" content="Portfólio com experiência 3D, webdesign, apps, animação e devops." />
+    <title>André Machado — Design &amp; Development</title>
+    <meta name="description" content="Portfólio de André Machado. Design, desenvolvimento, 3D, apps, animação e devops." />
     <meta name="color-scheme" content="light" />
     <link rel="preconnect" href="https://unpkg.com" crossorigin />
-    <link rel="preload" href="/styles.css?v=20260218" as="style" />
-    <link rel="stylesheet" href="/styles.css?v=20260218" />
-    <style>
-      html,
-      body {
-        margin: 0;
-        background: #f5f5f7;
-        color: #1d1d1f;
-        font-family: "SF Pro Display", "SF Pro Text", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        background: rgba(245, 245, 247, 0.82);
-      }
-
-      .topbar-inner {
-        max-width: 1160px;
-        margin: 0 auto;
-        padding: 0 22px;
-        min-height: 52px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .menu {
-        display: flex;
-        gap: 18px;
-      }
-
-      .menu a,
-      .brand {
-        color: #1d1d1f;
-        text-decoration: none;
-      }
-
-      .section {
-        max-width: 1160px;
-        margin: 0 auto;
-        padding: 84px 22px;
-      }
-    </style>
+    <link rel="stylesheet" href="/styles.css?v=2" />
   </head>
   <body>
-    <header class="topbar">
-      <div class="topbar-inner">
-        <a class="brand" href="#inicio">André Machado</a>
-        <nav class="menu" aria-label="Seções do portfólio">
+
+    <!-- ─── NAV ─── -->
+    <nav class="nav" id="nav">
+      <div class="nav-inner">
+        <a class="nav-brand" href="#hero">André Machado</a>
+        <div class="nav-links">
           <a href="#sec-3d">3D</a>
           <a href="#sec-webdesign">Webdesign</a>
           <a href="#sec-apps">Apps</a>
           <a href="#sec-animacao">Animação</a>
           <a href="#sec-devops">DevOps</a>
-        </nav>
+          <a href="#sec-contato">Contato</a>
+        </div>
       </div>
-    </header>
+    </nav>
 
     <main>
-      <section id="inicio" class="hero section">
-        <p class="eyebrow">PORTFÓLIO</p>
-        <h1>Design e desenvolvimento com foco em produto, performance e detalhe.</h1>
-        <p class="hero-text">
-          Experiência de navegação contínua, visual clean e apresentação 3D integrada ao conteúdo.
+
+      <!-- ─── HERO ─── -->
+      <section id="hero" class="hero">
+        <p class="overline reveal">PORTFÓLIO 2026</p>
+        <h1 class="hero-title reveal">Design que comunica.<br/>Código que entrega.</h1>
+        <p class="hero-sub reveal">
+          Foco em produto, performance e atenção ao detalhe. Cada projeto é pensado
+          para gerar impacto real — da interface ao deploy.
         </p>
+        <a class="hero-cta reveal" href="#sec-3d">Explorar trabalhos</a>
       </section>
 
-      <section id="sec-3d" class="section section-3d">
-        <div class="section-heading">
-          <p class="eyebrow">SEÇÃO 3D</p>
-          <h2>Modelos 3D em destaque durante o scroll</h2>
-          <p>
-            Role para baixo para transicionar entre os dois itens do catálogo: <strong>Cuia</strong> e
-            <strong>Óculos</strong>.
+      <!-- ─── 3D SHOWCASE ─── -->
+      <section id="sec-3d" class="sec-showcase">
+        <div class="showcase-intro">
+          <p class="overline reveal">MODELAGEM 3D</p>
+          <h2 class="sec-title reveal">Objetos que contam<br/>uma história.</h2>
+          <p class="sec-body reveal">
+            Do conceito ao render final, cada modelo é construído pensando em proporção,
+            materialidade e presença. Role para conhecer dois projetos do catálogo —
+            apresentados em tempo real no seu navegador.
           </p>
         </div>
 
-        <div class="three-stage" aria-label="Visualização 3D dos projetos">
-          <div class="three-canvas-wrap" id="threeCanvasWrap"></div>
+        <!-- 3D STAGE — sticky canvas + scroll track -->
+        <div class="stage" id="stage">
+          <div class="stage-canvas" id="stageCanvas"></div>
 
-          <div class="three-track" aria-hidden="true">
-            <article class="track-step" data-step="0">
-              <h3>Projeto 01 · Cuia</h3>
-              <p>Estudo de forma, material e presença volumétrica em render para web.</p>
-            </article>
-            <article class="track-step" data-step="1">
-              <h3>Projeto 02 · Óculos</h3>
-              <p>Produto com leitura refinada, proporção técnica e apresentação minimalista.</p>
-            </article>
+          <div class="stage-track">
+            <!-- Model 1 -->
+            <div class="stage-slide" data-model="0">
+              <div class="slide-text">
+                <p class="overline">PROJETO 01</p>
+                <h3 class="slide-title">Cuia</h3>
+                <p class="slide-body">
+                  Estudo volumétrico inspirado em cultura regional. A peça explora formas
+                  orgânicas, texturas terrosas e a relação entre tradição e linguagem
+                  digital contemporânea. Modelada em Blender, com atenção a topologia
+                  limpa, subdivisão controlada e materiais PBR.
+                </p>
+                <div class="slide-stats">
+                  <div class="stat"><span class="stat-value">2.4K</span><span class="stat-label">Polígonos</span></div>
+                  <div class="stat"><span class="stat-value">PBR</span><span class="stat-label">Materiais</span></div>
+                  <div class="stat"><span class="stat-value">WebGL</span><span class="stat-label">Render</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model 2 -->
+            <div class="stage-slide" data-model="1">
+              <div class="slide-text">
+                <p class="overline">PROJETO 02</p>
+                <h3 class="slide-title">Óculos</h3>
+                <p class="slide-body">
+                  Produto com leitura refinada, proporção técnica e acabamento industrial.
+                  O modelo transita entre render de catálogo e apresentação interativa
+                  em tempo real. Construído com foco em hard-surface modeling, edge flow
+                  preciso e iluminação de estúdio.
+                </p>
+                <div class="slide-stats">
+                  <div class="stat"><span class="stat-value">3.1K</span><span class="stat-label">Polígonos</span></div>
+                  <div class="stat"><span class="stat-value">Glass</span><span class="stat-label">Shader</span></div>
+                  <div class="stat"><span class="stat-value">60fps</span><span class="stat-label">Real-time</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="sec-webdesign" class="section">
-        <div class="section-heading">
-          <p class="eyebrow">WEBDESIGN</p>
-          <h2>Interfaces pensadas para clareza, ritmo e conversão</h2>
+      <!-- ─── ABOUT ─── -->
+      <section class="sec-about">
+        <div class="about-inner">
+          <p class="overline reveal">SOBRE</p>
+          <h2 class="sec-title reveal">Construir é a minha linguagem.</h2>
+          <p class="sec-body reveal">
+            Sou designer e desenvolvedor com experiência em interfaces digitais, modelagem 3D, prototipação
+            e entrega de produto. Trabalho na intersecção entre estética e engenharia — onde cada pixel
+            tem justificativa e cada linha de código tem propósito. Acredito que bons produtos nascem de
+            restrições bem compreendidas, iteração constante e respeito profundo pelo contexto do usuário.
+          </p>
+          <div class="skills-grid reveal">
+            <div class="skill-chip">UX / UI Design</div>
+            <div class="skill-chip">Front-end</div>
+            <div class="skill-chip">Modelagem 3D</div>
+            <div class="skill-chip">Motion Design</div>
+            <div class="skill-chip">Design Systems</div>
+            <div class="skill-chip">Prototipação</div>
+            <div class="skill-chip">Three.js / WebGL</div>
+            <div class="skill-chip">DevOps básico</div>
+          </div>
         </div>
-        <div class="cards">
+      </section>
+
+      <!-- ─── WEBDESIGN ─── -->
+      <section id="sec-webdesign" class="sec-cards">
+        <div class="sec-cards-head">
+          <p class="overline reveal">WEBDESIGN</p>
+          <h2 class="sec-title reveal">Interfaces pensadas para<br/>clareza, ritmo e conversão.</h2>
+          <p class="sec-body reveal">
+            Cada projeto web combina hierarquia visual, espaçamento generoso e performance.
+            O objetivo é sempre o mesmo: comunicar com eficiência e gerar resultado mensurável.
+          </p>
+        </div>
+        <div class="card-grid three-cols">
           <article class="card reveal">
             <h3>Landing Premium</h3>
-            <p>Direção visual e estrutura com foco em mensagem objetiva e performance.</p>
+            <p>Direção visual e estrutura com foco em mensagem objetiva e performance. Layouts construídos para conversão, com hierarquia tipográfica e CTA claro em cada dobra. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
           </article>
           <article class="card reveal">
             <h3>Design System</h3>
-            <p>Biblioteca modular para escalar produtos com consistência visual.</p>
+            <p>Biblioteca modular para escalar produtos com consistência. Tokens de cor, tipografia, espaçamento e componentes documentados para manter coerência visual em equipes de qualquer tamanho.</p>
           </article>
           <article class="card reveal">
             <h3>E-commerce UX</h3>
-            <p>Fluxo otimizado de descoberta de produto até checkout.</p>
+            <p>Fluxo otimizado de descoberta até checkout. Filtros inteligentes, micro-interações de feedback e layout responsivo que aumenta o ticket médio sem sacrificar a experiência.</p>
           </article>
         </div>
       </section>
 
-      <section id="sec-apps" class="section">
-        <div class="section-heading">
-          <p class="eyebrow">APPS</p>
-          <h2>Produtos digitais com usabilidade e velocidade</h2>
+      <!-- ─── APPS ─── -->
+      <section id="sec-apps" class="sec-cards">
+        <div class="sec-cards-head">
+          <p class="overline reveal">APPS</p>
+          <h2 class="sec-title reveal">Produtos digitais com<br/>usabilidade e velocidade.</h2>
+          <p class="sec-body reveal">
+            Aplicações pensadas para o dia a dia, com navegação clara, carregamento instantâneo
+            e design que desaparece para deixar o conteúdo brilhar.
+          </p>
         </div>
-        <div class="cards two-cols">
+        <div class="card-grid two-cols">
           <article class="card reveal">
             <h3>App de Operações</h3>
-            <p>Gestão de tarefas e métricas com visual limpo para uso diário.</p>
+            <p>Gestão de tarefas e métricas com visual limpo. Dashboards em tempo real, notificações contextuais e fluxo pensado para reduzir cliques e aumentar produtividade. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</p>
           </article>
           <article class="card reveal">
             <h3>App de Conteúdo</h3>
-            <p>Navegação fluida para leitura, descoberta e retenção.</p>
+            <p>Navegação fluida para leitura, descoberta e retenção. Sistema de recomendação visual, modo leitura e tipografia otimizada para telas pequenas. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.</p>
           </article>
         </div>
       </section>
 
-      <section id="sec-animacao" class="section">
-        <div class="section-heading">
-          <p class="eyebrow">ANIMAÇÃO</p>
-          <h2>Microinterações e motion como parte da narrativa</h2>
+      <!-- ─── ANIMAÇÃO ─── -->
+      <section id="sec-animacao" class="sec-cards">
+        <div class="sec-cards-head">
+          <p class="overline reveal">ANIMAÇÃO</p>
+          <h2 class="sec-title reveal">Microinterações e motion<br/>como parte da narrativa.</h2>
+          <p class="sec-body reveal">
+            Animação não é ornamento — é comunicação. Cada transição guia o olhar, reforça
+            a hierarquia e adiciona uma camada de significado à experiência.
+          </p>
         </div>
-        <div class="cards two-cols">
+        <div class="card-grid two-cols">
           <article class="card reveal">
             <h3>Motion de Interface</h3>
-            <p>Transições suaves e orientadas ao contexto de uso.</p>
+            <p>Transições suaves orientadas ao contexto: loading states, hover feedback, page transitions e skeleton screens. Tudo com timing preciso e easing natural que respeita a percepção do usuário.</p>
           </article>
           <article class="card reveal">
             <h3>Storytelling Visual</h3>
-            <p>Sequência de blocos com timing para guiar atenção sem ruído.</p>
+            <p>Sequência de blocos com timing para guiar atenção sem ruído. Scroll-triggered animations, parallax controlado e reveals progressivos que constroem narrativa conforme o usuário avança.</p>
           </article>
         </div>
       </section>
 
-      <section id="sec-devops" class="section">
-        <div class="section-heading">
-          <p class="eyebrow">DEVOPS</p>
-          <h2>Entrega contínua e stack estática otimizada</h2>
+      <!-- ─── DEVOPS ─── -->
+      <section id="sec-devops" class="sec-cards">
+        <div class="sec-cards-head">
+          <p class="overline reveal">DEVOPS</p>
+          <h2 class="sec-title reveal">Entrega contínua e<br/>stack otimizada.</h2>
+          <p class="sec-body reveal">
+            Infraestrutura simples, previsível e automatizada. O foco é manter o ciclo de
+            entrega rápido sem abrir mão de qualidade ou estabilidade.
+          </p>
         </div>
-        <div class="cards two-cols">
+        <div class="card-grid two-cols">
           <article class="card reveal">
-            <h3>Deploy GitHub Pages</h3>
-            <p>Pipeline simples para publicação de front-end estático.</p>
+            <h3>Deploy Estático</h3>
+            <p>Pipeline de publicação com GitHub Pages, Vercel ou Netlify. Build otimizado, cache inteligente, compressão de assets e preview automático por branch. Zero downtime, sempre.</p>
           </article>
           <article class="card reveal">
-            <h3>Monitoramento Básico</h3>
-            <p>Boas práticas de build leve, versionamento e previsibilidade.</p>
+            <h3>Monitoramento</h3>
+            <p>Boas práticas de observabilidade para front-end: Lighthouse CI, Core Web Vitals tracking e alertas de regressão. Cada deploy é validado antes de ir ao ar.</p>
           </article>
         </div>
       </section>
+
+      <!-- ─── CONTATO ─── -->
+      <section id="sec-contato" class="sec-contato">
+        <div class="contato-inner">
+          <p class="overline reveal">CONTATO</p>
+          <h2 class="sec-title reveal">Vamos conversar.</h2>
+          <p class="sec-body reveal">
+            Se você tem um projeto, uma ideia ou simplesmente quer trocar uma ideia sobre
+            design e tecnologia — estou disponível.
+          </p>
+          <div class="contato-links reveal">
+            <a href="mailto:andremachado@email.com" class="contato-link">andremachado@email.com</a>
+            <a href="#" class="contato-link">LinkedIn</a>
+            <a href="#" class="contato-link">GitHub</a>
+            <a href="#" class="contato-link">Behance</a>
+          </div>
+        </div>
+      </section>
+
     </main>
 
-    <script type="module" src="/main.js?v=20260218"></script>
+    <!-- ─── FOOTER ─── -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <p>© 2026 André Machado. Todos os direitos reservados.</p>
+        <p class="footer-note">Construído com Three.js, HTML e CSS. Hospedado no GitHub Pages.</p>
+      </div>
+    </footer>
+
+    <script type="module" src="/main.js?v=2"></script>
   </body>
 </html>

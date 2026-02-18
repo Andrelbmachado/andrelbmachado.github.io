@@ -1,283 +1,266 @@
+/* ─────────────────────────────────────────────
+   André Machado — Portfolio  ·  Three.js 3D
+   ───────────────────────────────────────────── */
+
 import * as THREE from "https://unpkg.com/three@0.164.1/build/three.module.js";
 import { GLTFLoader } from "https://unpkg.com/three@0.164.1/examples/jsm/loaders/GLTFLoader.js";
 
-const section3D = document.getElementById("sec-3d");
-const stageElement = section3D.querySelector(".three-stage");
-const canvasWrap = document.getElementById("threeCanvasWrap");
-const trackSteps = Array.from(document.querySelectorAll(".track-step"));
-const revealElements = Array.from(document.querySelectorAll(".reveal"));
-const menuLinks = Array.from(document.querySelectorAll(".menu a"));
-const allSections = Array.from(document.querySelectorAll("main section[id]"));
+/* ── DOM refs ────────────────────────────── */
+const stage       = document.getElementById("stage");
+const canvasWrap  = document.getElementById("stageCanvas");
+const slides      = Array.from(document.querySelectorAll(".stage-slide"));
+const slideTexts  = Array.from(document.querySelectorAll(".slide-text"));
+const reveals     = Array.from(document.querySelectorAll(".reveal"));
+const navLinks    = Array.from(document.querySelectorAll(".nav-links a"));
+const sections    = Array.from(document.querySelectorAll("main section[id]"));
 
+/* ── Set stage height ────────────────────── */
+const NUM_SLIDES = slides.length;
+stage.style.height = `${(NUM_SLIDES + 1) * 100}vh`;
+
+/* ── Renderer ────────────────────────────── */
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(canvasWrap.clientWidth, canvasWrap.clientHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 1.1;
 canvasWrap.appendChild(renderer.domElement);
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(36, canvasWrap.clientWidth / canvasWrap.clientHeight, 0.1, 100);
-camera.position.set(0, 0.95, 6.2);
+/* ── Scene ───────────────────────────────── */
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  34, canvasWrap.clientWidth / canvasWrap.clientHeight, 0.1, 100
+);
+camera.position.set(0, 0.6, 6);
 
-const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
-keyLight.position.set(4.4, 5.6, 6.3);
-scene.add(keyLight);
+/* ── Lighting — studio setup ─────────────── */
+const key = new THREE.DirectionalLight(0xffffff, 2.6);
+key.position.set(5, 6, 7);
+scene.add(key);
 
-const fillLight = new THREE.DirectionalLight(0xdce4ff, 1.2);
-fillLight.position.set(-4.2, 2.8, 4.4);
-scene.add(fillLight);
+const fill = new THREE.DirectionalLight(0xd8e0f3, 1.4);
+fill.position.set(-4, 3, 5);
+scene.add(fill);
 
-const hemiLight = new THREE.HemisphereLight(0xf6f9ff, 0xe6e8ef, 1.1);
-scene.add(hemiLight);
+const rim = new THREE.DirectionalLight(0xffffff, 1.0);
+rim.position.set(0, 4, -5);
+scene.add(rim);
 
+const hemi = new THREE.HemisphereLight(0xf0f4ff, 0xe4e6ec, 0.9);
+scene.add(hemi);
+
+/* ── Subtle floor disc ───────────────────── */
 const floor = new THREE.Mesh(
-  new THREE.CircleGeometry(3.9, 64),
+  new THREE.CircleGeometry(4.5, 64),
   new THREE.MeshStandardMaterial({
-    color: 0xf2f3f6,
-    roughness: 0.92,
-    metalness: 0.04,
+    color: 0xecedf0,
+    roughness: 0.95,
+    metalness: 0.02,
     transparent: true,
-    opacity: 0.94
+    opacity: 0.7,
   })
 );
 floor.rotation.x = -Math.PI / 2;
-floor.position.y = -1.25;
+floor.position.y = -1.45;
 scene.add(floor);
 
-const halo = new THREE.Mesh(
-  new THREE.RingGeometry(3.2, 3.7, 64),
-  new THREE.MeshBasicMaterial({ color: 0xe4e8f2, transparent: true, opacity: 0.42 })
-);
-halo.rotation.x = -Math.PI / 2;
-halo.position.y = -1.24;
-scene.add(halo);
-
+/* ── Models ──────────────────────────────── */
 const loader = new GLTFLoader();
-const modelWrappers = [];
-let animationClock = new THREE.Clock();
-let currentScrollProgress = 0;
+const models = [];          // { group, baseY }
+let smoothProgress = 0;
+const clock = new THREE.Clock();
 
-setupRevealAnimation();
-setupActiveMenu();
+const MODEL_DEFS = [
+  { path: "./assets/models/cuia.glb",   size: 2.6, y: -0.1, rotY: -0.3  },
+  { path: "./assets/models/oculos.glb", size: 3.4, y: -0.05, rotY:  0.5 },
+];
+
+/* ── Init ────────────────────────────────── */
+initReveal();
+initActiveNav();
 init3D();
 window.addEventListener("resize", onResize);
 
-function setupRevealAnimation() {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in");
-        }
-      });
-    },
-    { threshold: 0.2 }
+/* ── Reveal observer ─────────────────────── */
+function initReveal() {
+  const obs = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) e.target.classList.add("visible");
+    }),
+    { threshold: 0.15 }
   );
-
-  revealElements.forEach((element) => observer.observe(element));
+  reveals.forEach((el) => obs.observe(el));
 }
 
-function setupActiveMenu() {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          menuLinks.forEach((link) => {
-            link.classList.toggle("is-active", link.getAttribute("href") === `#${id}`);
+/* ── Active nav link ─────────────────────── */
+function initActiveNav() {
+  const obs = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navLinks.forEach((l) =>
+          l.classList.toggle("active", l.getAttribute("href") === `#${id}`)
+        );
+      }
+    }),
+    { rootMargin: "-30% 0px -60% 0px" }
+  );
+  sections.forEach((s) => obs.observe(s));
+}
+
+/* ── Load 3D models ──────────────────────── */
+async function init3D() {
+  try {
+    const loaded = await Promise.all(
+      MODEL_DEFS.map((d) => loadModel(d.path, d.size))
+    );
+
+    loaded.forEach((mesh, i) => {
+      const group = new THREE.Group();
+      group.add(mesh);
+      group.position.y = MODEL_DEFS[i].y;
+      group.rotation.y = MODEL_DEFS[i].rotY;
+      group.visible = false;        // start hidden
+      scene.add(group);
+      models.push({ group, baseY: MODEL_DEFS[i].y });
+    });
+
+    animate();
+  } catch (err) {
+    console.error("3D load error:", err);
+    const msg = document.createElement("div");
+    Object.assign(msg.style, {
+      position: "absolute", inset: "0",
+      display: "grid", placeItems: "center",
+      fontSize: ".95rem", color: "#6e6e73",
+    });
+    msg.textContent = "Não foi possível carregar os modelos 3D.";
+    canvasWrap.appendChild(msg);
+  }
+}
+
+function loadModel(path, targetSize) {
+  return new Promise((resolve, reject) => {
+    loader.load(path, (gltf) => {
+      const m = gltf.scene;
+      const box = new THREE.Box3().setFromObject(m);
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      box.getSize(size);
+      box.getCenter(center);
+
+      const s = targetSize / (Math.max(size.x, size.y, size.z) || 1);
+      m.scale.setScalar(s);
+      m.position.sub(center.multiplyScalar(s));
+
+      m.traverse((c) => {
+        if (c.isMesh && c.material) {
+          const mats = Array.isArray(c.material) ? c.material : [c.material];
+          mats.forEach((mat) => {
+            mat.transparent = true;
+            mat.needsUpdate = true;
           });
         }
       });
-    },
-    {
-      rootMargin: "-35% 0px -55% 0px",
-      threshold: 0
-    }
+
+      resolve(m);
+    }, undefined, reject);
+  });
+}
+
+/* ── Scroll-driven 3D update ─────────────── */
+function updateScroll(dt) {
+  if (!models.length) return;
+
+  const stageRect = stage.getBoundingClientRect();
+  const vh = window.innerHeight;
+
+  // raw 0→1 across the stage section
+  const raw = THREE.MathUtils.clamp(
+    -stageRect.top / (stageRect.height - vh), 0, 1
   );
 
-  allSections.forEach((section) => observer.observe(section));
-}
+  // smooth damp
+  smoothProgress = THREE.MathUtils.damp(
+    smoothProgress, raw, 5.5, Math.max(dt, 1 / 120)
+  );
 
-async function init3D() {
-  try {
-    const [cuia, oculos] = await Promise.all([
-      loadModel("./assets/models/cuia.glb", 2.4),
-      loadModel("./assets/models/oculos.glb", 3.1)
-    ]);
+  const p = smoothProgress;
+  const t = performance.now();
 
-    const cuiaWrapper = new THREE.Group();
-    cuiaWrapper.add(cuia);
-    cuiaWrapper.position.set(-1.55, -0.08, 0);
-    scene.add(cuiaWrapper);
+  // Determine which model to show (split evenly)
+  const segSize = 1 / NUM_SLIDES;
 
-    const oculosWrapper = new THREE.Group();
-    oculosWrapper.add(oculos);
-    oculosWrapper.position.set(1.65, -0.09, 0);
-    scene.add(oculosWrapper);
+  models.forEach((m, i) => {
+    const segStart = i * segSize;
+    const segEnd   = (i + 1) * segSize;
 
-    modelWrappers.push({
-      key: "cuia",
-      group: cuiaWrapper,
-      baseRotationY: -0.38,
-      basePosX: -1.55
-    });
-
-    modelWrappers.push({
-      key: "oculos",
-      group: oculosWrapper,
-      baseRotationY: 0.58,
-      basePosX: 1.65
-    });
-
-    update3DByScroll(0);
-    animate();
-  } catch (error) {
-    const message = document.createElement("div");
-    message.style.position = "absolute";
-    message.style.inset = "0";
-    message.style.display = "grid";
-    message.style.placeItems = "center";
-    message.style.fontSize = "0.95rem";
-    message.style.color = "#6e6e73";
-    message.textContent = "Não foi possível carregar os modelos 3D.";
-    canvasWrap.appendChild(message);
-    console.error(error);
-  }
-}
-
-function loadModel(path, targetMaxSize) {
-  return new Promise((resolve, reject) => {
-    loader.load(
-      path,
-      (gltf) => {
-        const model = gltf.scene;
-        normalizeModelSize(model, targetMaxSize);
-        optimizeMaterials(model);
-        resolve(model);
-      },
-      undefined,
-      (error) => reject(error)
+    // local progress: 0→1 within this model's segment
+    const local = THREE.MathUtils.clamp(
+      (p - segStart) / segSize, 0, 1
     );
-  });
-}
 
-function normalizeModelSize(object, targetMaxSize) {
-  const box = new THREE.Box3().setFromObject(object);
-  const size = new THREE.Vector3();
-  const center = new THREE.Vector3();
-  box.getSize(size);
-  box.getCenter(center);
+    // fade: ramp in 0→0.15, hold, ramp out 0.85→1
+    const fadeIn  = THREE.MathUtils.smoothstep(local, 0.0,  0.15);
+    const fadeOut = 1 - THREE.MathUtils.smoothstep(local, 0.82, 1.0);
+    // For the last model, don't fade out
+    const opacity = i === NUM_SLIDES - 1
+      ? fadeIn
+      : Math.min(fadeIn, fadeOut);
 
-  const maxAxis = Math.max(size.x, size.y, size.z) || 1;
-  const scale = targetMaxSize / maxAxis;
-  object.scale.setScalar(scale);
+    const isActive = opacity > 0.01;
+    m.group.visible = isActive;
 
-  object.position.x -= center.x * scale;
-  object.position.y -= center.y * scale;
-  object.position.z -= center.z * scale;
-}
+    if (!isActive) return;
 
-function optimizeMaterials(object) {
-  object.traverse((child) => {
-    if (!child.isMesh || !child.material) {
-      return;
-    }
+    // gentle float & auto-rotate
+    m.group.position.y = m.baseY + Math.sin(t * 0.0012 + i) * 0.06;
+    m.group.rotation.y = MODEL_DEFS[i].rotY + t * 0.00025;
 
-    const materials = Array.isArray(child.material) ? child.material : [child.material];
-    materials.forEach((material) => {
-      material.transparent = true;
-      material.opacity = 1;
-      material.needsUpdate = true;
+    // scale entrance: small → full
+    const scaleT = THREE.MathUtils.smoothstep(local, 0.0, 0.2);
+    const s = THREE.MathUtils.lerp(0.7, 1, scaleT);
+    m.group.scale.setScalar(s);
+
+    // set opacity on meshes
+    m.group.traverse((c) => {
+      if (c.isMesh && c.material) {
+        const mats = Array.isArray(c.material) ? c.material : [c.material];
+        mats.forEach((mat) => { mat.opacity = opacity; });
+      }
     });
   });
-}
 
-function easeInOut(value) {
-  return value * value * (3 - 2 * value);
-}
-
-function segmentProgress(progress, start, end) {
-  const range = end - start;
-  if (range <= 0) return 0;
-  const normalized = (progress - start) / range;
-  return THREE.MathUtils.clamp(normalized, 0, 1);
-}
-
-function update3DByScroll(deltaSeconds) {
-  const stageRect = stageElement.getBoundingClientRect();
-  const viewport = window.innerHeight;
-  const raw = (viewport * 0.55 - stageRect.top) / (stageRect.height - viewport * 0.2);
-  const progress = THREE.MathUtils.clamp(raw, 0, 1);
-
-  currentScrollProgress = THREE.MathUtils.damp(currentScrollProgress, progress, 6.5, Math.max(deltaSeconds, 1 / 120));
-
-  const intro = easeInOut(segmentProgress(currentScrollProgress, 0.04, 0.45));
-  const switchToSecond = easeInOut(segmentProgress(currentScrollProgress, 0.52, 0.96));
-
-  const cuiaWeight = THREE.MathUtils.clamp(1 - switchToSecond * 1.2, 0, 1);
-  const oculosWeight = THREE.MathUtils.clamp((switchToSecond - 0.05) * 1.2, 0, 1);
-
-  const cuia = modelWrappers[0];
-  const oculos = modelWrappers[1];
-
-  if (cuia && oculos) {
-    cuia.group.position.x = THREE.MathUtils.lerp(cuia.basePosX, -0.35, intro);
-    cuia.group.position.y = -0.08 + Math.sin(performance.now() * 0.0016) * 0.05;
-    cuia.group.rotation.y = cuia.baseRotationY + intro * 0.72 + performance.now() * 0.00028;
-    setModelOpacity(cuia.group, cuiaWeight);
-
-    oculos.group.position.x = THREE.MathUtils.lerp(2.15, oculos.basePosX, switchToSecond);
-    oculos.group.position.y = -0.08 + Math.sin(performance.now() * 0.0012 + 0.8) * 0.04;
-    oculos.group.rotation.y = oculos.baseRotationY - switchToSecond * 0.86 - performance.now() * 0.00024;
-    setModelOpacity(oculos.group, oculosWeight);
-
-    camera.position.x = THREE.MathUtils.lerp(0.15, -0.1, switchToSecond * 0.55);
-    camera.position.z = THREE.MathUtils.lerp(6.2, 5.5, currentScrollProgress);
-    camera.lookAt(0, 0, 0);
-  }
-
-  halo.material.opacity = THREE.MathUtils.lerp(0.18, 0.56, currentScrollProgress);
-
-  trackSteps[0]?.classList.toggle("is-visible", currentScrollProgress < 0.56 && currentScrollProgress > 0.08);
-  trackSteps[1]?.classList.toggle("is-visible", currentScrollProgress >= 0.48);
-}
-
-function setModelOpacity(group, opacity) {
-  group.traverse((child) => {
-    if (!child.isMesh || !child.material) {
-      return;
-    }
-
-    const materials = Array.isArray(child.material) ? child.material : [child.material];
-    materials.forEach((material) => {
-      material.opacity = opacity;
-    });
+  // slide text visibility
+  slides.forEach((slide, i) => {
+    const segStart = i * segSize;
+    const local = (p - segStart) / segSize;
+    const vis = local > 0.1 && local < 0.9;
+    const textEl = slide.querySelector(".slide-text");
+    if (textEl) textEl.classList.toggle("visible", vis);
   });
+
+  // camera subtle shift
+  camera.position.x = THREE.MathUtils.lerp(0.1, -0.1, p);
+  camera.position.z = THREE.MathUtils.lerp(6, 5.2, p);
+  camera.lookAt(0, 0, 0);
 }
 
+/* ── Resize ──────────────────────────────── */
 function onResize() {
-  const width = canvasWrap.clientWidth;
-  const height = canvasWrap.clientHeight;
-
-  renderer.setSize(width, height);
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-
-  if (window.innerWidth < 760) {
-    camera.fov = 42;
-    camera.position.z = 6.6;
-  } else {
-    camera.fov = 36;
-    camera.position.z = 6.2;
-  }
+  const w = canvasWrap.clientWidth;
+  const h = canvasWrap.clientHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.fov = window.innerWidth < 760 ? 40 : 34;
   camera.updateProjectionMatrix();
 }
 
+/* ── Render loop ─────────────────────────── */
 function animate() {
-  const delta = animationClock.getDelta();
-  update3DByScroll(delta);
+  const dt = clock.getDelta();
+  updateScroll(dt);
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
