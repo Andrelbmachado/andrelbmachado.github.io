@@ -1,4 +1,4 @@
-# Portfólio Scroll + 3D (Three.js)
+# Portfólio Scroll 
 
 Portfólio com rolagem vertical, navegação superior por categorias e seção 3D interativa com dois modelos GLB (`cuia.glb` e `oculos.glb`) animados pelo scroll.
 
