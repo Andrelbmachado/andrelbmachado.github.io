@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>André Machado — Design &amp; Development</title>
-    <meta name="description" content="Portfólio de André Machado. Design, desenvolvimento, 3D, apps, animação e devops." />
+    <meta name="description" content="Portfólio de André Machado. Design, desenvolvimento, 3D, jogos, animação e devops." />
     <meta name="color-scheme" content="dark light" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link rel="stylesheet" href="/styles.css?v=17" />
+    <link rel="stylesheet" href="/styles.css?v=20" />
     <script type="importmap">
     {
       "imports": {
@@ -59,7 +59,7 @@
         </div>
 
         <div class="bento-grid">
-          <div class="bento-card bento-about reveal" data-href="#sec-about">
+          <div class="bento-card bento-about reveal" data-href="/sobre/">
             <div class="bento-shine"></div>
             <div class="bento-content">
               <div class="bento-icon">
@@ -73,7 +73,7 @@
             </div>
           </div>
 
-          <div class="bento-card bento-3d reveal" data-href="#sec-3d">
+          <div class="bento-card bento-3d reveal" data-href="/modelos-3d/">
             <div class="bento-shine"></div>
             <div class="bento-content">
               <div class="bento-icon">
@@ -85,7 +85,7 @@
             </div>
           </div>
 
-          <div class="bento-card bento-web reveal" data-href="#sec-webdesign">
+          <div class="bento-card bento-web reveal" data-href="/webdesign/">
             <div class="bento-shine"></div>
             <div class="bento-content">
               <div class="bento-icon">
@@ -97,26 +97,26 @@
             </div>
           </div>
 
-          <div class="bento-card bento-apps reveal" data-href="#sec-apps">
+          <div class="bento-card bento-jogos reveal" data-href="/jogos/">
             <div class="bento-shine"></div>
             <div class="bento-content">
               <div class="bento-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/><path d="M7 6h10a5 5 0 0 1 5 5v4a3 3 0 0 1-5.2 2.06L15 15.3a3 3 0 0 0-2.16-.92h-1.68a3 3 0 0 0-2.16.92l-1.8 1.76A3 3 0 0 1 2 15V11a5 5 0 0 1 5-5z"/></svg>
               </div>
-              <h2 class="bento-title">Apps</h2>
-              <p class="bento-desc">Produtos digitais com usabilidade e velocidade.</p>
+              <h2 class="bento-title">Jogos</h2>
+              <p class="bento-desc">Jogos originais pra jogar direto no navegador.</p>
               <span class="bento-cta">Ver projetos &#8594;</span>
             </div>
           </div>
 
-          <div class="bento-card bento-anim reveal" data-href="#sec-animacao">
+          <div class="bento-card bento-anim reveal" data-href="/plugins-addons/">
             <div class="bento-shine"></div>
             <div class="bento-content">
               <div class="bento-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M12 16v6"/><path d="M4.93 4.93l4.24 4.24"/><path d="M14.83 14.83l4.24 4.24"/><path d="M2 12h6"/><path d="M16 12h6"/><path d="M4.93 19.07l4.24-4.24"/><path d="M14.83 9.17l4.24-4.24"/></svg>
               </div>
-              <h2 class="bento-title">Animações</h2>
-              <p class="bento-desc">Motion design e microinterações como parte da narrativa.</p>
+              <h2 class="bento-title">Plug-ins &amp; Addons</h2>
+              <p class="bento-desc">Plug-ins para Figma e addons para Blender criados para acelerar fluxos reais de design e 3D.</p>
               <span class="bento-cta">Ver projetos &#8594;</span>
             </div>
           </div>
@@ -180,13 +180,26 @@
             </div>
           </div>
         </div>
+
+        <div class="section-more section-more-3d reveal">
+          <a class="more-button" href="/modelos-3d/">Ver Mais</a>
+        </div>
       </section>
 
       <section id="sec-about" class="sec-about">
         <div class="about-inner">
-          <p class="overline reveal">SOBRE</p>
+          <p class="overline reveal">SOBRE MIM</p>
           <h2 class="sec-title reveal">Construir é a minha linguagem.</h2>
           <p class="sec-body reveal">Sou designer e desenvolvedor com experiência em interfaces digitais, modelagem 3D, prototipação e entrega de produto.</p>
+          <div class="about-feature reveal">
+            <figure class="about-photo-card">
+              <img src="/assets/images/sobre/andre-zeus.jpg" alt="André Machado com Zeus, seu rottweiler mais velho" loading="lazy" onerror="this.onerror=null;this.src='/assets/images/sobre/andre-zeus.svg';" />
+            </figure>
+            <div class="about-story">
+              <h3>Dono de 7 rottweilers.</h3>
+              <p>Além do trabalho com design, código e 3D, minha rotina tem uma equipe de peso em casa: sete rottweilers. Esse bonitão da foto é o Zeus, o mais velho, companheiro de muitos projetos e pausas entre uma entrega e outra.</p>
+            </div>
+          </div>
           <div class="skills-grid reveal">
             <div class="skill-chip">UX / UI Design</div>
             <div class="skill-chip">Front-end</div>
@@ -206,33 +219,57 @@
           <h2 class="sec-title reveal">Interfaces pensadas para<br/>clareza, ritmo e conversão.</h2>
         </div>
         <div class="card-grid three-cols">
-          <article class="card card-img reveal"><img src="/assets/images/webdesign/marketplace.png" alt="Marketplace" loading="lazy"/><h3>Marketplace</h3><p>Hierarquia clara, busca proeminente e categorização visual.</p></article>
-          <article class="card card-img reveal"><img src="/assets/images/webdesign/perfil.png" alt="Perfil" loading="lazy"/><h3>Perfil de Usuário</h3><p>Métricas, histórico e personalização.</p></article>
-          <article class="card card-img reveal"><img src="/assets/images/webdesign/tela-inicio.png" alt="Dashboard" loading="lazy"/><h3>Dashboard Início</h3><p>Widgets modulares e atalhos contextuais.</p></article>
+          <a class="card card-img reveal" href="/webdesign/marketplace/"><img src="/assets/images/webdesign/marketplace.png" alt="Marketplace" loading="lazy"/><h3>Marketplace</h3><p>Hierarquia clara, busca proeminente e categorização visual.</p></a>
+          <a class="card card-img reveal" href="/webdesign/perfil-de-usuario/"><img src="/assets/images/webdesign/perfil.png" alt="Perfil" loading="lazy"/><h3>Perfil de Usuário</h3><p>Métricas, histórico e personalização.</p></a>
+          <a class="card card-img reveal" href="/webdesign/dashboard-inicio/"><img src="/assets/images/webdesign/tela-inicio.png" alt="Dashboard" loading="lazy"/><h3>Dashboard Início</h3><p>Widgets modulares e atalhos contextuais.</p></a>
+        </div>
+        <div class="section-more reveal">
+          <a class="more-button" href="/webdesign/">Ver Mais</a>
         </div>
       </section>
 
-      <section id="sec-apps" class="sec-cards">
+      <section id="sec-jogos" class="sec-cards">
         <div class="sec-cards-head">
-          <p class="overline reveal">APPS</p>
-          <h2 class="sec-title reveal">Produtos digitais com<br/>usabilidade e velocidade.</h2>
+          <p class="overline reveal">JOGOS</p>
+          <h2 class="sec-title reveal">Jogos originais pra<br/>jogar direto no navegador.</h2>
         </div>
         <div class="card-grid three-cols">
-          <article class="card card-img reveal"><img src="/assets/images/apps/app-1.png" alt="App 1" loading="lazy"/><h3>Tela Principal</h3><p>Navegação bottom-tab e micro-interações.</p></article>
-          <article class="card card-img reveal"><img src="/assets/images/apps/app-2.png" alt="App 2" loading="lazy"/><h3>Detalhes</h3><p>Tipografia editorial e componentes reutilizáveis.</p></article>
-          <article class="card card-img reveal"><img src="/assets/images/apps/app-3.png" alt="App 3" loading="lazy"/><h3>Fluxo Completo</h3><p>Jornada otimizada do onboarding ao uso recorrente.</p></article>
+          <a class="empty-card reveal" href="/jogos/sunset-drive/"><span>Sunset Drive</span></a>
+          <a class="empty-card reveal" href="/jogos/mini-merlin/"><span>Mini Merlin</span></a>
+          <a class="empty-card reveal" href="/jogos/ascii-strike/"><span>ASCII Strike</span></a>
+        </div>
+        <div class="section-more reveal">
+          <a class="more-button" href="/jogos/">Ver Mais</a>
         </div>
       </section>
 
-      <section id="sec-animacao" class="sec-cards">
+      <section id="sec-plugins" class="sec-cards">
         <div class="sec-cards-head">
-          <p class="overline reveal">ANIMAÇÃO</p>
-          <h2 class="sec-title reveal">Microinterações e motion<br/>como parte da narrativa.</h2>
+          <p class="overline reveal">PLUG-INS &amp; ADDONS</p>
+          <h2 class="sec-title reveal">Ferramentas para acelerar<br/>design e produção 3D.</h2>
         </div>
         <div class="card-grid three-cols">
-          <article class="card card-img reveal"><img src="/assets/images/animacao/homer.gif" alt="Homer" loading="lazy"/><h3>Character Animation</h3><p>Timing expressivo e loop suave.</p></article>
-          <article class="card card-img reveal"><img src="/assets/images/animacao/8A1zI.gif" alt="Motion" loading="lazy"/><h3>Motion Graphics</h3><p>Transições dinâmicas e storytelling.</p></article>
-          <article class="card card-img reveal"><img src="/assets/images/animacao/nyan.webp" alt="Nyan" loading="lazy"/><h3>Loop Animation</h3><p>Pixel art estilizado e nostalgia digital.</p></article>
+          <a class="card reveal" href="/plugins-addons/figma-plug-ins/"><h3>Figma Plug-ins</h3><p>Automações para organizar componentes, acelerar revisões e reduzir trabalho repetitivo em interfaces.</p></a>
+          <a class="card reveal" href="/plugins-addons/blender-addons/"><h3>Blender Addons</h3><p>Ferramentas para apoiar modelagem, materiais, cenas e rotinas de produção 3D.</p></a>
+          <a class="card reveal" href="/plugins-addons/pipeline-tools/"><h3>Pipeline Tools</h3><p>Utilitários criados para conectar design, assets e entrega com menos fricção.</p></a>
+        </div>
+        <div class="section-more reveal">
+          <a class="more-button" href="/plugins-addons/">Ver Mais</a>
+        </div>
+      </section>
+
+      <section id="sec-animacoes" class="sec-cards">
+        <div class="sec-cards-head">
+          <p class="overline reveal">ANIMAÇÕES</p>
+          <h2 class="sec-title reveal">Motion e loops<br/>com personalidade.</h2>
+        </div>
+        <div class="card-grid three-cols">
+          <a class="card card-img reveal" href="/animacoes/character-animation/"><img src="/assets/images/animacao/homer.gif" alt="Homer" loading="lazy"/><h3>Character Animation</h3><p>Timing expressivo e loop suave.</p></a>
+          <a class="card card-img reveal" href="/animacoes/motion-graphics/"><img src="/assets/images/animacao/8A1zI.gif" alt="Motion" loading="lazy"/><h3>Motion Graphics</h3><p>Transições dinâmicas e storytelling.</p></a>
+          <a class="card card-img reveal" href="/animacoes/loop-animation/"><img src="/assets/images/animacao/nyan.webp" alt="Nyan" loading="lazy"/><h3>Loop Animation</h3><p>Pixel art estilizado e nostalgia digital.</p></a>
+        </div>
+        <div class="section-more reveal">
+          <a class="more-button" href="/animacoes/">Ver Mais</a>
         </div>
       </section>
 
@@ -242,41 +279,31 @@
           <h2 class="sec-title reveal">Entrega contínua e<br/>stack otimizada.</h2>
         </div>
         <div class="card-grid two-cols">
-          <article class="card reveal"><h3>Deploy Estático</h3><p>GitHub Pages, Vercel ou Netlify. Build otimizado e zero downtime.</p></article>
-          <article class="card reveal"><h3>Monitoramento</h3><p>Lighthouse CI, Core Web Vitals e alertas de regressão.</p></article>
+          <a class="card reveal" href="/devops/deploy-estatico/"><h3>Deploy Estático</h3><p>GitHub Pages, Vercel ou Netlify. Build otimizado e zero downtime.</p></a>
+          <a class="card reveal" href="/devops/monitoramento/"><h3>Monitoramento</h3><p>Lighthouse CI, Core Web Vitals e alertas de regressão.</p></a>
+        </div>
+        <div class="section-more reveal">
+          <a class="more-button" href="/devops/">Ver Mais</a>
         </div>
       </section>
 
       <footer id="sec-contato" class="site-footer">
         <div class="footer-inner">
           <div class="footer-grid">
-            <div class="footer-intro reveal">
-              <p class="overline">CONTATO</p>
-              <h2 class="footer-title">Vamos conversar.</h2>
-              <p class="footer-copy">Se você tem um projeto ou uma ideia — estou disponível.</p>
-              <a class="footer-email" href="mailto:andremachado@ymail.com">
-                <span>andremachado@ymail.com</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
-              </a>
-            </div>
-
             <nav class="footer-column reveal" aria-label="Navegação do rodapé">
               <h3>Explorar</h3>
               <a href="#hero">Início</a>
-              <a href="#sec-about">Sobre mim</a>
-              <a href="#sec-3d">Modelagem 3D</a>
-              <a href="#sec-webdesign">Web Sites</a>
-              <a href="#sec-apps">Apps</a>
-              <a href="#sec-animacao">Animações</a>
-              <a href="#sec-devops">DevOps</a>
+              <a href="/sobre/">Sobre mim</a>
+              <a href="/modelos-3d/">Modelagem 3D</a>
+              <a href="/webdesign/">Web Sites</a>
+              <a href="/jogos/">Jogos</a>
+              <a href="/plugins-addons/">Plug-ins &amp; Addons</a>
+              <a href="/animacoes/">Animações</a>
+              <a href="/devops/">DevOps</a>
             </nav>
 
             <div class="footer-column reveal">
-              <h3>Social</h3>
-              <a href="mailto:andremachado@ymail.com">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                Email
-              </a>
+              <h3>Contato</h3>
               <a href="https://www.linkedin.com/in/andrelbmachado/" target="_blank" rel="noopener noreferrer">
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                 LinkedIn
@@ -291,18 +318,26 @@
               </a>
             </div>
 
-            <div class="footer-mark reveal" aria-label="André Machado">
-              <span>AM</span>
+            <div class="footer-cta reveal">
+              <p class="overline">CONTATO</p>
+              <h2>Vamos conversar.</h2>
             </div>
+
+            <a class="footer-top reveal" href="#hero" aria-label="Voltar ao topo">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+            </a>
           </div>
 
           <div class="footer-bottom reveal">
-            <p class="footer-status"><span></span>Disponível para projetos.</p>
             <p class="footer-copyright">&copy; 2026 André Machado. Todos os direitos reservados.</p>
-            <button class="footer-theme-button" type="button" data-theme-toggle aria-label="Alternar tema">
-              <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-              <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              <span>Alternar tema</span>
+            <button class="footer-theme-switch" type="button" data-theme-toggle aria-label="Alternar tema">
+              <span class="switch-icon switch-icon-sun">
+                <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              </span>
+              <span class="switch-knob" aria-hidden="true"></span>
+              <span class="switch-icon switch-icon-moon">
+                <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              </span>
             </button>
           </div>
         </div>
@@ -310,7 +345,7 @@
 
     </main>
 
-    <script src="/bento.js?v=16"></script>
-    <script type="module" src="/main.js?v=17"></script>
+    <script src="/bento.js?v=20"></script>
+    <script type="module" src="/main.js?v=18"></script>
   </body>
 </html>

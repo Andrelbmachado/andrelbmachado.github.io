@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jogos — André Machado</title>
+    <meta name="description" content="Jogos originais de André Machado pra jogar direto no navegador." />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="stylesheet" href="/styles.css?v=20" />
+    <link rel="stylesheet" href="/jogos/jogos.css?v=1" />
+  </head>
+  <body data-page-type="jogos-hub">
+    <canvas id="gridBg" class="grid-bg"></canvas>
+
+    <section class="jogos-stage">
+      <nav class="page-nav jogos-nav" aria-label="Navegação de páginas">
+        <a href="/">Início</a>
+        <a href="/sobre/">Sobre mim</a>
+        <a href="/modelos-3d/">Modelagem 3D</a>
+        <a href="/webdesign/">Web Sites</a>
+        <a href="/jogos/" class="is-current">Jogos</a>
+        <a href="/plugins-addons/">Plug-ins &amp; Addons</a>
+        <a href="/animacoes/">Animações</a>
+        <a href="/devops/">DevOps</a>
+      </nav>
+
+      <header class="jogos-head">
+        <p class="overline">JOGOS</p>
+        <h1>Escolha um jogo pra entrar.</h1>
+        <p class="jogos-sub">Projetos jogáveis, feitos do zero e rodando direto no navegador.</p>
+      </header>
+
+      <div class="jogos-carousel" id="jogosCarousel">
+        <button class="jogos-arrow jogos-arrow-prev" type="button" aria-label="Jogo anterior">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <ul class="jogos-track" id="jogosTrack">
+          <li class="jogos-slide" data-slug="sunset-drive">
+            <a class="jogos-slide-link" href="/jogos/sunset-drive/">
+              <span class="jogos-spot-box" aria-hidden="true">
+                <span class="jogos-beam"></span>
+                <span class="jogos-cube-wrap">
+                  <span class="jogos-cube">
+                    <span class="cube-face cube-top"></span>
+                    <span class="cube-face cube-front"></span>
+                    <span class="cube-face cube-side"></span>
+                  </span>
+                </span>
+                <span class="jogos-floor-glow"></span>
+              </span>
+              <span class="jogos-slide-title">Sunset Drive</span>
+            </a>
+          </li>
+          <li class="jogos-slide" data-slug="mini-merlin">
+            <a class="jogos-slide-link" href="/jogos/mini-merlin/">
+              <span class="jogos-spot-box" aria-hidden="true">
+                <span class="jogos-beam"></span>
+                <span class="jogos-cube-wrap">
+                  <span class="jogos-cube">
+                    <span class="cube-face cube-top"></span>
+                    <span class="cube-face cube-front"></span>
+                    <span class="cube-face cube-side"></span>
+                  </span>
+                </span>
+                <span class="jogos-floor-glow"></span>
+              </span>
+              <span class="jogos-slide-title">Mini Merlin</span>
+            </a>
+          </li>
+          <li class="jogos-slide" data-slug="ascii-strike">
+            <a class="jogos-slide-link" href="/jogos/ascii-strike/">
+              <span class="jogos-spot-box" aria-hidden="true">
+                <span class="jogos-beam"></span>
+                <span class="jogos-cube-wrap">
+                  <span class="jogos-cube">
+                    <span class="cube-face cube-top"></span>
+                    <span class="cube-face cube-front"></span>
+                    <span class="cube-face cube-side"></span>
+                  </span>
+                </span>
+                <span class="jogos-floor-glow"></span>
+              </span>
+              <span class="jogos-slide-title">ASCII Strike</span>
+            </a>
+          </li>
+        </ul>
+
+        <button class="jogos-arrow jogos-arrow-next" type="button" aria-label="Próximo jogo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div class="jogos-dots" id="jogosDots"></div>
+
+      <a class="jogos-enter" id="jogosEnter" href="/jogos/sunset-drive/">Entrar no jogo &#8594;</a>
+    </section>
+
+    <script src="/bento.js?v=20"></script>
+    <script src="/jogos/jogos.js?v=1"></script>
+  </body>
+</html>

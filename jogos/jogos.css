@@ -1,0 +1,298 @@
+/* ─────────────────────────────────────────────
+   Jogos — hub carousel (floating cubes / overhead light)
+   ───────────────────────────────────────────── */
+
+.jogos-stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(72px, 10vw, 128px) var(--gutter) clamp(60px, 8vw, 100px);
+  background: #030303;
+  overflow: hidden;
+}
+
+.jogos-nav {
+  width: 100%;
+  max-width: var(--max-w);
+}
+.jogos-nav a.is-current {
+  color: var(--text-primary);
+  border-color: rgba(41,151,255,.4);
+  background: rgba(41,151,255,.1);
+}
+
+.jogos-head {
+  text-align: center;
+  max-width: 560px;
+  margin-bottom: clamp(28px, 5vw, 48px);
+}
+.jogos-head .overline {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.jogos-head h1 {
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
+  font-weight: 750;
+  letter-spacing: 0;
+  line-height: 1.1;
+  color: #f5f5f7;
+}
+.jogos-sub {
+  margin-top: 12px;
+  color: #8b8b92;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* ── carousel shell ── */
+.jogos-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 3vw, 28px);
+  width: 100%;
+  max-width: 980px;
+  perspective: 1400px;
+}
+
+.jogos-arrow {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  color: #d0d0d6;
+  cursor: pointer;
+  transition: border-color .25s, background .25s, color .25s, transform .2s;
+  z-index: 3;
+}
+.jogos-arrow:hover {
+  border-color: rgba(41,151,255,.5);
+  background: rgba(41,151,255,.12);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.jogos-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  height: clamp(300px, 38vw, 380px);
+  flex: 1;
+  min-width: 0;
+}
+
+.jogos-slide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(180px, 22vw, 240px);
+  transform: translate(-50%, -50%) translateX(var(--x, 0)) translateZ(var(--z, 0)) scale(var(--scale, 1));
+  opacity: var(--opacity, 0);
+  filter: blur(var(--blur, 0));
+  pointer-events: none;
+  transition: transform .5s cubic-bezier(.25,.1,.25,1), opacity .5s ease, filter .5s ease;
+}
+.jogos-slide.is-active,
+.jogos-slide.is-prev,
+.jogos-slide.is-next {
+  pointer-events: auto;
+}
+
+.jogos-slide-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+}
+
+/* spotlight shining down from above, ending in a light pool on the floor */
+.jogos-spot-box {
+  position: relative;
+  width: 100%;
+  height: 236px;
+}
+
+.jogos-beam {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 150px;
+  height: 196px;
+  transform: translateX(-50%);
+  clip-path: polygon(42% 0%, 58% 0%, 100% 100%, 0% 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(160,200,255,.22) 55%, rgba(160,200,255,0) 95%);
+  filter: blur(2px);
+}
+
+.jogos-floor-glow {
+  position: absolute;
+  top: 186px;
+  left: 50%;
+  width: 150px;
+  height: 30px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.9) 0%, rgba(120,180,255,.55) 40%, transparent 75%);
+  box-shadow: 0 0 40px 14px rgba(90,160,255,.3);
+}
+
+.jogos-cube-wrap {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  width: 96px;
+  height: 96px;
+  margin-left: -48px;
+  animation: jogos-bob 4.5s ease-in-out infinite;
+}
+
+.jogos-cube {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  transform-style: preserve-3d;
+  transform: rotateX(-18deg) rotateY(0deg);
+  animation: jogos-spin 12s linear infinite;
+}
+.cube-face {
+  position: absolute;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.14);
+}
+.cube-top {
+  width: 96px;
+  height: 96px;
+  background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(120,170,255,.08));
+  transform: rotateX(90deg) translateZ(48px);
+}
+.cube-front {
+  width: 96px;
+  height: 96px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.35));
+  transform: translateZ(48px);
+}
+.cube-side {
+  width: 96px;
+  height: 96px;
+  background: rgba(0,0,0,.5);
+  transform: rotateY(90deg) translateZ(48px);
+}
+
+@keyframes jogos-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+@keyframes jogos-spin {
+  from { transform: rotateX(-18deg) rotateY(0deg); }
+  to   { transform: rotateX(-18deg) rotateY(360deg); }
+}
+
+.jogos-slide-title {
+  font-size: 1.0625rem;
+  font-weight: 650;
+  color: #d8d8de;
+  transition: color .25s;
+}
+.jogos-slide.is-active .jogos-slide-title {
+  color: #fff;
+}
+.jogos-slide:not(.is-active) .jogos-cube,
+.jogos-slide:not(.is-active) .jogos-cube-wrap {
+  animation-play-state: paused;
+}
+.jogos-slide-link:hover .jogos-slide-title { color: #fff; }
+
+.jogos-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: clamp(28px, 4vw, 40px);
+}
+.jogos-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,.18);
+  cursor: pointer;
+  transition: background .25s, transform .25s;
+  padding: 0;
+}
+.jogos-dot.is-active {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+
+.jogos-enter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(28px, 4vw, 40px);
+  min-height: 48px;
+  padding: 13px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(41,151,255,.3);
+  background: rgba(41,151,255,.14);
+  color: #fff;
+  font-size: .9375rem;
+  font-weight: 650;
+  transition: transform .25s, border-color .25s, background .25s;
+}
+.jogos-enter:hover {
+  transform: translateY(-2px);
+  border-color: rgba(41,151,255,.55);
+  background: rgba(41,151,255,.22);
+}
+
+@media (max-width: 640px) {
+  .jogos-arrow { width: 36px; height: 36px; }
+  .jogos-track { height: 280px; }
+}
+
+/* ─────────────────────────────────────────────
+   Jogos — game detail page
+   ───────────────────────────────────────────── */
+
+.game-icon {
+  width: clamp(120px, 16vw, 160px);
+  height: clamp(120px, 16vw, 160px);
+  border-radius: 28px;
+  background: linear-gradient(150deg, rgba(41,151,255,.16), rgba(255,255,255,.03));
+  border: 1px solid var(--card-border);
+}
+
+.play-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  min-height: 52px;
+  padding: 14px 30px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: transform .25s, background .25s, box-shadow .25s;
+  box-shadow: 0 10px 30px rgba(41,151,255,.28);
+}
+.play-button:hover {
+  transform: translateY(-2px);
+  background: var(--accent-hover);
+  box-shadow: 0 14px 36px rgba(41,151,255,.38);
+}
+.play-button svg { flex: 0 0 auto; }

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1125" role="img" aria-labelledby="title desc">
+  <title id="title">André e Zeus</title>
+  <desc id="desc">Placeholder visual para a foto de André Machado com Zeus.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#171717"/>
+      <stop offset=".55" stop-color="#0d1825"/>
+      <stop offset="1" stop-color="#0a0a0a"/>
+    </linearGradient>
+    <linearGradient id="brick" x1="0" x2="1">
+      <stop offset="0" stop-color="#9b4d32"/>
+      <stop offset="1" stop-color="#c06a45"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1125" fill="url(#bg)"/>
+  <g opacity=".78">
+    <g fill="url(#brick)">
+      <rect x="-30" y="38" width="178" height="66" rx="4"/>
+      <rect x="166" y="38" width="178" height="66" rx="4"/>
+      <rect x="362" y="38" width="178" height="66" rx="4"/>
+      <rect x="558" y="38" width="178" height="66" rx="4"/>
+      <rect x="754" y="38" width="178" height="66" rx="4"/>
+      <rect x="68" y="122" width="178" height="66" rx="4"/>
+      <rect x="264" y="122" width="178" height="66" rx="4"/>
+      <rect x="460" y="122" width="178" height="66" rx="4"/>
+      <rect x="656" y="122" width="178" height="66" rx="4"/>
+      <rect x="-30" y="206" width="178" height="66" rx="4"/>
+      <rect x="166" y="206" width="178" height="66" rx="4"/>
+      <rect x="362" y="206" width="178" height="66" rx="4"/>
+      <rect x="558" y="206" width="178" height="66" rx="4"/>
+      <rect x="754" y="206" width="178" height="66" rx="4"/>
+    </g>
+    <g stroke="#ead4b7" stroke-width="10" opacity=".78">
+      <path d="M0 112h900"/>
+      <path d="M0 196h900"/>
+      <path d="M0 280h900"/>
+    </g>
+  </g>
+  <circle cx="580" cy="420" r="172" fill="#f0c6aa"/>
+  <path d="M402 350c42-124 264-150 338-18 22 40 27 103 12 154-18-82-88-132-176-130-77 2-136 37-174 104-16-39-15-77 0-110z" fill="#5b3428"/>
+  <path d="M372 1036c36-278 102-392 236-392 144 0 214 114 248 392H372z" fill="#111"/>
+  <path d="M516 526c36 26 90 27 128 0" fill="none" stroke="#8d4c3d" stroke-width="10" stroke-linecap="round"/>
+  <path d="M474 404h82m78 0h82" fill="none" stroke="#24344f" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="515" cy="424" r="45" fill="none" stroke="#24344f" stroke-width="14"/>
+  <circle cx="675" cy="424" r="45" fill="none" stroke="#24344f" stroke-width="14"/>
+  <path d="M560 424h70" fill="none" stroke="#24344f" stroke-width="14"/>
+  <path d="M96 1004c20-178 92-320 258-320 174 0 274 137 286 320H96z" fill="#111"/>
+  <ellipse cx="364" cy="696" rx="222" ry="172" fill="#101010"/>
+  <path d="M198 664c-44-68-34-132 36-150 62-16 118 35 130 120" fill="#0d0d0d"/>
+  <path d="M508 662c36-74 100-92 144-44 42 46 14 112-58 138" fill="#0d0d0d"/>
+  <ellipse cx="300" cy="710" rx="34" ry="40" fill="#6c3a20"/>
+  <ellipse cx="468" cy="710" rx="34" ry="40" fill="#6c3a20"/>
+  <ellipse cx="384" cy="806" rx="86" ry="60" fill="#3b2118"/>
+  <ellipse cx="384" cy="780" rx="64" ry="44" fill="#161616"/>
+  <circle cx="338" cy="740" r="15" fill="#f2e8d8"/>
+  <circle cx="438" cy="740" r="15" fill="#f2e8d8"/>
+  <circle cx="343" cy="742" r="8" fill="#171717"/>
+  <circle cx="433" cy="742" r="8" fill="#171717"/>
+  <path d="M338 852c38 34 78 34 116 0" fill="none" stroke="#d7837e" stroke-width="20" stroke-linecap="round"/>
+  <rect x="72" y="888" width="448" height="146" rx="73" fill="#f0c6aa"/>
+  <text x="76" y="1080" fill="#f5f5f7" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">ANDRÉ + ZEUS</text>
+</svg>

@@ -321,15 +321,20 @@
 
 
 /* ══════════════════════════════════════════════
-   3. BENTO BOX 3D TILT ON HOVER
+   3. CARD 3D TILT ON HOVER
    ══════════════════════════════════════════════ */
-(function initBentoTilt() {
-  const cards = document.querySelectorAll(".bento-card");
+(function initCardTilt() {
+  const cards = document.querySelectorAll(
+    ".bento-card, .card, .empty-card, .phone-card, .detail-card, .project-media"
+  );
 
   cards.forEach((card) => {
+    card.classList.add("hover-tilt");
+
     card.addEventListener("mouseenter", () => {
       // Disable CSS transition so JS transform is instant
       card.style.transition = 'box-shadow 0.3s, border-color 0.3s, background 0.4s';
+      card.classList.add("is-hovering");
     });
 
     card.addEventListener("mousemove", (e) => {
@@ -346,6 +351,8 @@
       const tiltX = ny * 14;
       const tiltY = nx * -14;
       card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.03, 1.03, 1.03)`;
+      card.style.setProperty("--hover-x", `${x}px`);
+      card.style.setProperty("--hover-y", `${y}px`);
 
       // Shine highlight
       const shine = card.querySelector(".bento-shine");
@@ -358,6 +365,7 @@
       // Re-enable CSS transition for smooth return
       card.style.transition = 'transform 0.22s ease-out, box-shadow 0.3s, border-color 0.3s, background 0.4s';
       card.style.transform = "perspective(800px) rotateX(0) rotateY(0) scale3d(1,1,1)";
+      card.classList.remove("is-hovering");
       const shine = card.querySelector(".bento-shine");
       if (shine) {
         shine.style.background = "transparent";
@@ -388,7 +396,13 @@
 (function initBentoLinks() {
   document.querySelectorAll(".bento-card[data-href]").forEach((card) => {
     card.addEventListener("click", () => {
-      const target = document.querySelector(card.dataset.href);
+      const href = card.dataset.href;
+      if (!href) return;
+      if (href.charAt(0) !== "#") {
+        window.location.href = href;
+        return;
+      }
+      const target = document.querySelector(href);
       if (target) {
         target.scrollIntoView({ behavior: "smooth", block: "start" });
       }
