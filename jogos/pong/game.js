@@ -80,6 +80,16 @@ function applyWindowMetrics(object, metrics) {
   }
 }
 
+function reportWindowMetrics() {
+  const metrics = readWindowMetrics();
+  if (runsGame && window.opener) {
+    applyWindowMetrics('player', metrics);
+    publish('state', { state: serialize() });
+  } else if (role === 'bot' || role === 'ball') {
+    publish('metrics', { object: role, metrics });
+  }
+}
+
 function addObject(object) {
   if (object === 'player') {
     // The current player window already is the simulation host; this reasserts its position and focus.
@@ -147,9 +157,12 @@ function collideWith(paddle, movingRight) {
     ? b.x + halfW >= paddle.x && b.x < paddle.x
     : b.x - halfW <= paddle.x + paddle.w && b.x > paddle.x + paddle.w;
   if (!xOverlap || !yOverlap) return false;
-  b.vx = (movingRight ? -1 : 1) * Math.abs(b.vx) * 1.025;
-  b.vy += ((b.y - (paddle.y + paddle.h / 2)) / (paddle.h / 2)) * 150;
-  b.x = movingRight ? paddle.x - halfW - 1 : paddle.x + paddle.w + halfW + 1;
+  b.vx = (movingRight ? -1 : 1) * Math.max(380, Math.abs(b.vx) * 1.025);
+  const angle = (b.y - (paddle.y + paddle.h / 2)) / (paddle.h / 2);
+  const maxVerticalSpeed = Math.max(240, Math.abs(b.vx) * .72);
+  b.vy = Math.max(-maxVerticalSpeed, Math.min(maxVerticalSpeed, b.vy + angle * 150));
+  // Snap the outer edge of the ball pop-up to the paddle's outer edge.
+  b.x = movingRight ? paddle.x - halfW : paddle.x + paddle.w + halfW;
   return true;
 }
 
@@ -255,6 +268,10 @@ channel.onmessage = ({ data }) => {
     maybeStartMatch();
     publish('state', { state: serialize() });
   }
+  if (data.type === 'metrics' && runsGame && (data.object === 'bot' || data.object === 'ball')) {
+    applyWindowMetrics(data.object, data.metrics);
+    publish('state', { state: serialize() });
+  }
 };
 
 function launchGame() {
@@ -303,6 +320,8 @@ function setupObjectWindow() {
     publish('state', { state: serialize() });
   } else {
     publish('ready', { object: role, metrics: readWindowMetrics() });
+    // Chrome/Safari can finish applying pop-up chrome one layout pass after load.
+    setTimeout(reportWindowMetrics, 300);
     publish('request-state');
   }
 }
@@ -313,6 +332,6 @@ window.render_game_to_text = () => JSON.stringify({
 });
 window.advanceTime = (ms) => { for (let i = 0; i < Math.max(1, Math.round(ms / (1000 / 60))); i++) update(1 / 60); positionSelf(); render(); };
 
-addEventListener('resize', resize); resize();
+addEventListener('resize', () => { resize(); reportWindowMetrics(); }); resize();
 if (role === 'launcher') setupLauncher(); else setupObjectWindow();
 requestAnimationFrame(frame);
