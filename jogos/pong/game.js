@@ -18,9 +18,9 @@ const game = {
   mode: 'menu', time: 0, score: { player: 0, bot: 0 },
   windows: { bot: false, ball: false },
   world: { left: 0, top: 0, right: 1440, bottom: 900 },
-  player: { x: 90, y: 270, w: 120, h: 212 },
-  bot: { x: 1080, y: 270, w: 120, h: 212 },
-  ball: { x: 620, y: 410, r: 44, vx: 420, vy: 188, style: 'tennis' },
+  player: { x: 90, y: 270, w: 120, h: 280 },
+  bot: { x: 1080, y: 270, w: 120, h: 280 },
+  ball: { x: 620, y: 410, w: 144, h: 144, r: 44, vx: 420, vy: 188, style: 'tennis' },
   controls: { up: false, down: false },
 };
 let last = performance.now();
@@ -53,11 +53,31 @@ function objectUrl(object, host = false) {
 
 function featureString(object) {
   const target = object === 'player' ? game.player : object === 'bot' ? game.bot : game.ball;
-  const width = object === 'ball' ? 144 : 120;
-  const height = object === 'ball' ? 144 : 280;
-  const left = object === 'ball' ? target.x - 72 : target.x;
-  const top = object === 'ball' ? target.y - 140 : target.y - 68;
+  const width = target.w;
+  const height = target.h;
+  const left = object === 'ball' ? target.x - width / 2 : target.x;
+  const top = object === 'ball' ? target.y - height / 2 : target.y;
   return `popup=yes,toolbar=no,location=no,menubar=no,status=no,width=${width},height=${height},left=${Math.round(left)},top=${Math.round(top)},resizable=no,scrollbars=no`;
+}
+
+function readWindowMetrics() {
+  return {
+    w: Math.max(80, Math.round(window.outerWidth || innerWidth)),
+    h: Math.max(80, Math.round(window.outerHeight || innerHeight)),
+  };
+}
+
+function applyWindowMetrics(object, metrics) {
+  if (!metrics || !Number.isFinite(metrics.w) || !Number.isFinite(metrics.h)) return;
+  const w = Math.max(80, Math.round(metrics.w));
+  const h = Math.max(80, Math.round(metrics.h));
+  if (object === 'player' || object === 'bot') {
+    game[object].w = w;
+    game[object].h = h;
+  } else if (object === 'ball') {
+    game.ball.w = w;
+    game.ball.h = h;
+  }
 }
 
 function addObject(object) {
@@ -70,9 +90,6 @@ function addObject(object) {
     setStatus('LIBERE POP-UPS PARA ABRIR A JANELA', false);
     return false;
   }
-  game.windows[object] = true;
-  maybeStartMatch();
-  publish('state', { state: serialize() });
   setStatus(`${object.toUpperCase()} ABERTO`, true);
   try { popup.focus(); } catch (_) {}
   return true;
@@ -81,9 +98,12 @@ function addObject(object) {
 function seedRound(resetScore = false) {
   // The desktop itself is the court: its usable edges are the full play area.
   game.world = { left: 0, top: 0, right: Math.max(900, screen.availWidth), bottom: Math.max(620, screen.availHeight) };
-  game.player = { x: game.world.left + 12, y: Math.round((game.world.top + game.world.bottom - 212) / 2), w: 120, h: 212 };
-  game.bot = { x: game.world.right - 132, y: Math.round((game.world.top + game.world.bottom - 212) / 2), w: 120, h: 212 };
-  game.ball = { x: Math.round((game.world.left + game.world.right) / 2), y: Math.round((game.world.top + game.world.bottom) / 2), r: 44, vx: 420, vy: 188, style: game.ball.style || 'tennis' };
+  const playerSize = { w: game.player.w || 120, h: game.player.h || 280 };
+  const botSize = { w: game.bot.w || 120, h: game.bot.h || 280 };
+  const ballSize = { w: game.ball.w || 144, h: game.ball.h || 144 };
+  game.player = { x: game.world.left + 12, y: Math.round((game.world.top + game.world.bottom - playerSize.h) / 2), ...playerSize };
+  game.bot = { x: game.world.right - botSize.w - 12, y: Math.round((game.world.top + game.world.bottom - botSize.h) / 2), ...botSize };
+  game.ball = { x: Math.round((game.world.left + game.world.right) / 2), y: Math.round((game.world.top + game.world.bottom) / 2), ...ballSize, r: 44, vx: 420, vy: 188, style: game.ball.style || 'tennis' };
   if (resetScore) game.score = { player: 0, bot: 0 };
   game.mode = game.windows.bot && game.windows.ball ? 'playing' : 'waiting';
   updateScore();
@@ -119,14 +139,17 @@ function togglePause() {
 
 function collideWith(paddle, movingRight) {
   const b = game.ball;
-  const yOverlap = b.y + b.r > paddle.y && b.y - b.r < paddle.y + paddle.h;
+  const halfW = b.w / 2;
+  const halfH = b.h / 2;
+  // All collision dimensions are browser-window outer bounds, not the image radius.
+  const yOverlap = b.y + halfH > paddle.y && b.y - halfH < paddle.y + paddle.h;
   const xOverlap = movingRight
-    ? b.x + b.r >= paddle.x && b.x < paddle.x
-    : b.x - b.r <= paddle.x + paddle.w && b.x > paddle.x + paddle.w;
+    ? b.x + halfW >= paddle.x && b.x < paddle.x
+    : b.x - halfW <= paddle.x + paddle.w && b.x > paddle.x + paddle.w;
   if (!xOverlap || !yOverlap) return false;
   b.vx = (movingRight ? -1 : 1) * Math.abs(b.vx) * 1.025;
   b.vy += ((b.y - (paddle.y + paddle.h / 2)) / (paddle.h / 2)) * 150;
-  b.x = movingRight ? paddle.x - b.r - 2 : paddle.x + paddle.w + b.r + 2;
+  b.x = movingRight ? paddle.x - halfW - 1 : paddle.x + paddle.w + halfW + 1;
   return true;
 }
 
@@ -145,11 +168,12 @@ function update(dt) {
   game.bot.y = Math.max(game.world.top, Math.min(game.world.bottom - game.bot.h, game.bot.y));
   const b = game.ball;
   b.x += b.vx * dt; b.y += b.vy * dt;
-  if (b.y - b.r < game.world.top) { b.y = game.world.top + b.r; b.vy = Math.abs(b.vy); }
-  if (b.y + b.r > game.world.bottom) { b.y = game.world.bottom - b.r; b.vy = -Math.abs(b.vy); }
+  const halfBallHeight = b.h / 2;
+  if (b.y - halfBallHeight < game.world.top) { b.y = game.world.top + halfBallHeight; b.vy = Math.abs(b.vy); }
+  if (b.y + halfBallHeight > game.world.bottom) { b.y = game.world.bottom - halfBallHeight; b.vy = -Math.abs(b.vy); }
   if (b.vx < 0) collideWith(game.player, false); else collideWith(game.bot, true);
-  if (b.x < game.world.left - 100) { game.score.bot++; resetBall(1); }
-  if (b.x > game.world.right + 100) { game.score.player++; resetBall(-1); }
+  if (b.x + b.w / 2 < game.world.left) { game.score.bot++; resetBall(1); }
+  if (b.x - b.w / 2 > game.world.right) { game.score.player++; resetBall(-1); }
   game.time += dt; updateScore();
   publish('state', { state: serialize() });
 }
@@ -157,8 +181,8 @@ function update(dt) {
 function positionSelf() {
   if (role === 'launcher' || game.mode !== 'playing') return;
   const target = role === 'player' ? game.player : role === 'bot' ? game.bot : game.ball;
-  const left = role === 'ball' ? target.x - 72 : target.x;
-  const top = role === 'ball' ? target.y - 140 : target.y - 68;
+  const left = role === 'ball' ? target.x - target.w / 2 : target.x;
+  const top = role === 'ball' ? target.y - target.h / 2 : target.y;
   if (runsGame && manualDrag.active) return;
   const nextX = Math.round(left), nextY = Math.round(top);
   if (runsGame && manualDrag.lastTargetX === nextX && manualDrag.lastTargetY === nextY) return;
@@ -175,7 +199,7 @@ function positionSelf() {
 function observeManualDrag(now) {
   if (!runsGame || game.mode !== 'playing') return;
   const currentX = window.screenX;
-  const currentY = window.screenY + 68;
+  const currentY = window.screenY;
   const wasObserved = manualDrag.observedX !== null;
   const windowMoved = wasObserved && (Math.abs(currentX - manualDrag.observedX) > 4 || Math.abs(currentY - manualDrag.observedY) > 4);
   manualDrag.observedX = currentX; manualDrag.observedY = currentY;
@@ -226,6 +250,7 @@ channel.onmessage = ({ data }) => {
   if (data.type === 'state' && !runsGame) hydrate(data.state);
   if (data.type === 'request-state' && runsGame) publish('state', { state: serialize() });
   if (data.type === 'ready' && runsGame && (data.object === 'bot' || data.object === 'ball')) {
+    applyWindowMetrics(data.object, data.metrics);
     game.windows[data.object] = true;
     maybeStartMatch();
     publish('state', { state: serialize() });
@@ -258,6 +283,8 @@ function setupObjectWindow() {
   ui.landing.classList.add('hidden'); ui.game.classList.remove('hidden');
   $('.top-ui').classList.add('hidden'); ui.menu.classList.add('hidden'); ui.coordinator.classList.add('hidden');
   if (runsGame) {
+    // A real pop-up reports its outer dimensions. Keep the test/dev tab on defaults.
+    if (window.opener) applyWindowMetrics('player', readWindowMetrics());
     seedRound(true); ui.controls.classList.remove('hidden');
     ui.restart.addEventListener('click', () => { seedRound(true); publish('state', { state: serialize() }); });
     ui.pause.addEventListener('click', togglePause);
@@ -275,7 +302,7 @@ function setupObjectWindow() {
     addEventListener('blur', () => { game.controls.up = false; game.controls.down = false; });
     publish('state', { state: serialize() });
   } else {
-    publish('ready', { object: role });
+    publish('ready', { object: role, metrics: readWindowMetrics() });
     publish('request-state');
   }
 }
