@@ -1,0 +1,74 @@
+:root { color-scheme: dark; --ink:#0d0e10; --paper:#f4f2ea; --acid:#d8ff3e; --muted:#94948f; }
+* { box-sizing:border-box; }
+html, body, #app { width:100%; min-height:100%; margin:0; }
+body { background:var(--paper); color:var(--ink); font-family:"Space Grotesk",sans-serif; overflow-x:hidden; }
+button { font:inherit; }
+.hidden { display:none !important; }
+.landing { min-height:100vh; padding:30px clamp(24px,4vw,66px); position:relative; overflow:hidden; display:grid; grid-template-columns:1fr minmax(250px,30vw); grid-template-rows:auto 1fr auto; }
+.landing-grid { position:absolute; inset:0; pointer-events:none; background-image:linear-gradient(to right,rgba(13,14,16,.10) 1px,transparent 1px),linear-gradient(to bottom,rgba(13,14,16,.10) 1px,transparent 1px); background-size:calc(100% / 8) 100%,100% 74px; mask-image:linear-gradient(to bottom,black 0%,rgba(0,0,0,.38) 85%,transparent); }
+.nav { grid-column:1 / -1; display:flex; align-items:center; gap:30px; height:32px; position:relative; z-index:1; font:11px "DM Mono",monospace; letter-spacing:.08em; }
+.nav span:nth-child(2) { margin-left:auto; }
+.wordmark { text-decoration:none; color:inherit; font:700 24px "Space Grotesk",sans-serif; letter-spacing:-.12em; white-space:nowrap; }
+.wordmark span { color:#eb4d2f; }
+.landing-copy { align-self:center; position:relative; z-index:1; padding-top:4vh; }
+.eyebrow { font:11px "DM Mono",monospace; letter-spacing:.09em; margin:0 0 20px; }
+h1, h2 { letter-spacing:-.075em; font-size:clamp(54px,9.6vw,154px); line-height:.78; margin:0; font-weight:600; }
+h1 em { font-family:Georgia,serif; font-weight:400; }
+.intro { width:min(335px,80%); line-height:1.35; margin:35px 0 0; font-size:15px; }
+.project-card { margin:auto 0 12vh auto; width:min(360px,100%); aspect-ratio:1 / 1.05; border:1px solid var(--ink); color:var(--paper); background:var(--ink); padding:21px; text-align:left; position:relative; overflow:hidden; cursor:pointer; transition:transform .3s ease, background .3s ease; z-index:1; }
+.project-card::after { content:""; position:absolute; width:78%; aspect-ratio:1; background:var(--acid); border-radius:50%; right:-29%; bottom:-24%; transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+.project-card:hover { background:#20231e; transform:rotate(-2deg) translateY(-7px); }
+.project-card:hover::after { transform:scale(1.35); }
+.card-index,.card-detail { position:relative; z-index:1; display:block; font:10px "DM Mono",monospace; letter-spacing:.08em; }
+.card-title { position:absolute; z-index:1; bottom:24px; left:20px; font-size:clamp(35px,4.6vw,63px); font-weight:600; letter-spacing:-.08em; line-height:.75; }
+.card-detail { position:absolute; right:18px; top:51%; text-align:right; line-height:1.25; }
+.card-arrow { position:absolute; right:18px; bottom:20px; z-index:2; color:var(--ink); font-size:32px; }
+.landing-note { grid-column:1 / -1; align-self:end; position:relative; z-index:1; font:10px "DM Mono",monospace; letter-spacing:.1em; margin:0; }
+.landing-note span { font-size:16px; margin-left:6px; }
+
+.game { position:fixed; inset:0; background:var(--ink); color:var(--paper); overflow:hidden; }
+#game-canvas { display:block; width:100%; height:100%; }
+.game-ui { position:absolute; z-index:2; display:flex; align-items:center; justify-content:space-between; }
+.top-ui { top:24px; left:30px; right:30px; }
+.connection-status { font:10px "DM Mono",monospace; letter-spacing:.08em; }
+.connection-status i { width:7px; height:7px; display:inline-block; margin-right:7px; border-radius:50%; background:#777; }
+.connection-status.live i { background:var(--acid); box-shadow:0 0 14px var(--acid); }
+.text-button { color:inherit; border:0; background:transparent; padding:6px; font:10px "DM Mono",monospace; letter-spacing:.08em; cursor:pointer; }
+.game-menu { position:absolute; z-index:2; left:clamp(30px,10vw,160px); top:50%; transform:translateY(-46%); max-width:550px; }
+.game-menu h2 { font-size:clamp(66px,9vw,136px); }
+.game-menu > p:not(.eyebrow) { max-width:365px; font-size:15px; line-height:1.4; margin:30px 0; }
+.launch-button { background:var(--acid); border:0; padding:16px 18px; color:var(--ink); font:500 12px "DM Mono",monospace; letter-spacing:.09em; cursor:pointer; transition:gap .2s, transform .2s; }
+.launch-button:hover { transform:translate(4px,-4px); box-shadow:-4px 4px 0 #eb4d2f; }
+.launch-button span { font-size:18px; vertical-align:-1px; margin-left:22px; }
+.game-menu small { display:block; color:#9ea09d; font:10px/1.5 "DM Mono",monospace; margin-top:18px; }
+.hud { position:absolute; z-index:2; top:50%; transform:translateY(-52%); left:30px; right:30px; display:flex; justify-content:space-between; pointer-events:none; }
+.hud div { display:flex; flex-direction:column; gap:3px; }
+.hud div:last-child { text-align:right; align-items:end; }
+.hud span,.game-instructions { color:#aeb0aa; font:10px "DM Mono",monospace; letter-spacing:.08em; }
+.hud strong { font-size:clamp(42px,7vw,105px); letter-spacing:-.09em; line-height:.8; }
+.hud .vs { align-self:center; color:#696b67; font-size:24px; }
+.game-instructions { z-index:2; position:absolute; left:50%; bottom:25px; transform:translateX(-50%); white-space:nowrap; }
+.game-instructions span { color:var(--acid); margin:0 9px; }
+.pause-panel { position:absolute; inset:0; z-index:3; display:grid; place-content:center; text-align:center; background:rgba(13,14,16,.68); backdrop-filter:blur(5px); }
+.pause-panel p { font:500 44px "DM Mono",monospace; letter-spacing:-.1em; margin:0 0 18px; }
+.coordinator { position:absolute; z-index:2; left:50%; top:50%; transform:translate(-50%,-50%); text-align:center; width:min(420px,calc(100vw - 60px)); }
+.coordinator strong { display:block; font:600 clamp(54px,9vw,110px)/.8 "Space Grotesk",sans-serif; letter-spacing:-.1em; color:var(--paper); margin:12px 0 28px; }
+.coordinator p:last-child { color:#9ea09d; font:12px/1.5 "DM Mono",monospace; }
+.coordinator b { color:var(--acid); font-weight:400; }
+body.satellite { margin:0; overflow:hidden; background:#0d0e10; }
+body.satellite #app, body.satellite .game { min-height:100vh; position:fixed; inset:0; }
+body.satellite #game-canvas { width:100vw; height:100vh; display:block; }
+body.satellite.satellite-player { background:#969696; }
+.window-controls { position:fixed; z-index:4; bottom:10px; left:10px; right:10px; display:grid; grid-template-columns:repeat(3,1fr); gap:5px; }
+.window-controls > button, .ball-picker > button { width:100%; height:42px; border:1px solid rgba(13,14,16,.65); background:rgba(244,242,234,.18); color:#0d0e10; font:600 18px "DM Mono",monospace; cursor:pointer; }
+.window-controls > button:hover, .ball-picker > button:hover { background:var(--acid); }
+.ball-picker { position:relative; }
+.ball-menu { position:absolute; z-index:8; right:0; bottom:48px; width:116px; padding:5px; border:1px solid rgba(13,14,16,.7); background:#171817; box-shadow:0 6px 14px rgba(0,0,0,.32); }
+.ball-menu button { width:100%; min-height:31px; padding:2px 4px; display:flex; align-items:center; gap:6px; border:0; border-bottom:1px solid rgba(255,255,255,.12); background:transparent; color:#f4f2ea; font:8px "DM Mono",monospace; cursor:pointer; text-align:left; }
+.ball-menu button:last-child { border-bottom:0; }
+.ball-menu button:hover { color:#0d0e10; background:var(--acid); }
+.ball-menu img { width:25px; height:25px; object-fit:contain; }
+body.satellite-ball, body.satellite-ball #app, body.satellite-ball .game, body.satellite-ball #game-canvas { background:transparent !important; }
+body.launcher-finished #app { display:none; }
+body.launcher-finished::before { content:"PARTIDA INICIADA\A ESTA ABA PODE SER FECHADA"; white-space:pre; position:fixed; inset:0; display:grid; place-content:center; text-align:center; color:#f4f2ea; background:#0d0e10; font:11px/1.7 "DM Mono",monospace; letter-spacing:.08em; }
+@media (max-width:650px) { .landing{grid-template-columns:1fr;}.project-card{width:min(290px,80vw);margin:6vh 0 7vh auto}.nav{gap:12px}.nav span:last-child{display:none}.landing-copy{padding-top:8vh}.game-menu{left:30px;right:25px}.game-menu h2{font-size:21vw}.hud{top:34%;}.top-ui{left:18px;right:18px}.game-instructions{font-size:8px} }

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>André Machado — Portfolio / Window Pong</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="landing" class="landing" aria-labelledby="portfolio-title">
+        <div class="landing-grid"></div>
+        <nav class="nav"><a class="wordmark" href="#">AM<span>_</span></a><span>PORTFOLIO / 2026</span><span>BRASIL</span></nav>
+        <div class="landing-copy">
+          <p class="eyebrow">EXPERIMENTOS DIGITAIS — 07</p>
+          <h1 id="portfolio-title">Design que<br /><em>sai da tela.</em></h1>
+          <p class="intro">Uma coleção de sistemas, interfaces e pequenos desvios de comportamento.</p>
+        </div>
+        <button id="open-game" class="project-card" type="button" aria-label="Abrir projeto Window Pong">
+          <span class="card-index">07 / JOGO</span>
+          <span class="card-title">WINDOW<br />PONG</span>
+          <span class="card-arrow">↗</span>
+          <span class="card-detail">MULTI-WINDOW<br />EXPERIMENT</span>
+        </button>
+        <p class="landing-note">ROLE PARA EXPLORAR <span>↓</span></p>
+      </section>
+
+      <section id="game" class="game hidden" aria-labelledby="game-title">
+        <canvas id="game-canvas" aria-label="Visualização do jogo Window Pong"></canvas>
+        <div class="game-ui top-ui">
+          <a class="wordmark" href="./" aria-label="Voltar ao portfólio">AM<span>_</span></a>
+          <div id="connection-status" class="connection-status"><i></i> STAND BY</div>
+          <button id="sound-toggle" class="text-button" type="button">SOM: ON</button>
+        </div>
+        <div id="game-menu" class="game-menu">
+          <p class="eyebrow">07 / JOGO EXPERIMENTAL</p>
+          <h2 id="game-title">Pong fora<br />da moldura.</h2>
+          <p>Sem campo e sem paddle desenhado: as três peças do jogo são janelas reais. A sua janela cinza é o seu paddle.</p>
+          <button id="start-game" class="launch-button" type="button">JOGAR <span>↗</span></button>
+          <small>Primeiro abrimos sua janela. Nela, use +E e +● para abrir as duas janelas da partida.<br />Permita pop-ups para a experiência completa.</small>
+        </div>
+        <div id="coordinator" class="coordinator hidden" aria-live="polite">
+          <p class="eyebrow">PARTIDA EM CAMPO</p>
+          <strong><span id="player-score">00</span> — <span id="bot-score">00</span></strong>
+          <p>Sua janela cinza está ativa.<br />Use <b>W/S</b> ou <b>↑/↓</b> dentro dela.</p>
+          <button id="retry-ball" class="text-button hidden" type="button">REABRIR BOLA ↗</button>
+        </div>
+        <div id="window-controls" class="window-controls hidden" aria-label="Controles da partida">
+          <button id="restart-game" type="button" title="Reiniciar jogo">↻</button>
+          <button id="pause-game" type="button" title="Pausar jogo">Ⅱ</button>
+          <button id="add-bot" type="button" title="Adicionar adversário">+E</button>
+          <button id="add-player" type="button" title="Adicionar usuário">+U</button>
+          <div class="ball-picker">
+            <button id="add-ball" type="button" title="Escolher bolinha">+●</button>
+            <div id="ball-menu" class="ball-menu hidden" aria-label="Estilos de bolinha">
+              <button type="button" data-ball-style="tennis"><img src="./assets/balls/tennis.png" alt="" /><span>TÊNIS</span></button>
+              <button type="button" data-ball-style="soccer"><img src="./assets/balls/soccer.png" alt="" /><span>FUTEBOL</span></button>
+              <button type="button" data-ball-style="baseball"><img src="./assets/balls/baseball.png" alt="" /><span>BASEBALL</span></button>
+              <button type="button" data-ball-style="eight-ball"><img src="./assets/balls/eight-ball.png" alt="" /><span>BOLA 8</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Script clássico: funciona também quando o portfólio é aberto diretamente via file:// no Safari. -->
+    <script defer src="./game.js"></script>
+  </body>
+</html>
