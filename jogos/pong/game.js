@@ -20,11 +20,12 @@ const game = {
   world: { left: 0, top: 0, right: 1440, bottom: 900 },
   player: { x: 90, y: 270, w: 120, h: 280 },
   bot: { x: 1080, y: 270, w: 120, h: 280 },
-  ball: { x: 620, y: 410, w: 144, h: 144, r: 44, vx: 420, vy: 188, style: 'tennis' },
+  ball: { x: 620, y: 410, w: 144, h: 144, r: 44, vx: 420, vy: 188, style: 'tennis', rotation: 0, spin: 1, spinPause: 0 },
   controls: { up: false, down: false },
 };
 let last = performance.now();
 const manualDrag = { active: false, lastMovement: 0, lastAutoMove: 0, lastTargetX: null, lastTargetY: null, observedX: null, observedY: null };
+const frameOffsets = { player: { x: 0, y: 0 }, bot: { x: 0, y: 0 }, ball: { x: 0, y: 0 } };
 const ballImages = Object.fromEntries(['tennis', 'soccer', 'baseball', 'eight-ball'].map((style) => {
   const image = new Image(); image.src = `./assets/balls/${style}.png`; return [style, image];
 }));
@@ -67,6 +68,10 @@ function readWindowMetrics() {
   };
 }
 
+function readWindowBounds() {
+  return { ...readWindowMetrics(), x: Math.round(window.screenX), y: Math.round(window.screenY) };
+}
+
 function applyWindowMetrics(object, metrics) {
   if (!metrics || !Number.isFinite(metrics.w) || !Number.isFinite(metrics.h)) return;
   const w = Math.max(80, Math.round(metrics.w));
@@ -80,13 +85,26 @@ function applyWindowMetrics(object, metrics) {
   }
 }
 
+function applyWindowBounds(object, bounds) {
+  applyWindowMetrics(object, bounds);
+  if (!bounds || !Number.isFinite(bounds.x) || !Number.isFinite(bounds.y)) return;
+  const target = object === 'ball' ? game.ball : game[object];
+  const expectedX = object === 'ball' ? target.x - target.w / 2 : target.x;
+  const expectedY = object === 'ball' ? target.y - target.h / 2 : target.y;
+  const deltaX = bounds.x - expectedX;
+  const deltaY = bounds.y - expectedY;
+  // Ignore a window that is still opening far from its target; retain real browser-frame offsets.
+  if (Math.abs(deltaX) <= 48) frameOffsets[object].x = deltaX;
+  if (Math.abs(deltaY) <= 48) frameOffsets[object].y = deltaY;
+}
+
 function reportWindowMetrics() {
-  const metrics = readWindowMetrics();
+  const bounds = readWindowBounds();
   if (runsGame && window.opener) {
-    applyWindowMetrics('player', metrics);
+    applyWindowBounds('player', bounds);
     publish('state', { state: serialize() });
   } else if (role === 'bot' || role === 'ball') {
-    publish('metrics', { object: role, metrics });
+    publish('bounds', { object: role, bounds });
   }
 }
 
@@ -113,7 +131,7 @@ function seedRound(resetScore = false) {
   const ballSize = { w: game.ball.w || 144, h: game.ball.h || 144 };
   game.player = { x: game.world.left + 12, y: Math.round((game.world.top + game.world.bottom - playerSize.h) / 2), ...playerSize };
   game.bot = { x: game.world.right - botSize.w - 12, y: Math.round((game.world.top + game.world.bottom - botSize.h) / 2), ...botSize };
-  game.ball = { x: Math.round((game.world.left + game.world.right) / 2), y: Math.round((game.world.top + game.world.bottom) / 2), ...ballSize, r: 44, vx: 420, vy: 188, style: game.ball.style || 'tennis' };
+  game.ball = { x: Math.round((game.world.left + game.world.right) / 2), y: Math.round((game.world.top + game.world.bottom) / 2), ...ballSize, r: 44, vx: 420, vy: 188, style: game.ball.style || 'tennis', rotation: 0, spin: 1, spinPause: 0 };
   if (resetScore) game.score = { player: 0, bot: 0 };
   game.mode = game.windows.bot && game.windows.ball ? 'playing' : 'waiting';
   updateScore();
@@ -130,6 +148,8 @@ function resetBall(direction) {
   game.ball.y = Math.round((game.world.top + game.world.bottom) / 2);
   game.ball.vx = direction * (420 + 25 * (game.score.player + game.score.bot));
   game.ball.vy = Math.random() > .5 ? 188 : -188;
+  game.ball.spin = direction > 0 ? 1 : -1;
+  game.ball.spinPause = .16;
 }
 
 function selectBallStyle(style) {
@@ -151,18 +171,26 @@ function collideWith(paddle, movingRight) {
   const b = game.ball;
   const halfW = b.w / 2;
   const halfH = b.h / 2;
+  const ballOffset = frameOffsets.ball;
+  const paddleOffset = paddle === game.player ? frameOffsets.player : frameOffsets.bot;
+  const ballX = b.x + ballOffset.x;
+  const ballY = b.y + ballOffset.y;
+  const paddleX = paddle.x + paddleOffset.x;
+  const paddleY = paddle.y + paddleOffset.y;
   // All collision dimensions are browser-window outer bounds, not the image radius.
-  const yOverlap = b.y + halfH > paddle.y && b.y - halfH < paddle.y + paddle.h;
+  const yOverlap = ballY + halfH > paddleY && ballY - halfH < paddleY + paddle.h;
   const xOverlap = movingRight
-    ? b.x + halfW >= paddle.x && b.x < paddle.x
-    : b.x - halfW <= paddle.x + paddle.w && b.x > paddle.x + paddle.w;
+    ? ballX + halfW >= paddleX && ballX < paddleX
+    : ballX - halfW <= paddleX + paddle.w && ballX > paddleX + paddle.w;
   if (!xOverlap || !yOverlap) return false;
   b.vx = (movingRight ? -1 : 1) * Math.max(380, Math.abs(b.vx) * 1.025);
-  const angle = (b.y - (paddle.y + paddle.h / 2)) / (paddle.h / 2);
+  const angle = (ballY - (paddleY + paddle.h / 2)) / (paddle.h / 2);
   const maxVerticalSpeed = Math.max(240, Math.abs(b.vx) * .72);
   b.vy = Math.max(-maxVerticalSpeed, Math.min(maxVerticalSpeed, b.vy + angle * 150));
   // Snap the outer edge of the ball pop-up to the paddle's outer edge.
-  b.x = movingRight ? paddle.x - halfW : paddle.x + paddle.w + halfW;
+  b.x = movingRight ? paddleX - halfW - ballOffset.x : paddleX + paddle.w + halfW - ballOffset.x;
+  b.spin *= -1;
+  b.spinPause = .12;
   return true;
 }
 
@@ -180,6 +208,8 @@ function update(dt) {
   game.bot.y += Math.max(-350 * dt, Math.min(350 * dt, botTarget - game.bot.y));
   game.bot.y = Math.max(game.world.top, Math.min(game.world.bottom - game.bot.h, game.bot.y));
   const b = game.ball;
+  if (b.spinPause > 0) b.spinPause = Math.max(0, b.spinPause - dt);
+  else b.rotation = (b.rotation + b.spin * 300 * dt) % 360;
   b.x += b.vx * dt; b.y += b.vy * dt;
   const halfBallHeight = b.h / 2;
   if (b.y - halfBallHeight < game.world.top) { b.y = game.world.top + halfBallHeight; b.vy = Math.abs(b.vy); }
@@ -251,8 +281,12 @@ function drawObject() {
     // The canvas intentionally remains transparent; only the ball is painted.
     const asset = ballImages[game.ball.style] || ballImages.tennis;
     const size = Math.min(innerWidth, innerHeight) * 1.06;
-    if (asset.complete && asset.naturalWidth) ctx.drawImage(asset, (innerWidth - size) / 2, (innerHeight - size) / 2, size, size);
-    else { ctx.fillStyle = '#d8ff3e'; ctx.beginPath(); ctx.arc(innerWidth / 2, innerHeight / 2, Math.min(innerWidth, innerHeight) * .48, 0, Math.PI * 2); ctx.fill(); }
+    ctx.save();
+    ctx.translate(innerWidth / 2, innerHeight / 2);
+    ctx.rotate((game.ball.rotation || 0) * Math.PI / 180);
+    if (asset.complete && asset.naturalWidth) ctx.drawImage(asset, -size / 2, -size / 2, size, size);
+    else { ctx.fillStyle = '#d8ff3e'; ctx.beginPath(); ctx.arc(0, 0, Math.min(innerWidth, innerHeight) * .48, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
   }
 }
 
@@ -263,13 +297,13 @@ channel.onmessage = ({ data }) => {
   if (data.type === 'state' && !runsGame) hydrate(data.state);
   if (data.type === 'request-state' && runsGame) publish('state', { state: serialize() });
   if (data.type === 'ready' && runsGame && (data.object === 'bot' || data.object === 'ball')) {
-    applyWindowMetrics(data.object, data.metrics);
+    applyWindowBounds(data.object, data.bounds || data.metrics);
     game.windows[data.object] = true;
     maybeStartMatch();
     publish('state', { state: serialize() });
   }
-  if (data.type === 'metrics' && runsGame && (data.object === 'bot' || data.object === 'ball')) {
-    applyWindowMetrics(data.object, data.metrics);
+  if (data.type === 'bounds' && runsGame && (data.object === 'bot' || data.object === 'ball')) {
+    applyWindowBounds(data.object, data.bounds);
     publish('state', { state: serialize() });
   }
 };
@@ -319,7 +353,7 @@ function setupObjectWindow() {
     addEventListener('blur', () => { game.controls.up = false; game.controls.down = false; });
     publish('state', { state: serialize() });
   } else {
-    publish('ready', { object: role, metrics: readWindowMetrics() });
+    publish('ready', { object: role, bounds: readWindowBounds() });
     // Chrome/Safari can finish applying pop-up chrome one layout pass after load.
     setTimeout(reportWindowMetrics, 300);
     publish('request-state');

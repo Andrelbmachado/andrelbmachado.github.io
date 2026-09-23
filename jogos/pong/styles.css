@@ -63,11 +63,10 @@ body.satellite.satellite-player { background:#969696; }
 .window-controls > button, .ball-picker > button { width:100%; height:42px; border:1px solid rgba(13,14,16,.65); background:rgba(244,242,234,.18); color:#0d0e10; font:600 18px "DM Mono",monospace; cursor:pointer; }
 .window-controls > button:hover, .ball-picker > button:hover { background:var(--acid); }
 .ball-picker { position:relative; }
-.ball-menu { position:absolute; z-index:8; right:0; bottom:48px; width:116px; padding:5px; border:1px solid rgba(13,14,16,.7); background:#171817; box-shadow:0 6px 14px rgba(0,0,0,.32); }
-.ball-menu button { width:100%; min-height:31px; padding:2px 4px; display:flex; align-items:center; gap:6px; border:0; border-bottom:1px solid rgba(255,255,255,.12); background:transparent; color:#f4f2ea; font:8px "DM Mono",monospace; cursor:pointer; text-align:left; }
-.ball-menu button:last-child { border-bottom:0; }
-.ball-menu button:hover { color:#0d0e10; background:var(--acid); }
-.ball-menu img { width:25px; height:25px; object-fit:contain; }
+.ball-menu { position:fixed; z-index:8; left:10px; right:10px; bottom:58px; width:auto; padding:5px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; border:1px solid rgba(13,14,16,.7); background:#171817; box-shadow:0 6px 14px rgba(0,0,0,.32); }
+.ball-menu button { aspect-ratio:1; min-width:0; padding:2px; display:grid; place-items:center; border:0; background:transparent; cursor:pointer; }
+.ball-menu button:hover { background:var(--acid); }
+.ball-menu img { width:100%; height:100%; object-fit:contain; }
 body.satellite-ball, body.satellite-ball #app, body.satellite-ball .game, body.satellite-ball #game-canvas { background:transparent !important; }
 body.launcher-finished #app { display:none; }
 body.launcher-finished::before { content:"PARTIDA INICIADA\A ESTA ABA PODE SER FECHADA"; white-space:pre; position:fixed; inset:0; display:grid; place-content:center; text-align:center; color:#f4f2ea; background:#0d0e10; font:11px/1.7 "DM Mono",monospace; letter-spacing:.08em; }
