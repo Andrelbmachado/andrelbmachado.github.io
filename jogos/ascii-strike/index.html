@@ -7,7 +7,7 @@
     <meta name="description" content="ASCII Strike, jogo original de André Machado." />
     <meta name="color-scheme" content="dark light" />
     <link rel="stylesheet" href="/styles.css?v=20" />
-    <link rel="stylesheet" href="/jogos/jogos.css?v=4" />
+    <link rel="stylesheet" href="/jogos/jogos.css?v=6" />
     <script>
       (function () {
         var THEME_KEY = "am-theme";
@@ -75,13 +75,52 @@
               <div class="project-meta">
                 <span>Ação</span>
                 <span>ASCII</span>
-                <span>Navegador</span>
+                <span>Terminal</span>
               </div>
-              <a class="play-button" href="#">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                Jogar
-              </a>
+              <div class="install-box" id="installBox">
+                <p class="install-label">Instale pelo terminal</p>
+                <div class="install-tabs" role="tablist" aria-label="Sistema operacional">
+                  <button type="button" role="tab" class="install-tab" data-os="mac" aria-selected="true">macOS / Linux</button>
+                  <button type="button" role="tab" class="install-tab" data-os="windows" aria-selected="false">Windows</button>
+                </div>
+                <div class="install-panel" role="tabpanel" data-os-panel="mac">
+                  <div class="code-box">
+                    <code class="code-line"><span class="code-prompt">$</span> <span data-copy-source>git clone https://github.com/Andrelbmachado/ASCII-Strike.git && cd ASCII-Strike && make && ./ascii-strike</span></code>
+                    <button type="button" class="copy-button" data-copy>Copiar</button>
+                  </div>
+                  <p class="install-hint">Cole no Terminal. Requer Git e as ferramentas de linha de comando do Xcode (<code>xcode-select --install</code>). No Linux, basta ter <code>git</code>, <code>make</code> e <code>g++</code>.</p>
+                </div>
+                <div class="install-panel" role="tabpanel" data-os-panel="windows" hidden>
+                  <div class="code-box">
+                    <code class="code-line"><span class="code-prompt">&gt;</span> <span data-copy-source>git clone https://github.com/Andrelbmachado/ASCII-Strike.git; cd ASCII-Strike; cmake -S . -B build-msvc; cmake --build build-msvc --config Release; .\Jogar.cmd</span></code>
+                    <button type="button" class="copy-button" data-copy>Copiar</button>
+                  </div>
+                  <p class="install-hint">Cole no PowerShell. Requer Git, CMake e o Visual Studio Build Tools com C++. Recomendado: Windows Terminal em 140×42.</p>
+                </div>
+              </div>
             </article>
+          </section>
+
+          <section class="game-gallery reveal" aria-labelledby="gameGalleryTitle">
+            <h2 id="gameGalleryTitle">Prints do jogo</h2>
+            <div class="game-gallery-grid">
+              <figure class="game-shot">
+                <img src="/assets/images/jogos/prints/ascii-strike-1-inicio.jpg" alt="Tela de abertura no terminal" loading="lazy" width="1280" height="720" />
+                <figcaption>Início</figcaption>
+              </figure>
+              <figure class="game-shot">
+                <img src="/assets/images/jogos/prints/ascii-strike-2-dificuldade.jpg" alt="Escolha da dificuldade" loading="lazy" width="1280" height="720" />
+                <figcaption>Dificuldade</figcaption>
+              </figure>
+              <figure class="game-shot">
+                <img src="/assets/images/jogos/prints/ascii-strike-3-jogando.jpg" alt="Fase 1, Depósito, com minimapa" loading="lazy" width="1280" height="720" />
+                <figcaption>Jogando</figcaption>
+              </figure>
+              <figure class="game-shot">
+                <img src="/assets/images/jogos/prints/ascii-strike-4-loja.jpg" alt="Arsenal com a arma 3D girando" loading="lazy" width="1280" height="720" />
+                <figcaption>Loja</figcaption>
+              </figure>
+            </div>
           </section>
 
           <footer class="page-footer"><span>&copy; 2026 André Machado.</span><a href="/">Voltar para o início</a></footer>
@@ -90,5 +129,6 @@
     </main>
 
     <script src="/bento.js?v=20"></script>
+    <script src="/jogos/install.js?v=1"></script>
   </body>
 </html>
