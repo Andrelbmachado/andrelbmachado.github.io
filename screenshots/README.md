@@ -1,0 +1,81 @@
+# Prints do portfólio
+
+Um print de cada tela do site, usado como referência visual das atualizações.
+
+Para atualizar: `node scripts/screenshots.mjs` (todas as telas) ou `node scripts/screenshots.mjs /jogos /plugins-addons` (só algumas).
+
+| Tela | Print |
+|---|---|
+| `/animacoes/` | [animacoes.png](animacoes.png) |
+| `/animacoes/animacao-04/` | [animacoes__animacao-04.png](animacoes__animacao-04.png) |
+| `/animacoes/animacao-05/` | [animacoes__animacao-05.png](animacoes__animacao-05.png) |
+| `/animacoes/animacao-06/` | [animacoes__animacao-06.png](animacoes__animacao-06.png) |
+| `/animacoes/animacao-07/` | [animacoes__animacao-07.png](animacoes__animacao-07.png) |
+| `/animacoes/animacao-08/` | [animacoes__animacao-08.png](animacoes__animacao-08.png) |
+| `/animacoes/animacao-09/` | [animacoes__animacao-09.png](animacoes__animacao-09.png) |
+| `/animacoes/animacao-10/` | [animacoes__animacao-10.png](animacoes__animacao-10.png) |
+| `/animacoes/character-animation/` | [animacoes__character-animation.png](animacoes__character-animation.png) |
+| `/animacoes/loop-animation/` | [animacoes__loop-animation.png](animacoes__loop-animation.png) |
+| `/animacoes/motion-graphics/` | [animacoes__motion-graphics.png](animacoes__motion-graphics.png) |
+| `/apps/` | [apps.png](apps.png) |
+| `/apps/app-04/` | [apps__app-04.png](apps__app-04.png) |
+| `/apps/app-05/` | [apps__app-05.png](apps__app-05.png) |
+| `/apps/app-06/` | [apps__app-06.png](apps__app-06.png) |
+| `/apps/app-07/` | [apps__app-07.png](apps__app-07.png) |
+| `/apps/app-08/` | [apps__app-08.png](apps__app-08.png) |
+| `/apps/app-09/` | [apps__app-09.png](apps__app-09.png) |
+| `/apps/app-10/` | [apps__app-10.png](apps__app-10.png) |
+| `/apps/detalhes/` | [apps__detalhes.png](apps__detalhes.png) |
+| `/apps/fluxo-completo/` | [apps__fluxo-completo.png](apps__fluxo-completo.png) |
+| `/apps/tela-principal/` | [apps__tela-principal.png](apps__tela-principal.png) |
+| `/devops/` | [devops.png](devops.png) |
+| `/devops/deploy-estatico/` | [devops__deploy-estatico.png](devops__deploy-estatico.png) |
+| `/devops/devops-03/` | [devops__devops-03.png](devops__devops-03.png) |
+| `/devops/devops-04/` | [devops__devops-04.png](devops__devops-04.png) |
+| `/devops/devops-05/` | [devops__devops-05.png](devops__devops-05.png) |
+| `/devops/devops-06/` | [devops__devops-06.png](devops__devops-06.png) |
+| `/devops/devops-07/` | [devops__devops-07.png](devops__devops-07.png) |
+| `/devops/devops-08/` | [devops__devops-08.png](devops__devops-08.png) |
+| `/devops/devops-09/` | [devops__devops-09.png](devops__devops-09.png) |
+| `/devops/devops-10/` | [devops__devops-10.png](devops__devops-10.png) |
+| `/devops/monitoramento/` | [devops__monitoramento.png](devops__monitoramento.png) |
+| `/` | [inicio.png](inicio.png) |
+| `/jogos/` | [jogos.png](jogos.png) |
+| `/jogos/ascii-strike/` | [jogos__ascii-strike.png](jogos__ascii-strike.png) |
+| `/jogos/mini-merlin/` | [jogos__mini-merlin.png](jogos__mini-merlin.png) |
+| `/jogos/pong/` | [jogos__pong.png](jogos__pong.png) |
+| `/jogos/sunset-drive/` | [jogos__sunset-drive.png](jogos__sunset-drive.png) |
+| `/modelos-3d/` | [modelos-3d.png](modelos-3d.png) |
+| `/modelos-3d/cuia/` | [modelos-3d__cuia.png](modelos-3d__cuia.png) |
+| `/modelos-3d/oculos/` | [modelos-3d__oculos.png](modelos-3d__oculos.png) |
+| `/modelos-3d/projeto-3d-03/` | [modelos-3d__projeto-3d-03.png](modelos-3d__projeto-3d-03.png) |
+| `/modelos-3d/projeto-3d-04/` | [modelos-3d__projeto-3d-04.png](modelos-3d__projeto-3d-04.png) |
+| `/modelos-3d/projeto-3d-05/` | [modelos-3d__projeto-3d-05.png](modelos-3d__projeto-3d-05.png) |
+| `/modelos-3d/projeto-3d-06/` | [modelos-3d__projeto-3d-06.png](modelos-3d__projeto-3d-06.png) |
+| `/modelos-3d/projeto-3d-07/` | [modelos-3d__projeto-3d-07.png](modelos-3d__projeto-3d-07.png) |
+| `/modelos-3d/projeto-3d-08/` | [modelos-3d__projeto-3d-08.png](modelos-3d__projeto-3d-08.png) |
+| `/modelos-3d/projeto-3d-09/` | [modelos-3d__projeto-3d-09.png](modelos-3d__projeto-3d-09.png) |
+| `/modelos-3d/projeto-3d-10/` | [modelos-3d__projeto-3d-10.png](modelos-3d__projeto-3d-10.png) |
+| `/plugins-addons/` | [plugins-addons.png](plugins-addons.png) |
+| `/plugins-addons/blender-addons/` | [plugins-addons__blender-addons.png](plugins-addons__blender-addons.png) |
+| `/plugins-addons/figma-plug-ins/` | [plugins-addons__figma-plug-ins.png](plugins-addons__figma-plug-ins.png) |
+| `/plugins-addons/pipeline-tools/` | [plugins-addons__pipeline-tools.png](plugins-addons__pipeline-tools.png) |
+| `/plugins-addons/plug-in-add-on-04/` | [plugins-addons__plug-in-add-on-04.png](plugins-addons__plug-in-add-on-04.png) |
+| `/plugins-addons/plug-in-add-on-05/` | [plugins-addons__plug-in-add-on-05.png](plugins-addons__plug-in-add-on-05.png) |
+| `/plugins-addons/plug-in-add-on-06/` | [plugins-addons__plug-in-add-on-06.png](plugins-addons__plug-in-add-on-06.png) |
+| `/plugins-addons/plug-in-add-on-07/` | [plugins-addons__plug-in-add-on-07.png](plugins-addons__plug-in-add-on-07.png) |
+| `/plugins-addons/plug-in-add-on-08/` | [plugins-addons__plug-in-add-on-08.png](plugins-addons__plug-in-add-on-08.png) |
+| `/plugins-addons/plug-in-add-on-09/` | [plugins-addons__plug-in-add-on-09.png](plugins-addons__plug-in-add-on-09.png) |
+| `/plugins-addons/plug-in-add-on-10/` | [plugins-addons__plug-in-add-on-10.png](plugins-addons__plug-in-add-on-10.png) |
+| `/sobre/` | [sobre.png](sobre.png) |
+| `/webdesign/` | [webdesign.png](webdesign.png) |
+| `/webdesign/dashboard-inicio/` | [webdesign__dashboard-inicio.png](webdesign__dashboard-inicio.png) |
+| `/webdesign/interface-web-04/` | [webdesign__interface-web-04.png](webdesign__interface-web-04.png) |
+| `/webdesign/interface-web-05/` | [webdesign__interface-web-05.png](webdesign__interface-web-05.png) |
+| `/webdesign/interface-web-06/` | [webdesign__interface-web-06.png](webdesign__interface-web-06.png) |
+| `/webdesign/interface-web-07/` | [webdesign__interface-web-07.png](webdesign__interface-web-07.png) |
+| `/webdesign/interface-web-08/` | [webdesign__interface-web-08.png](webdesign__interface-web-08.png) |
+| `/webdesign/interface-web-09/` | [webdesign__interface-web-09.png](webdesign__interface-web-09.png) |
+| `/webdesign/interface-web-10/` | [webdesign__interface-web-10.png](webdesign__interface-web-10.png) |
+| `/webdesign/marketplace/` | [webdesign__marketplace.png](webdesign__marketplace.png) |
+| `/webdesign/perfil-de-usuario/` | [webdesign__perfil-de-usuario.png](webdesign__perfil-de-usuario.png) |

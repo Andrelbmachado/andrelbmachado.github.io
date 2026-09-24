@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   Jogos — hub carousel (floating cubes / overhead light)
+   Jogos — hub carousel (game logos / overhead light)
    ───────────────────────────────────────────── */
 
 .jogos-stage {
@@ -151,55 +151,27 @@
   box-shadow: 0 0 40px 14px rgba(90,160,255,.3);
 }
 
-.jogos-cube-wrap {
+/* logo do jogo flutuando no centro do feixe de luz */
+.jogos-logo-wrap {
   position: absolute;
-  top: 56px;
+  top: 54px;
   left: 50%;
-  width: 96px;
-  height: 96px;
-  margin-left: -48px;
+  width: 104px;
+  height: 104px;
+  transform: translateX(-50%);
   animation: jogos-bob 4.5s ease-in-out infinite;
 }
 
-.jogos-cube {
-  position: relative;
-  width: 96px;
-  height: 96px;
-  transform-style: preserve-3d;
-  transform: rotateX(-18deg) rotateY(0deg);
-  animation: jogos-spin 12s linear infinite;
-}
-.cube-face {
-  position: absolute;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,.14);
-}
-.cube-top {
-  width: 96px;
-  height: 96px;
-  background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(120,170,255,.08));
-  transform: rotateX(90deg) translateZ(48px);
-}
-.cube-front {
-  width: 96px;
-  height: 96px;
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.35));
-  transform: translateZ(48px);
-}
-.cube-side {
-  width: 96px;
-  height: 96px;
-  background: rgba(0,0,0,.5);
-  transform: rotateY(90deg) translateZ(48px);
+.jogos-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(160,200,255,.18));
 }
 
 @keyframes jogos-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-14px); }
-}
-@keyframes jogos-spin {
-  from { transform: rotateX(-18deg) rotateY(0deg); }
-  to   { transform: rotateX(-18deg) rotateY(360deg); }
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-14px); }
 }
 
 .jogos-slide-title {
@@ -211,8 +183,7 @@
 .jogos-slide.is-active .jogos-slide-title {
   color: #fff;
 }
-.jogos-slide:not(.is-active) .jogos-cube,
-.jogos-slide:not(.is-active) .jogos-cube-wrap {
+.jogos-slide:not(.is-active) .jogos-logo-wrap {
   animation-play-state: paused;
 }
 .jogos-slide-link:hover .jogos-slide-title { color: #fff; }
@@ -268,6 +239,8 @@
    ───────────────────────────────────────────── */
 
 .game-icon {
+  display: block;
+  object-fit: contain;
   width: clamp(120px, 16vw, 160px);
   height: clamp(120px, 16vw, 160px);
   border-radius: 28px;
@@ -296,3 +269,14 @@
   box-shadow: 0 14px 36px rgba(41,151,255,.38);
 }
 .play-button svg { flex: 0 0 auto; }
+.game-icon-logo,
+.project-media img.game-icon-logo {
+  width: clamp(140px, 18vw, 200px);
+  height: clamp(140px, 18vw, 200px);
+  min-height: 0;
+  object-fit: contain;
+  background: none;
+  border: none;
+  border-radius: 0;
+  filter: drop-shadow(0 16px 32px rgba(0,0,0,.45));
+}

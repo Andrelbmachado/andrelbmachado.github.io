@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Blender Addons">
+  <defs>
+    <radialGradient id="bg" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#2b2b30"/><stop offset="1" stop-color="#121214"/></radialGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb066"/><stop offset="1" stop-color="#f5792a"/></linearGradient>
+  </defs>
+  <rect width="640" height="400" fill="url(#bg)"/>
+  <!-- grid do viewport -->
+  <g stroke="#ffffff" stroke-opacity=".06">
+    <path d="M0 300 L640 300 M0 330 L640 330 M0 365 L640 365 M0 270 L640 270"/>
+    <path d="M320 250 L320 400 M250 250 L140 400 M390 250 L500 400 M180 250 L-40 400 M460 250 L680 400"/>
+  </g>
+  <line x1="0" y1="300" x2="640" y2="300" stroke="#e8414f" stroke-opacity=".55" stroke-width="1.5"/>
+  <line x1="320" y1="250" x2="320" y2="400" stroke="#6bbf3b" stroke-opacity=".55" stroke-width="1.5"/>
+  <!-- cubo -->
+  <polygon points="320,92 408,140 320,188 232,140" fill="url(#top)"/>
+  <polygon points="232,140 320,188 320,288 232,240" fill="#c85a1c"/>
+  <polygon points="408,140 320,188 320,288 408,240" fill="#8f3c10"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity=".75" stroke-width="1.5">
+    <polygon points="320,92 408,140 320,188 232,140"/><polyline points="232,140 232,240 320,288 408,240 408,140"/><line x1="320" y1="188" x2="320" y2="288"/>
+  </g>
+  <g fill="#ffffff"><circle cx="320" cy="92" r="4"/><circle cx="408" cy="140" r="4"/><circle cx="232" cy="140" r="4"/><circle cx="320" cy="188" r="4"/><circle cx="232" cy="240" r="4"/><circle cx="408" cy="240" r="4"/><circle cx="320" cy="288" r="4"/></g>
+  <!-- gizmo -->
+  <g transform="translate(560 70)" stroke-width="3" stroke-linecap="round">
+    <line x1="0" y1="0" x2="30" y2="10" stroke="#e8414f"/><line x1="0" y1="0" x2="-22" y2="14" stroke="#6bbf3b"/><line x1="0" y1="0" x2="0" y2="-30" stroke="#4a8fe8"/>
+    <circle r="4" fill="#fff" stroke="none"/>
+  </g>
+  <!-- painel N do addon -->
+  <rect x="36" y="40" width="132" height="150" rx="12" fill="#1d1d21" stroke="#3a3a40"/>
+  <rect x="52" y="58" width="70" height="8" rx="4" fill="#f5792a"/>
+  <g fill="#34343b"><rect x="52" y="82" width="100" height="18" rx="5"/><rect x="52" y="108" width="100" height="18" rx="5"/><rect x="52" y="134" width="100" height="18" rx="5"/></g>
+  <rect x="52" y="160" width="100" height="18" rx="5" fill="#4a7fd1"/>
+</svg>

@@ -70,7 +70,7 @@ function shell(attrs) {
 
     <main id="pageRoot"></main>
 
-    <script src="/portfolio-pages.js?v=1"></script>
+    <script src="/portfolio-pages.js?v=2"></script>
     <script src="/bento.js?v=20"></script>
   </body>
 </html>

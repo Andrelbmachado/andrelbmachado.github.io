@@ -32,10 +32,10 @@
       body: "Plug-ins, addons e utilitários criados para acelerar fluxos reais de design e produção 3D.",
       layout: "grid",
       projects: [
-        { slug: "figma-plug-ins", title: "Figma Plug-ins", body: "Automações para organizar componentes, acelerar revisões e reduzir trabalho repetitivo em interfaces.", tags: ["Figma", "Design Ops"] },
-        { slug: "blender-addons", title: "Blender Addons", body: "Ferramentas para apoiar modelagem, materiais, cenas e rotinas de produção 3D.", tags: ["Blender", "3D"] },
-        { slug: "pipeline-tools", title: "Pipeline Tools", body: "Utilitários criados para conectar design, assets e entrega com menos fricção.", tags: ["Pipeline", "Automação"] },
-        ...emptyProjects("Plug-in/Add-on", 4, 10),
+        { slug: "figma-plug-ins", image: "/assets/images/plugins/figma-plug-ins.svg", title: "Figma Plug-ins", body: "Automações para organizar componentes, acelerar revisões e reduzir trabalho repetitivo em interfaces.", tags: ["Figma", "Design Ops"] },
+        { slug: "blender-addons", image: "/assets/images/plugins/blender-addons.svg", title: "Blender Addons", body: "Ferramentas para apoiar modelagem, materiais, cenas e rotinas de produção 3D.", tags: ["Blender", "3D"] },
+        { slug: "pipeline-tools", image: "/assets/images/plugins/pipeline-tools.svg", title: "Pipeline Tools", body: "Utilitários criados para conectar design, assets e entrega com menos fricção.", tags: ["Pipeline", "Automação"] },
+        ...emptyProjects("Plug-in/Add-on", 4, 10).map((project) => ({ ...project, image: `/assets/images/plugins/${project.slug}.svg` })),
       ],
     },
     "animacoes": {

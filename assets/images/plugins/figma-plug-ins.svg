@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Figma Plug-ins">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#15121f"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#ffffff" opacity=".08"/></pattern>
+  </defs>
+  <rect width="640" height="400" fill="url(#bg)"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <!-- barra lateral de camadas -->
+  <rect x="40" y="48" width="120" height="304" rx="12" fill="#1c1a26" stroke="#2c2938"/>
+  <g fill="#3a3650"><rect x="56" y="72" width="80" height="8" rx="4"/><rect x="68" y="96" width="64" height="8" rx="4"/><rect x="68" y="120" width="72" height="8" rx="4"/><rect x="56" y="144" width="88" height="8" rx="4"/><rect x="68" y="168" width="56" height="8" rx="4"/></g>
+  <rect x="52" y="116" width="96" height="16" rx="4" fill="#a259ff" opacity=".25"/>
+  <!-- frame selecionado -->
+  <rect x="196" y="72" width="248" height="256" rx="14" fill="#f5f4f8"/>
+  <rect x="216" y="92" width="120" height="12" rx="6" fill="#1c1a26"/>
+  <rect x="216" y="114" width="180" height="8" rx="4" fill="#c9c6d6"/>
+  <rect x="216" y="148" width="98" height="80" rx="10" fill="#f24e1e"/>
+  <rect x="326" y="148" width="98" height="80" rx="10" fill="#0acf83"/>
+  <rect x="216" y="240" width="98" height="64" rx="10" fill="#1abcfe"/>
+  <rect x="326" y="240" width="98" height="64" rx="10" fill="#a259ff"/>
+  <rect x="196" y="72" width="248" height="256" rx="14" fill="none" stroke="#1abcfe" stroke-width="2"/>
+  <g fill="#fff" stroke="#1abcfe" stroke-width="2"><rect x="190" y="66" width="12" height="12"/><rect x="438" y="66" width="12" height="12"/><rect x="190" y="322" width="12" height="12"/><rect x="438" y="322" width="12" height="12"/></g>
+  <!-- painel do plugin -->
+  <rect x="468" y="96" width="140" height="184" rx="14" fill="#1c1a26" stroke="#a259ff" stroke-opacity=".6"/>
+  <path d="M492 124 h14 a7 7 0 1 1 14 0 h14 v14 a7 7 0 1 0 0 14 v14 h-42 z" fill="#a259ff"/>
+  <rect x="548" y="126" width="44" height="8" rx="4" fill="#3a3650"/><rect x="548" y="142" width="30" height="8" rx="4" fill="#3a3650"/>
+  <g fill="#2c2938"><rect x="484" y="186" width="108" height="10" rx="5"/><rect x="484" y="206" width="84" height="10" rx="5"/></g>
+  <rect x="484" y="236" width="108" height="28" rx="8" fill="#a259ff"/>
+  <rect x="512" y="246" width="52" height="8" rx="4" fill="#fff" opacity=".9"/>
+  <!-- cursor -->
+  <path d="M404 262 l0 40 l10 -10 l8 18 l8 -4 l-8 -17 l14 0 z" fill="#fff" stroke="#15121f" stroke-width="2" stroke-linejoin="round"/>
+</svg>

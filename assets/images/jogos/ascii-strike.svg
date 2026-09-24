@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="ASCII Strike">
+  <rect x="4" y="4" width="112" height="112" rx="26" fill="#07140c"/>
+  <g font-family="ui-monospace, 'DM Mono', Menlo, Consolas, monospace" font-weight="700" fill="#39ff88" text-anchor="middle">
+    <text x="60" y="34" font-size="14">|</text>
+    <text x="60" y="100" font-size="14">|</text>
+    <text x="28" y="65" font-size="14">--</text>
+    <text x="92" y="65" font-size="14">--</text>
+    <text x="60" y="68" font-size="22">@</text>
+  </g>
+  <circle cx="60" cy="60" r="28" fill="none" stroke="#39ff88" stroke-width="2" stroke-dasharray="4 5"/>
+  <g stroke="#39ff88" stroke-width="3" fill="none" stroke-linecap="square">
+    <path d="M18 30 V18 H30"/><path d="M90 18 H102 V30"/><path d="M18 90 V102 H30"/><path d="M90 102 H102 V90"/>
+  </g>
+  <rect x="4" y="4" width="112" height="112" rx="26" fill="none" stroke="rgba(57,255,136,.35)" stroke-width="1.5"/>
+</svg>
