@@ -4,7 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 
 const categories = {
-  "webdesign": ["marketplace", "perfil-de-usuario", "dashboard-inicio", ...range("interface-web", 4, 10)],
+  "webdesign": [...range("site", 2, 10)], // chronos-art é um app publicado à parte (webdesign/chronos-art/), não gerar página
   "modelos-3d": ["cuia", "oculos", ...range("projeto-3d", 3, 10)],
   "plugins-addons": ["figma-plug-ins", "blender-addons", "pipeline-tools", ...range("plug-in-add-on", 4, 10)],
   "animacoes": ["character-animation", "motion-graphics", "loop-animation", ...range("animacao", 4, 10)],

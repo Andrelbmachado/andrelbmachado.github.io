@@ -7,10 +7,8 @@
       body: "Uma coleção de interfaces pensadas para clareza, ritmo, conversão e apresentação de produto.",
       layout: "grid",
       projects: [
-        { slug: "marketplace", title: "Marketplace", image: "/assets/images/webdesign/marketplace.png", body: "Hierarquia clara, busca proeminente e categorização visual." },
-        { slug: "perfil-de-usuario", title: "Perfil de Usuário", image: "/assets/images/webdesign/perfil.png", body: "Métricas, histórico e personalização." },
-        { slug: "dashboard-inicio", title: "Dashboard Início", image: "/assets/images/webdesign/tela-inicio.png", body: "Widgets modulares e atalhos contextuais." },
-        ...emptyProjects("Interface Web", 4, 10),
+        { slug: "chronos-art", title: "Cronos Art", image: "/assets/images/webdesign/chronos-art.jpg", body: "Linha do tempo interativa dos movimentos artísticos mundiais." },
+        ...emptyProjects("Site", 2, 10),
       ],
     },
     "modelos-3d": {
