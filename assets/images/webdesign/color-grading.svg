@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="60" y1="34" x2="1108" y2="696" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#171923"/><stop offset="1" stop-color="#272238"/>
+    </linearGradient>
+    <linearGradient id="swatch" x1="324" y1="210" x2="890" y2="550" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00D9F5"/><stop offset=".34" stop-color="#6C57FF"/><stop offset=".68" stop-color="#FF5577"/><stop offset="1" stop-color="#FFC247"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="36" fill="url(#bg)"/>
+  <circle cx="154" cy="113" r="21" fill="#00D9F5"/><circle cx="190" cy="113" r="21" fill="#FF5577"/><circle cx="226" cy="113" r="21" fill="#FFC247"/>
+  <text x="270" y="124" fill="#F8FAFC" font-family="Arial,sans-serif" font-size="31" font-weight="700">Color Grading</text>
+  <text x="150" y="204" fill="#A9ACBB" font-family="Arial,sans-serif" font-size="18" letter-spacing="3">PALETTE STUDIO</text>
+  <circle cx="372" cy="389" r="166" stroke="#5EDCF5" stroke-width="40" stroke-dasharray="174 87" transform="rotate(-90 372 389)"/>
+  <circle cx="372" cy="389" r="166" stroke="#8C73FF" stroke-width="40" stroke-dasharray="174 87" stroke-dashoffset="-261" transform="rotate(-90 372 389)"/>
+  <circle cx="372" cy="389" r="166" stroke="#FF6685" stroke-width="40" stroke-dasharray="174 87" stroke-dashoffset="-522" transform="rotate(-90 372 389)"/>
+  <circle cx="372" cy="389" r="166" stroke="#FFC247" stroke-width="40" stroke-dasharray="174 87" stroke-dashoffset="-783" transform="rotate(-90 372 389)"/>
+  <circle cx="372" cy="389" r="106" fill="#211E2C"/><circle cx="372" cy="389" r="18" fill="#F8FAFC"/>
+  <rect x="670" y="252" width="378" height="304" rx="24" fill="#211F2C" stroke="#454251" stroke-width="2"/>
+  <text x="704" y="300" fill="#F8FAFC" font-family="Arial,sans-serif" font-size="21" font-weight="700">Paleta triangular</text>
+  <rect x="704" y="330" width="310" height="72" rx="14" fill="url(#swatch)"/>
+  <text x="704" y="447" fill="#B8B7C4" font-family="Arial,sans-serif" font-size="16">#00D9F5</text><text x="797" y="447" fill="#B8B7C4" font-family="Arial,sans-serif" font-size="16">#6C57FF</text><text x="890" y="447" fill="#B8B7C4" font-family="Arial,sans-serif" font-size="16">#FF5577</text>
+  <rect x="704" y="476" width="146" height="46" rx="12" fill="#5F53D9"/><text x="731" y="506" fill="white" font-family="Arial,sans-serif" font-size="15" font-weight="700">Exportar paleta</text>
+</svg>

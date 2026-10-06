@@ -8,6 +8,7 @@
       layout: "grid",
       projects: [
         { slug: "chronos-art", title: "Cronos Art", image: "/assets/images/webdesign/chronos-art.jpg", body: "Linha do tempo interativa dos movimentos artísticos mundiais." },
+        { slug: "color-grading", title: "Color Grading", image: "/assets/images/webdesign/color-grading.svg", body: "Gerador gratuito de paletas com harmonias, roda de cores e exportação em vários formatos.", tags: ["Design", "Cores", "Ferramenta gratuita"] },
         ...emptyProjects("Site", 2, 10),
       ],
     },
