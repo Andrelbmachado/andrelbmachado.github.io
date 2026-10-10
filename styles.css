@@ -98,6 +98,31 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 2px 12px rgba(0,0,0,0.15);
 }
 .theme-toggle:hover { background: var(--accent); color: #fff; }
+/* Acesso ao painel OpenBase, ao lado do botão de tema */
+.site-login {
+  position: fixed;
+  top: 16px;
+  right: 64px;
+  z-index: 200;
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 14px;
+  border-radius: 20px;
+  background: var(--card-bg); color: var(--text-primary);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  font-size: .875rem; font-weight: 600; line-height: 1; text-decoration: none;
+  transition: color .25s, background .25s, border-color .25s;
+}
+/* Área de toque de 48px sem mudar o tamanho visual */
+.site-login::before { content: ""; position: absolute; inset: -4px; }
+.site-login:hover { background: var(--accent); color: #fff; }
+.site-login:focus-visible,
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 380px) {
+  .site-login { padding: 0 12px; }
+}
 [data-theme="light"] .icon-sun  { display: none; }
 [data-theme="light"] .icon-moon { display: block; }
 [data-theme="dark"]  .icon-sun  { display: block; }
