@@ -7,10 +7,10 @@
       body: "Uma coleção de interfaces pensadas para clareza, ritmo, conversão e apresentação de produto.",
       layout: "grid",
       projects: [
-        { slug: "chronos-art", title: "Cronos Art", image: "/assets/images/webdesign/chronos-art.jpg", body: "Linha do tempo interativa dos movimentos artísticos mundiais." },
-        { slug: "color-grading", title: "Color Grading", image: "/assets/images/webdesign/color-grading.svg", body: "Gerador gratuito de paletas com harmonias, roda de cores e exportação em vários formatos.", tags: ["Design", "Cores", "Ferramenta gratuita"] },
+        { slug: "chronos-art", url: "https://andremachado.design/cronos-art/", title: "Cronos Art", image: "/assets/images/webdesign/chronos-art.jpg", body: "Linha do tempo interativa dos movimentos artísticos mundiais." },
+        { slug: "color-grading", url: "https://andremachado.design/Color-Grading/", title: "Color Grading", image: "/assets/images/webdesign/color-grading.svg", body: "Gerador gratuito de paletas com harmonias, roda de cores e exportação em vários formatos.", tags: ["Design", "Cores", "Ferramenta gratuita"] },
         { slug: "casa-julieta", title: "Casa Julieta", image: "/assets/images/webdesign/casa-julieta.png", body: "Site da Casa Julieta de Sorocaba: Giro Bar, Giro Café, Airbnb, loja e massagem." },
-        { slug: "barbearia-rogerio", title: "Barbearia Rogério", image: "/assets/images/webdesign/barbearia-rogerio.png", body: "Site da Barbearia Rogério com serviços e avaliações." },
+        { slug: "barbearia-rogerio", url: "https://racamargo2007.github.io/Site-/", title: "Barbearia Rogério", image: "/assets/images/webdesign/barbearia-rogerio.png", body: "Site da Barbearia Rogério com serviços e avaliações." },
         ...emptyProjects("Site", 2, 10),
       ],
     },
@@ -93,7 +93,7 @@
   }
 
   function projectCard(category, project) {
-    const href = `/${category}/${project.slug}/`;
+    const href = project.url || `/${category}/${project.slug}/`;
     if (project.image) {
       return `<a class="card card-img project-link-card reveal" href="${href}"><img src="${esc(project.image)}" alt="${esc(project.title)}" loading="lazy"/><h3>${esc(project.title)}</h3><p>${esc(project.body)}</p></a>`;
     }
