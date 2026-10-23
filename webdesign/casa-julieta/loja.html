@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loja — Casa Julieta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (window.location.hash) history.replaceState(null, '', window.location.pathname + window.location.search);
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-centered">
+      <a href="index.html" class="brand">Casa Julieta</a>
+    </div>
+    <nav class="main-nav container" id="nav">
+      <a href="index.html#sobre">Sobre</a>
+      <a href="index.html#giro-bar">Espaços</a>
+      <a href="index.html#eventos">Eventos</a>
+      <a href="index.html#localizacao">Localização</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <section class="page-hero fade-up">
+      <div class="container">
+        <span class="icon" style="font-size:42px;color:var(--gold);display:block;margin-bottom:0.6rem">checkroom</span>
+        <h1>Loja</h1>
+        <p>Moda autoral e peças com identidade brasileira.</p>
+      </div>
+    </section>
+
+    <section class="page-body section-alt">
+      <div class="container fade-up">
+        <p>A loja da Casa Julieta reúne marcas independentes e designers brasileiros que valorizam produção ética, tecidos naturais e estética atemporal.</p>
+        <p>Cada peça é selecionada para refletir o espírito da casa — sofisticação sem esforço, com raízes na cultura e artesania local.</p>
+        <p>Além do vestuário, você encontra acessórios, objetos decorativos e itens de lifestyle que carregam a mesma identidade.</p>
+        <a href="index.html#loja" class="back-link">
+          <span class="icon" style="font-size:18px">arrow_back</span> Voltar aos espaços
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>&copy; <span id="year"></span> Casa Julieta</p>
+      <p>Criado por <a href="https://andremachado.design" target="_blank" rel="noopener">andremachado.design</a></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

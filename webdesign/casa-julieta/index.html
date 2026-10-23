@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa Julieta — Sorocaba</title>
+  <meta name="description" content="Casa Julieta — bar, café, loja, massagem e airbnb no coração de Sorocaba." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (window.location.hash) history.replaceState(null, '', window.location.pathname + window.location.search);
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-centered">
+      <a href="index.html" class="brand">Casa Julieta</a>
+    </div>
+    <div class="nav-line" id="navLine"></div>
+    <nav class="main-nav container" id="nav">
+      <a href="#sobre">Sobre</a>
+      <a href="#giro-bar">Espaços</a>
+      <a href="#eventos">Eventos</a>
+      <a href="#localizacao">Localização</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="img/hero-video.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-video-overlay"></div>
+    <a href="#sobre" class="hero-cta">
+      <span>Conheça o espaço</span>
+      <svg class="hero-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </a>
+  </section>
+
+  <main>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="section">
+      <div class="container fade-up about-row">
+        <div class="about-col">
+          <h2>História viva</h2>
+          <div class="about-text" id="aboutTypewriter">
+            <p>A Casa Julieta ocupa um dos edifícios mais emblemáticos do centro de Sorocaba. Fundada para reunir experiências únicas sob o mesmo teto, cada andar e cada sala abriga uma proposta diferente — do sabor artesanal ao descanso pleno.</p>
+            <p>Um casarão centenário reinventado em espaço de cultura, gastronomia e bem-estar.</p>
+          </div>
+        </div>
+        <div class="about-img">
+          <img src="img/predio-low.png" alt="Casa Julieta — Casarão histórico" />
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ESPAÇOS -->
+    <section class="section" style="padding: 3rem 0 1rem;">
+      <div class="container fade-up" style="text-align:center;">
+        <h2>Conheça os espaços</h2>
+      </div>
+    </section>
+
+    <section id="giro-bar" class="space-section fade-up">
+      <div class="bar-slideshow">
+        <div class="bar-slide bar-slide--active">
+          <img src="img/bar-amigos.jpg" alt="Amigos brindando no Giro Bar" />
+        </div>
+        <div class="bar-slide">
+          <img src="img/bar-balcao.jpg" alt="Balcão do Giro Bar" />
+        </div>
+        <div class="bar-slide">
+          <img src="img/bar-bartender.jpg" alt="Bartender preparando drink" />
+        </div>
+        <div class="bar-slide">
+          <img src="img/bar-coquetel.jpg" alt="Coquetel artesanal" />
+        </div>
+      </div>
+      <div class="space-overlay"></div>
+      <div class="space-content">
+        <img src="img/giro-bar-logo.png" alt="Giro Bar" class="space-logo" />
+        <p>Drinks autorais e curadoria de rótulos em um ambiente intimista. Cada drinque conta uma história — ingredientes locais, técnicas clássicas e uma atmosfera que convida a ficar.</p>
+        <a href="giro-bar.html" class="btn btn-gold">Saiba mais</a>
+      </div>
+    </section>
+
+    <section id="giro-cafe" class="space-section fade-up" style="--space-bg:url('img/giro-cafe.jpg')">
+      <div class="space-overlay"></div>
+      <div class="space-content">
+        <h2>Giro Café</h2>
+        <p>Cafés especiais, brunch e receitas com ingredientes locais. Um refúgio para amantes do bom café, com grãos selecionados e preparo artesanal.</p>
+        <a href="giro-cafe.html" class="btn btn-gold">Saiba mais</a>
+      </div>
+    </section>
+
+    <section id="loja" class="space-section fade-up" style="--space-bg:url('img/loja.jpg')">
+      <div class="space-overlay"></div>
+      <div class="space-content">
+        <h2>Loja</h2>
+        <p>Moda autoral e peças com identidade brasileira. Uma curadoria de estilo que valoriza o design nacional e a produção consciente.</p>
+        <a href="loja.html" class="btn btn-gold">Saiba mais</a>
+      </div>
+    </section>
+
+    <section id="massagem" class="space-section fade-up" style="--space-bg:url('img/massagem.jpg')">
+      <div class="space-overlay"></div>
+      <div class="space-content">
+        <h2>Massagem</h2>
+        <p>Bem-estar e relaxamento com técnicas especializadas. Um espaço dedicado ao cuidado do corpo e da mente, no coração histórico da cidade.</p>
+        <a href="massagem.html" class="btn btn-gold">Saiba mais</a>
+      </div>
+    </section>
+
+    <section id="airbnb" class="space-section fade-up" style="--space-bg:url('img/airbnb.jpg')">
+      <div class="space-overlay"></div>
+      <div class="space-content">
+        <img src="img/airbnb-logo.png" alt="Airbnb" class="space-logo" />
+        <p>Hospedagem em um cenário histórico, com todo conforto. Durma em um casarão centenário e acorde no coração de Sorocaba.</p>
+        <div class="space-actions">
+          <a href="airbnb.html" class="btn btn-gold">Saiba mais</a>
+          <a href="https://www.airbnb.com.br/rooms/17266741?check_in=2026-04-16&check_out=2026-04-17&guests=1&adults=1&s=67&unique_share_id=8e41a47e-fdcd-4101-91ab-4ace02b88892" target="_blank" rel="noopener" class="btn btn-outline">Reserve já</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCALIZAÇÃO -->
+    <section id="localizacao" class="section section-alt">
+      <div class="container fade-up">
+        <h2 class="loc-heading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Localização</h2>
+        <p class="loc-address">Rua Dr. Arthur Martins, 137 — Centro, Sorocaba – SP</p>
+        <div class="map-wrapper">
+          <iframe
+            src="https://maps.google.com/maps?q=Casa+Julieta,+R.+Dr.+Artur+Martins,+137,+Sorocaba+-+SP&z=18&output=embed"
+            width="100%"
+            height="420"
+            style="border:0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="section" style="background:var(--green-deep);position:relative;z-index:5">
+      <div class="container fade-up" style="text-align:center">
+        <h2 class="contact-title">Contato</h2>
+        <div class="contact-row">
+          <a href="https://www.instagram.com/acasajulieta/" target="_blank" rel="noopener" class="contact-item">
+            <svg class="contact-icon-ig" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <span>@acasajulieta</span>
+          </a>
+          <a href="mailto:casajulieta137@gmail.com" class="contact-item">
+            <div class="contact-icon-email">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="14" rx="3" ry="3"></rect>
+                <path d="M2 9l10 6 10-6"></path>
+                <path class="envelope-flap-path" d="M2 6l10 7 10-7" fill="none"></path>
+              </svg>
+            </div>
+            <span>casajulieta137@gmail.com</span>
+          </a>
+          <a href="https://bit.ly/casajulieta" target="_blank" rel="noopener" class="contact-item">
+            <svg class="contact-icon-pin" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Ver no mapa</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-spacer"></div>
+      <p class="footer-center">&copy; <span id="year"></span> Casa Julieta</p>
+      <p class="footer-right">Design por <a href="https://andremachado.design" target="_blank" rel="noopener">andremachado.design</a></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

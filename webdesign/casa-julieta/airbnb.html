@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airbnb — Casa Julieta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (window.location.hash) history.replaceState(null, '', window.location.pathname + window.location.search);
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-centered">
+      <a href="index.html" class="brand">Casa Julieta</a>
+    </div>
+    <nav class="main-nav container" id="nav">
+      <a href="index.html#sobre">Sobre</a>
+      <a href="index.html#giro-bar">Espaços</a>
+      <a href="index.html#eventos">Eventos</a>
+      <a href="index.html#localizacao">Localização</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <section class="page-hero fade-up">
+      <div class="container">
+        <img src="img/airbnb-logo.png" alt="Airbnb" style="max-height:80px;margin:0 auto 1rem;display:block" />
+        <h1>Airbnb</h1>
+        <p>Hospedagem em um cenário histórico, com todo conforto.</p>
+      </div>
+    </section>
+
+    <section class="page-body section-alt">
+      <div class="container fade-up">
+        <p>Dormir na Casa Julieta é viver a história de Sorocaba de um jeito pouco convencional. Os quartos preservam elementos originais do casarão — pisos em ladrilho hidráulico, janelas em arco e pé-direito alto — combinados a um mobiliário contemporâneo de alto padrão.</p>
+        <p>A experiência inclui acesso ao café da manhã do Giro Café e descontos exclusivos nos demais espaços da casa.</p>
+        <p>Reserve pelo Airbnb ou entre em contato diretamente conosco.</p>
+        <a href="https://www.airbnb.com.br/rooms/17266741?check_in=2026-04-16&check_out=2026-04-17&guests=1&adults=1&s=67&unique_share_id=8e41a47e-fdcd-4101-91ab-4ace02b88892" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:1.5rem;margin-right:1rem">Reserve já</a>
+        <a href="index.html#airbnb" class="back-link">
+          <span class="icon" style="font-size:18px">arrow_back</span> Voltar aos espaços
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>&copy; <span id="year"></span> Casa Julieta</p>
+      <p>Criado por <a href="https://andremachado.design" target="_blank" rel="noopener">andremachado.design</a></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
