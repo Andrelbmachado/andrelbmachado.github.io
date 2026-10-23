@@ -10,6 +10,7 @@
         { slug: "chronos-art", title: "Cronos Art", image: "/assets/images/webdesign/chronos-art.jpg", body: "Linha do tempo interativa dos movimentos artísticos mundiais." },
         { slug: "color-grading", title: "Color Grading", image: "/assets/images/webdesign/color-grading.svg", body: "Gerador gratuito de paletas com harmonias, roda de cores e exportação em vários formatos.", tags: ["Design", "Cores", "Ferramenta gratuita"] },
         { slug: "casa-julieta", title: "Casa Julieta", image: "/assets/images/webdesign/casa-julieta.png", body: "Site da Casa Julieta de Sorocaba: Giro Bar, Giro Café, Airbnb, loja e massagem." },
+        { slug: "barbearia-rogerio", title: "Barbearia Rogério", image: "/assets/images/webdesign/barbearia-rogerio.png", body: "Site da Barbearia Rogério com serviços e avaliações." },
         ...emptyProjects("Site", 2, 10),
       ],
     },

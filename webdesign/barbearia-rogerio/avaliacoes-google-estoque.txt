@@ -1,0 +1,66 @@
+Estoque de avaliacoes reais do Google - Barbearia Roger
+Gerado em: 2026-04-28
+
+Perfil Google: Barbearia Roger - Sorocaba
+Place ID: ChIJ5Tb8eieLxZQRz_EmfvCtG_4
+Nota no Google: 4.9
+Total de avaliacoes no Google no momento da consulta: 190
+Link do perfil: https://maps.google.com/?cid=18310419958425121231
+
+Observacao importante:
+A Google Places API retorna apenas uma amostra curta de avaliacoes por consulta, nao as 30 avaliacoes mais recentes.
+Foram salvas abaixo as avaliacoes reais unicas que a API retornou usando as ordenacoes "mais recentes" e "mais relevantes".
+Nenhuma chave de API foi salva neste arquivo.
+
+1. Samantta Guimaraes
+Nota: 5 estrelas
+Tempo exibido pelo Google: 4 meses atras
+Origem: Google Places API - ordenacao mais recentes
+Texto: "Profissional extremamente competente."
+
+2. DzP Zamp
+Nota: 5 estrelas
+Tempo exibido pelo Google: 8 meses atras
+Origem: Google Places API - ordenacao mais recentes
+Texto: "Otimo local! O atendimento do Rogerio e o ambiente sao nota 10!"
+
+3. Oficina Alphacar
+Nota: 5 estrelas
+Tempo exibido pelo Google: 9 meses atras
+Origem: Google Places API - ordenacao mais recentes e mais relevantes
+Texto: "Ja faz 12 anos que corto cabelo com o Rogerio so tenho a agradecer sempre superando e inovador nos cortes esta de parabens"
+
+4. aamir zeb
+Nota: 5 estrelas
+Tempo exibido pelo Google: um ano atras
+Origem: Google Places API - ordenacao mais recentes
+Texto: "A melhor barbearia da cidade. Desde que descobri este lugar, nunca mais fui a nenhuma outra barbearia."
+
+5. Vanderlei Ayres de Olivera
+Nota: 5 estrelas
+Tempo exibido pelo Google: um ano atras
+Origem: Google Places API - ordenacao mais recentes e mais relevantes
+Texto: "Otima experiencia, um local agradavel, sou cliente ha dez anos, recomendo."
+
+6. DIEGO DIAS SILVA
+Nota: 5 estrelas
+Tempo exibido pelo Google: um ano atras
+Origem: Google Places API - ordenacao mais relevantes
+Texto: "Excelente atendimento, atende por horario agendado e sempre pontual em tudo. Local climatizado, limpo, um ambiente super bacana com excelente profissional"
+
+7. Renato Nisiyama
+Nota: 5 estrelas
+Tempo exibido pelo Google: 3 anos atras
+Origem: Google Places API - ordenacao mais relevantes
+Texto: "Atendimento de excelencia, ambiente agradavel, limpo, bom corte de cabelo e geladeira com boas bebidas. Boa localizacao, facil acesso e facil de estacionar."
+
+8. Gabriel Barros
+Nota: 5 estrelas
+Tempo exibido pelo Google: um ano atras
+Origem: Google Places API - ordenacao mais relevantes
+Texto: "Cortei meu cabelo recentemente e que experiencia incrivel, atendimento impecavel, o meu corte ficou otimo, com certeza voltarei para cortar novamente!"
+
+Para obter 30 avaliacoes reais:
+1. Exportar ou copiar manualmente mais avaliacoes pelo perfil da empresa no Google.
+2. Usar a Google Business Profile API com OAuth da conta que gerencia a Barbearia Roger.
+3. Enviar as avaliacoes adicionais para serem adicionadas ao estoque e ao site.

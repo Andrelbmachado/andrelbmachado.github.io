@@ -1,0 +1,186 @@
+/* ========================================
+   BARBEARIA ROGER — Animations CSS
+   ======================================== */
+
+/* ---- Scroll reveal animations ---- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(214, 40, 40, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(214, 40, 40, 0.7);
+  }
+}
+
+@keyframes cardGlowUp {
+  0% {
+    box-shadow: 0 0 0 rgba(13, 42, 87, 0);
+    border-color: rgba(42, 47, 56, 0.6);
+  }
+  45% {
+    box-shadow: 0 0 28px rgba(30, 90, 168, 0.16);
+    border-color: rgba(30, 90, 168, 0.34);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(13, 42, 87, 0);
+    border-color: rgba(42, 47, 56, 0.6);
+  }
+}
+
+/* ---- Hero animations ---- */
+.hero__badge {
+  animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.hero__title {
+  animation: fadeInUp 0.6s ease 0.4s both;
+}
+
+.hero__subtitle {
+  animation: fadeInUp 0.6s ease 0.55s both;
+}
+
+.hero__actions {
+  animation: fadeInUp 0.6s ease 0.7s both;
+}
+
+.hero__stats {
+  animation: fadeInUp 0.6s ease 0.85s both;
+}
+
+.barber-pole-dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ---- Tilt card 3D ---- */
+.tilt-card {
+  perspective: 800px;
+}
+
+.tilt-card .ba-card {
+  transform-style: preserve-3d;
+  /* Transition set to 0ms when hovering so it's instant */
+  transition: box-shadow var(--transition-normal);
+}
+
+/* ---- Stagger entrance for cards in grid ---- */
+.gallery-grid .tilt-card {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.gallery-grid .tilt-card.visible {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.reviews-grid .card.visible {
+  animation: cardGlowUp 900ms ease both;
+}
+
+.gallery-grid .tilt-card.visible:nth-child(1) { animation-delay: 0ms; }
+
+.gallery-grid .tilt-card.visible:nth-child(2) { animation-delay: 80ms; }
+
+.gallery-grid .tilt-card.visible:nth-child(3) { animation-delay: 160ms; }
+
+.gallery-grid .tilt-card.visible:nth-child(4) { animation-delay: 240ms; }
+
+.gallery-grid .tilt-card.visible:nth-child(5) { animation-delay: 320ms; }
+
+.gallery-grid .tilt-card.visible:nth-child(6) { animation-delay: 400ms; }
+
+/* ---- Section header animation ---- */
+.section__header {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.section__header.visible {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ---- Location & Contact ---- */
+.location__info,
+.contact__buttons {
+  opacity: 0;
+  transform: translateX(-24px);
+}
+
+.location__info.visible,
+.contact__buttons.visible {
+  animation: fadeInLeft 0.6s ease forwards;
+}
+
+.location__map,
+.contact-form {
+  opacity: 0;
+  transform: translateX(24px);
+}
+
+.location__map.visible,
+.contact-form.visible {
+  animation: fadeInRight 0.6s ease 0.15s forwards;
+}
+
+/* ---- Reviews hero ---- */
+.reviews-hero {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.reviews-hero.visible {
+  animation: scaleIn 0.6s ease forwards;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
